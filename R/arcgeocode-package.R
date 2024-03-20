@@ -1,4 +1,5 @@
 #' @import arcgisutils
+#' @import rlang
 #' @keywords internal
 "_PACKAGE"
 

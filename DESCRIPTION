@@ -14,6 +14,9 @@ Language: en
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Imports: 
-    arcgisutils (>= 0.2.0.9000)
+    arcgisutils (>= 0.2.0.9000),
+    httr2 (>= 1.0.0),
+    rlang (>= 1.1.0),
+    sf
 Config/rextendr/version: 0.3.1.9000
 SystemRequirements: Cargo (Rust's package manager), rustc

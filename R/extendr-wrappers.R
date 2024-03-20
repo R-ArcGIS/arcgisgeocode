@@ -11,11 +11,20 @@
 #' @useDynLib arcgeocode, .registration = TRUE
 NULL
 
-sfc_point_to_esri_point <- function(pnts, sr) invisible(.Call(wrap__sfc_point_to_esri_point, pnts, sr))
+as_esri_point_json <- function(x, sr) .Call(wrap__as_esri_point_json, x, sr)
 
-#' Return string `"Hello world!"` to R.
+reverse_geocode_rs <- function(service_url, locations, crs, lang, for_storage, feature_type, location_type, preferred_label_values, `_token`) .Call(wrap__reverse_geocode_rs, service_url, locations, crs, lang, for_storage, feature_type, location_type, preferred_label_values, `_token`)
+
+parse_rev_geocode_resp <- function(resps) .Call(wrap__parse_rev_geocode_resp, resps)
+
 #' @export
-hello_world <- function() .Call(wrap__hello_world)
+is_iso3166 <- function(code) .Call(wrap__is_iso3166, code)
+
+iso_3166_2 <- function() .Call(wrap__iso_3166_2)
+
+iso_3166_3 <- function() .Call(wrap__iso_3166_3)
+
+iso_3166_names <- function() .Call(wrap__iso_3166_names)
 
 
 # nolint end

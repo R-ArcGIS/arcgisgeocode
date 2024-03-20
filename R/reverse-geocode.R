@@ -1,7 +1,3 @@
-
-# Valid featuretypes to be returned
-feature_types <- c("StreetInt", "DistanceMarker", "StreetAddress", "StreetName", "POI", "Subaddress", "PointAddress", "Postal", "Locality")
-
 #  Intersection matches are only returned when featureTypes=StreetInt is included in the request.
 
 # The locationType parameter only affects the location object in the geocode JSON response. It does not change the X/Y or DisplayX/DisplayY attribute values.
@@ -13,23 +9,133 @@ reverse_geocode <- function(
     locations,
     crs = sf::st_crs(locations),
     ...,
-    lang = NULL,
+    lang_code = NULL,
     feature_type = NULL,
     for_storage = TRUE,
     location_type = c("rooftop", "street"),
     preferred_label_values = c("postalCity", "localCity"),
     geocoder = default_geocoder(),
-    token = arc_token()
+    token = arc_token(),
+    .progress = TRUE
 ) {
 
-  # TODO
-  # rlang::arg_match0(for_storage)
-  # rlang::arg_match0(preferred_label_values)
+  # Tokens are required for reverseGeocoding
+  obj_check_token(token)
 
-  # Check that locations are an sf object
-  # encode locations as a featureset (on the geometry only)
-  # this endpoint only supports single addresses
-  # we would want to use `req_perform_parallel` here
+  # TODO ask users to verify their `for_storage` use
+  # This is super important and can lead to contractual violations
+  check_bool(for_storage)
+
+  # check feature type if not missing
+  if (!is.null(feature_type)) {
+    rlang::arg_match(
+      feature_type,
+      c(
+        "StreetInt", "DistanceMarker", "StreetAddress",
+        "StreetName", "POI", "Subaddress",
+        "PointAddress", "Postal", "Locality"
+      )
+    )
+  }
+
+  # verify location type argument
+  location_type <- rlang::arg_match(location_type, values = c("rooftop", "street"))
+
+  # verify label value arg
+  preferred_label_values <- rlang::arg_match(
+    preferred_label_values,
+    values = c("postalCity", "localCity")
+  )
+
+
+  # TODO use wk to use any wk_handle-able points
+  if (!rlang::inherits_all(locations, c("sfc_POINT", "sfc"))) {
+    stop_input_type(locations, "sfc_POINT")
+  }
+
+  # ensure lang_code a single string
+  check_string(lang_code, allow_null = TRUE)
+
+  # if not missing and not valid, error
+  if (!is.null(lang_code) && !is_iso3166(lang_code)) {
+    cli::cli_abort(
+      c(
+        "{.arg lang_code} is not a recognized Country Code",
+        "i" = "See {.fn iso_3166_codes} for ISO 3166 codes"
+      )
+    )
+  }
+
+  # validate output CRS:
+  out_crs <- validate_crs(crs)[[1]]
+
+  # create list of provided parameters
+  query_params <- compact(list(
+    langCode = lang_code,
+    outSR = jsonify::to_json(out_crs, unbox = TRUE),
+    featureType = feature_type,
+    forStorage = for_storage,
+    locationType = location_type,
+    preferredLabelValues = preferred_label_values
+  ))
+
+  # validate the input CRS
+  in_crs <- validate_crs(sf::st_crs(locations))[[1]]
+
+  # convert to EsriPoint JSON
+  locs_json <- as_esri_point_json(locations, in_crs)
+
+  b_req <- httr2::req_url_path_append(
+    arc_base_req(geocoder, token),
+    "reverseGeocode"
+  )
+
+  # f = json needs to be a url parameter
+  # b_req <- httr2::req_url_query(b_req, f = "json")
+
+  all_reqs <- vector(mode = "list", length = length(locs_json))
+
+  # fill requests with for loop
+  for (i in seq_along(locs_json)) {
+    all_reqs[[i]] <- httr2::req_body_form(
+      f = "json",
+      b_req,
+      !!!query_params,
+      location = locs_json[[i]]
+    )
+  }
+
+  # Run requests in parallel
+  all_resps <- httr2::req_perform_parallel(
+    all_reqs,
+    on_error = "continue",
+    progress = .progress
+  )
+
+  # TODO capture which locations had an error and either return
+  # requests or points
+  # also, should return missing values or IDs to associate with the points
+  # so that they can be merged back on to the input locations?
+  # TODO check for errors which will be encoded as json
+  resps_json <- httr2::resps_data(all_resps, httr2::resp_body_string)
+
+  # process the raw json using rust
+  res_raw <- parse_rev_geocode_resp(resps_json)
+
+  # TODO incorporate squish DF into arcgisutils. This is stopgap solution
+  # https://github.com/R-ArcGIS/arcgislayers/pull/167
+  res_attr <- data_frame(do.call(rbind.data.frame, res_raw$attributes))
+
+  # cast into sf object
+  res_sf <- sf::st_sf(
+    res_attr,
+    geometry = sf::st_sfc(res_raw[["geometry"]], crs = crs)
+  )
+
+  res_sf
+  # Return the errors as an attribute this will let people
+  # handle the failures later on if they need to do an iterative / recursive
+  # approach to it.
   # or use tokio....
   # I'll try both
 

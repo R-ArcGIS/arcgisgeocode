@@ -9,3 +9,16 @@
 # str(geocoder, 1)
 #
 # geocoder$candidateFields |> str(1)
+#
+# library(httr2)
+#
+# burl <- "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode"
+#
+# request(burl) |>
+#   req_body_json(
+#     f = "json",
+#     location = "-119.286297,34.280853"
+#   ) |>
+#   req_perform() |>
+#   resp_body_string()
+# # https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=Postal&location=-119.286297,34.280853

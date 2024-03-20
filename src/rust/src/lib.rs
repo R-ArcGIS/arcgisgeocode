@@ -3,7 +3,7 @@ use extendr_api::prelude::*;
 // use serde::{Deserialize, Serialize};
 
 use serde_json::to_string;
-// use tokio::runtime::Runtime;
+use tokio::runtime::Runtime;
 use extendr_api::deserializer::from_robj;
 use extendr_api::serializer::to_robj;
 
@@ -46,12 +46,10 @@ fn sfc_point_to_esri_point(pnts: List, sr: SpatialReference) -> Vec<Option<EsriP
             }
         })
         .collect::<Vec<_>>();
-
-    // rprintln!("{:#?}", esri_pnts);
+    
     esri_pnts
 }
 
-use std::collections::HashMap;
 
 #[extendr]
 fn reverse_geocode_rs(
@@ -63,14 +61,14 @@ fn reverse_geocode_rs(
     feature_type: Option<&str>,
     location_type: Option<&str>,
     preferred_label_values: Option<&str>,
-   _token: Option<String>,
+    token: Option<String>,
 ) -> 
-// Strings 
-    List
+Strings 
+    // List
 {
 
     // create a url
-    let _service_url = Url::parse(service_url).unwrap();
+    let service_url = Url::parse(service_url).unwrap();
 
     // extract spatial reference
     let sr = Arc::new(parse_sr(crs).unwrap());
@@ -104,12 +102,11 @@ fn reverse_geocode_rs(
     let locs = sfc_point_to_esri_point(locations, sr.as_ref().clone());
 
     // allocate params vec
-    // let mut params = Vec::with_capacity(locs.len());
+    let mut params = Vec::with_capacity(locs.len());
 
-    let mut res_list = List::new(locs.len());
 
     // fill in the params vec
-    for (i, loc) in locs.into_iter().enumerate() {
+    for (_, loc) in locs.into_iter().enumerate() {
         let param = ReverseGeocodeParams {
             location: loc.unwrap(),
             out_sr: sr.as_ref().clone(),
@@ -120,28 +117,26 @@ fn reverse_geocode_rs(
             preferred_label_values: pref_lab_vals.clone(),
         };
 
-        let hm = param.as_form_body();
-        let hm2 = hm.into_iter().map(|(k, v)| (k, v.into())).collect::<HashMap<&str, Robj>>();
-        let _ = res_list.set_elt(i, List::from_hashmap(hm2).into());
-        // params.push(param);
+        // let hm = param.as_form_body();
+        // let hm2 = hm.into_iter().map(|(k, v)| (k, v.into())).collect::<HashMap<&str, Robj>>();
+        // let _ = res_list.set_elt(i, List::from_hashmap(hm2).into());
+        params.push(param);
     }
-    res_list
-    // // create new runtime
-    // let rt = Runtime::new().unwrap();
+    // res_list
+    // create new runtime
+    let rt = Runtime::new().unwrap();
 
-    // // run the reverse geocode in parallel
-    // let res = rt.block_on(
-    //     reverse_geocode_(service_url, params, token)
-    // );
+    // run the reverse geocode in parallel
+    let res = rt.block_on(
+        reverse_geocode_(service_url, params, token)
+    );
 
-    // // print the result
-    // // println!("{:?}", res);
-    // res.into_iter().map(|r| {
-    //     let rr = r.unwrap();
-    //     let json = serde_json::to_string(&rr).unwrap();
-    //     json
-    // })
-    // .collect::<Strings>()
+    res.into_iter().map(|r| {
+        let rr = r.unwrap();
+        let json = serde_json::to_string(&rr).unwrap();
+        json
+    })
+    .collect::<Strings>()
 }
 
 // convert an EsriPoint to an sfg

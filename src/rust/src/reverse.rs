@@ -5,7 +5,7 @@ use reqwest::Url;
 use std::result::Result;
 use std::sync::Arc;
 
-pub async fn _reverse_geocode_(
+pub async fn reverse_geocode_(
     service_url: Url,
     params: Vec<ReverseGeocodeParams>,
     token: Option<String>,

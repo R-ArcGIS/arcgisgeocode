@@ -4,14 +4,50 @@
 
 # loation_type
 # Specifies whether the output geometry of PointAddress and Subaddress matches should be the rooftop point or street entrance location. Valid values are rooftop and street. The default value is rooftop.
-
+#' Reverse Geocode Locations
+#'
+#' @details
+#'
+#' ## Feature Types
+#'
+#' Valid `feature_type` values are `"StreetInt"`, `"DistanceMarker"`,
+#' `"StreetAddress"`, `"StreetName"`, `"POI"`, `"Subaddress"`, `"PointAddress"`,
+#' `"Postal"`, and `"Locality"`.
+#'
+#' Intersection matches are only returned when `feature_types = "StreetInt"`.
+#'
+#' See [documentation](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-reverse-geocode.htm#ESRI_SECTION3_1FE6B6D350714E45B2707845ADA22E1E).
+#'
+#' ## Storage
+#'
+#' **Very Important**
+#'
+#' The argument `for_storage` is used to determine if the request allows you to
+#' persist the results of the query. It is important to note that there are
+#' contractual obligations to appropriately set this argument. **You cannot save
+#' or persist results** when `for_storage = FALSE` (the default).
+#'
+#' @param locations an `sfc_POINT` object of the locations to be reverse geocoded.
+#' @param crs the CRS of the returned geometries. Passed to `sf::st_crs()`.
+#' @param ... unused.
+#' @param feature_type limits the possible match types returned. See Details.
+#' @param for_storage default `FALSE`. Whether or not the results will be saved
+#'    for long term storage. See Details.
+#' @param location_type default `"rooftop"`. Must be one of `"rooftop"` or `"street"`.
+#' @param preferred_label_values default NULL. Must be one of `"postalCity"`
+#'  or `"localCity"`.
+#' @param geocoder the url to the geocoder service.
+#'  Default provided by `default_geocoder()`.
+#' @param .progress default `TRUE`. Whether a progress bar should be provided.
+#' @inheritParams arcgisutils::arc_base_req
+#' @export
 reverse_geocode <- function(
     locations,
     crs = sf::st_crs(locations),
     ...,
     lang_code = NULL,
     feature_type = NULL,
-    for_storage = TRUE,
+    for_storage = FALSE,
     location_type = c("rooftop", "street"),
     preferred_label_values = c("postalCity", "localCity"),
     geocoder = default_geocoder(),
@@ -19,12 +55,14 @@ reverse_geocode <- function(
     .progress = TRUE
 ) {
 
-  # Tokens are required for reverseGeocoding
-  obj_check_token(token)
-
   # TODO ask users to verify their `for_storage` use
   # This is super important and can lead to contractual violations
   check_bool(for_storage)
+
+  # Tokens are required for reverseGeocoding for storage
+  if (for_storage) obj_check_token(token)
+
+  check_bool(.progress)
 
   # check feature type if not missing
   if (!is.null(feature_type)) {
@@ -47,7 +85,6 @@ reverse_geocode <- function(
     values = c("postalCity", "localCity")
   )
 
-
   # TODO use wk to use any wk_handle-able points
   if (!rlang::inherits_all(locations, c("sfc_POINT", "sfc"))) {
     stop_input_type(locations, "sfc_POINT")
@@ -66,7 +103,17 @@ reverse_geocode <- function(
     )
   }
 
-  # validate output CRS:
+  # validate output CRS
+  if (is.na(crs)) {
+    cli::cli_warn(
+      c(
+        "!" = "{.arg crs} is set to {.cls NA}",
+        "i" = "using {.code EPSG:4326}"
+      )
+    )
+    crs <- 4326
+  }
+
   out_crs <- validate_crs(crs)[[1]]
 
   # create list of provided parameters
@@ -90,9 +137,7 @@ reverse_geocode <- function(
     "reverseGeocode"
   )
 
-  # f = json needs to be a url parameter
-  # b_req <- httr2::req_url_query(b_req, f = "json")
-
+  # allocate list to store requests
   all_reqs <- vector(mode = "list", length = length(locs_json))
 
   # fill requests with for loop

@@ -16,7 +16,7 @@ list_geocoders <- function(
 ) {
 
   # extract helper services
-  self <- arc_self_meta()
+  self <- arc_self_meta(call = rlang::current_call())
   # extrac geocode metadata
   geocoder_metadata <- self[["helperServices"]][["geocode"]]
 

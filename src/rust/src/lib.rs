@@ -46,7 +46,7 @@ fn sfc_point_to_esri_point(pnts: List, sr: SpatialReference) -> Vec<Option<EsriP
             }
         })
         .collect::<Vec<_>>();
-    
+
     esri_pnts
 }
 
@@ -64,7 +64,7 @@ fn reverse_geocode_rs(
     token: Option<String>,
 ) -> 
 Strings 
-    // List
+
 {
 
     // create a url
@@ -175,10 +175,17 @@ fn parse_rev_geocode_resp(resps: Strings) -> List {
         .into_iter()
         .enumerate()
         .map(|(i, ri)| {
-            let resp  = serde_json::from_str::<ReverseGeocodeResponse>(ri.as_str()).unwrap();
-            let res = to_robj(&resp.address).unwrap().as_list().unwrap(); 
-            let _ = res_geo.set_elt(i, as_sfg(resp.location));
-
+            let resp  = serde_json::from_str::<ReverseGeocodeResponse>(ri.as_str());
+            let res = match resp {
+                Ok(r) => {
+                    let res = to_robj(&r.address).unwrap().as_list().unwrap(); 
+                    let _ = res_geo.set_elt(i, as_sfg(r.location));
+                    res.into_robj()
+                },
+                Err(_) => {
+                    ().into_robj()
+                }
+            };
             res
         }).collect::<List>().into();
 

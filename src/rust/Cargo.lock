@@ -42,6 +42,7 @@ dependencies = [
  "serde",
  "serde_esri",
  "serde_json",
+ "serde_with",
  "tokio",
 ]
 

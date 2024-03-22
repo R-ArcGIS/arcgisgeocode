@@ -95,7 +95,7 @@ find_address_candidates <- function(
 
   null_args <- vapply(all_args, is.null, logical(1))
 
-  to_exclude <- c("crs", ".progress", "token", "geocoder", "for_storage", "max_locations")
+  to_exclude <- c("crs", ".progress", "token", "geocoder", "for_storage")
   to_include <- !names(all_args) %in% to_exclude
 
   non_null_vals <- all_args[to_include & !null_args]
@@ -200,7 +200,7 @@ find_address_candidates <- function(
     progress = .progress
   )
 
-  all_resps
+  list(all_reqs, all_resps)
   # httr2::req_perform()
 }
 

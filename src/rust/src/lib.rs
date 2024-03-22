@@ -1,6 +1,4 @@
 use extendr_api::prelude::*;
-// use rust_iso3166::CountryCode;
-// use serde::{Deserialize, Serialize};
 
 use serde_json::to_string;
 use tokio::runtime::Runtime;
@@ -197,6 +195,7 @@ fn parse_rev_geocode_resp(resps: Strings) -> List {
         [res_attrs, res_geo]
     ).unwrap()
 }
+
 
 
 extendr_module! {

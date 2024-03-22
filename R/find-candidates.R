@@ -205,3 +205,16 @@ find_address_candidates <- function(
 }
 
 
+parse_candidate_res <- function(string) {
+  res_list <- parse_candidate_json(string)
+  res <- res_list[["attributes"]]
+  res[["extents"]] <- res_list[["extents"]]
+
+  sf::st_sf(
+    res,
+    geometry = sf::st_sfc(res_list$locations, crs = res_list$sr$wkid)
+  )
+}
+
+# parse_candidate_res(string)
+

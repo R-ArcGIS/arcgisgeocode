@@ -27,7 +27,7 @@ pub struct Candidate {
 }
 
 #[serde_as]
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, IntoDataFrameRow)]
 #[serde(rename_all = "camelCase")]
 pub struct Attributes {
     #[serde_as(as = "NoneAsEmptyString")]
@@ -277,12 +277,32 @@ pub fn parse_candidate_json(x: &str) -> Robj {
                 .into_iter()
                 .enumerate()
                 .map(|(i, pi)| {
-                    let ri = parse_candidate(pi);
-                    let _ = extent_res.set_elt(i, ri.1);
-                    let _ = location_res.set_elt(i, ri.2);
-                    ri.0
+                    let _ = location_res.set_elt(i, as_sfg(pi.location));
+
+                    let Extent {
+                        xmin,
+                        ymin,
+                        xmax,
+                        ymax,
+                    } = pi.extent;
+
+                    let extent = Doubles::from_values([xmin, ymin, xmax, ymax])
+                        .into_robj()
+                        .set_attrib("names", ["xmin", "ymin", "xmax", "ymax"])
+                        .unwrap();
+
+                    let _ = extent_res.set_elt(i, extent);
+
+                    pi.attributes
+                    // let ri = parse_candidate(pi);
+                    // let _ = extent_res.set_elt(i, ri.1);
+                    // let _ = location_res.set_elt(i, ri.2);
+                    // ri.0
                 })
-                .collect::<List>();
+                .collect::<Vec<_>>();
+
+            let res = candidate_attrs.into_dataframe().unwrap();
+            let candidate_attrs = res.as_robj().clone();
 
             list!(
                 attributes = candidate_attrs,

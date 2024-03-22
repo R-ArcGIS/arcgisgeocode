@@ -1,9 +1,9 @@
 use extendr_api::prelude::*;
 
-use serde_json::to_string;
-use tokio::runtime::Runtime;
 use extendr_api::deserializer::from_robj;
 use extendr_api::serializer::to_robj;
+use serde_json::to_string;
+use tokio::runtime::Runtime;
 
 use reqwest::Url;
 use serde_esri::geometry::EsriPoint;
@@ -51,7 +51,6 @@ fn sfc_point_to_esri_point(pnts: List, sr: SpatialReference) -> Vec<Option<EsriP
     esri_pnts
 }
 
-
 #[extendr]
 fn reverse_geocode_rs(
     service_url: &str,
@@ -63,11 +62,7 @@ fn reverse_geocode_rs(
     location_type: Option<&str>,
     preferred_label_values: Option<&str>,
     token: Option<String>,
-) -> 
-Strings 
-
-{
-
+) -> Strings {
     // create a url
     let service_url = Url::parse(service_url).unwrap();
 
@@ -105,7 +100,6 @@ Strings
     // allocate params vec
     let mut params = Vec::with_capacity(locs.len());
 
-
     // fill in the params vec
     for (_, loc) in locs.into_iter().enumerate() {
         let param = ReverseGeocodeParams {
@@ -128,16 +122,15 @@ Strings
     let rt = Runtime::new().unwrap();
 
     // run the reverse geocode in parallel
-    let res = rt.block_on(
-        reverse_geocode_(service_url, params, token)
-    );
+    let res = rt.block_on(reverse_geocode_(service_url, params, token));
 
-    res.into_iter().map(|r| {
-        let rr = r.unwrap();
-        let json = serde_json::to_string(&rr).unwrap();
-        json
-    })
-    .collect::<Strings>()
+    res.into_iter()
+        .map(|r| {
+            let rr = r.unwrap();
+            let json = serde_json::to_string(&rr).unwrap();
+            json
+        })
+        .collect::<Strings>()
 }
 
 // convert an EsriPoint to an sfg
@@ -152,18 +145,13 @@ fn as_sfg(x: EsriPoint) -> Robj {
 #[extendr]
 fn as_esri_point_json(x: List, sr: Robj) -> Strings {
     let res = sfc_point_to_esri_point(x, parse_sr(sr).unwrap());
-    res
-        .into_iter()
-        .map(|pi| {
-            match pi {
-                Some(p) => {
-                    let json = to_string(&p).unwrap();
-                    Rstr::from_string(&json)
-                }
-                None => {
-                    Rstr::na()
-                }
-            }    
+    res.into_iter()
+        .map(|pi| match pi {
+            Some(p) => {
+                let json = to_string(&p).unwrap();
+                Rstr::from_string(&json)
+            }
+            None => Rstr::na(),
         })
         .collect::<Strings>()
 }
@@ -172,31 +160,26 @@ fn as_esri_point_json(x: List, sr: Robj) -> Strings {
 fn parse_rev_geocode_resp(resps: Strings) -> List {
     let mut res_geo = List::new(resps.len());
 
-    let res_attrs = resps 
+    let res_attrs = resps
         .into_iter()
         .enumerate()
         .map(|(i, ri)| {
-            let resp  = serde_json::from_str::<ReverseGeocodeResponse>(ri.as_str());
+            let resp = serde_json::from_str::<ReverseGeocodeResponse>(ri.as_str());
             let res = match resp {
                 Ok(r) => {
-                    let res = to_robj(&r.address).unwrap().as_list().unwrap(); 
+                    let res = to_robj(&r.address).unwrap().as_list().unwrap();
                     let _ = res_geo.set_elt(i, as_sfg(r.location));
                     res.into_robj()
-                },
-                Err(_) => {
-                    ().into_robj()
                 }
+                Err(_) => ().into_robj(),
             };
             res
-        }).collect::<List>().into();
+        })
+        .collect::<List>()
+        .into();
 
-    List::from_names_and_values(
-        &["attributes", "geometry"], 
-        [res_attrs, res_geo]
-    ).unwrap()
+    List::from_names_and_values(&["attributes", "geometry"], [res_attrs, res_geo]).unwrap()
 }
-
-
 
 extendr_module! {
     mod arcgeocode;

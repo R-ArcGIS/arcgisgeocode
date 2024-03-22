@@ -39,8 +39,6 @@ List available geocoders based on an authorization token.
 
 ``` r
 library(arcgeocode)
-#> Warning: replacing previous import 'arcgisutils::%||%' by 'rlang::%||%' when
-#> loading 'arcgeocode'
 
 # create a point
 x <- sf::st_sfc(sf::st_point(c(-117.172, 34.052)), crs = 4326)
@@ -62,6 +60,28 @@ reverse_geocode(x)
 #> 1 Redlands Inland Empire San Bernardino County California         CA          
 #>   Postal PostalExt     CntryName CountryCode                geometry
 #> 1  92374           United States         USA POINT (-117.172 34.052)
+
+# find address candidates
+candidates <- find_address_candidates(
+  address = c("esri"),
+  city = "redlands",
+  country_code = "usa"
+)
+
+dplyr::glimpse(candidates[,1:10])
+#> Rows: 2
+#> Columns: 11
+#> $ loc_name    <chr> "World", "World"
+#> $ status      <chr> "T", "T"
+#> $ score       <int> 100, 100
+#> $ match_addr  <chr> "Esri", "Esri"
+#> $ long_label  <chr> "Esri, 380 New York St, Redlands, CA, 92373, USA", "Esri, …
+#> $ short_label <chr> "Esri", "Esri"
+#> $ addr_type   <chr> "POI", "POI"
+#> $ type_field  <chr> "Business Facility", "Scientific Research"
+#> $ place_name  <chr> "Esri", "Esri"
+#> $ place_addr  <chr> "380 New York St, Redlands, California, 92373", "Redlands,…
+#> $ geometry    <POINT [°]> POINT (-117.1957 34.05609), POINT (-117.1957 34.05615)…
 
 # list available geocoding services for signed in account
 list_geocoders()

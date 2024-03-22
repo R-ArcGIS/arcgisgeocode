@@ -179,7 +179,7 @@ find_address_candidates <- function(
   # pre-allocate list
   all_reqs <- vector(mode = "list", length = n)
 
-  for (i in seq_along(params_df)) {
+  for (i in seq_len(n)) {
     # capture params as a list
     params_i <- as.list(params_df[i,])
     # convert the names to lowerCamel for endpoint
@@ -200,8 +200,16 @@ find_address_candidates <- function(
     progress = .progress
   )
 
-  list(all_reqs, all_resps)
-  # httr2::req_perform()
+  # TODO handle errors!!!
+  successes <- httr2::resps_successes(all_resps)
+
+  all_results <- lapply(successes, function(.resp) {
+    string <- httr2::resp_body_string(.resp)
+    # string
+    parse_candidate_res(string)
+  })
+
+  collapse::rowbind(all_results)
 }
 
 
@@ -210,9 +218,12 @@ parse_candidate_res <- function(string) {
   res <- res_list[["attributes"]]
   res[["extents"]] <- res_list[["extents"]]
 
+  geometry <- sf::st_sfc(res_list[["locations"]], crs = res_list$sr$wkid)
+
+  # geometry
   sf::st_sf(
     res,
-    geometry = sf::st_sfc(res_list$locations, crs = res_list$sr$wkid)
+    geometry
   )
 }
 

@@ -15,6 +15,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Imports: 
     arcgisutils (>= 0.2.0.9000),
+    collapse,
     httr2 (>= 1.0.0),
     jsonify,
     rlang (>= 1.1.0),

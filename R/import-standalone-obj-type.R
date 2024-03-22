@@ -63,7 +63,7 @@
 #'   article, e.g. "an integer vector".
 #' @noRd
 obj_type_friendly <- function(x, value = TRUE) {
-  if (is_missing(x)) {
+  if (rlang::is_missing(x)) {
     return("absent")
   }
 
@@ -84,7 +84,7 @@ obj_type_friendly <- function(x, value = TRUE) {
 
   if (!n_dim) {
     if (!is_list(x) && length(x) == 1) {
-      if (is_na(x)) {
+      if (rlang::is_na(x)) {
         return(switch(
           typeof(x),
           logical = "`NA`",
@@ -303,11 +303,11 @@ stop_input_type <- function(
     allow_na = FALSE,
     allow_null = FALSE,
     show_value = TRUE,
-    arg = caller_arg(x),
-    call = caller_env()
+    arg = rlang::caller_arg(x),
+    call = rlang::caller_env()
 ) {
   # From standalone-cli.R
-  cli <- env_get_list(
+  cli <- rlang::env_get_list(
     nms = c("format_arg", "format_code"),
     last = topenv(),
     default = function(x) sprintf("`%s`", x),

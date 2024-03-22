@@ -1045,7 +1045,7 @@ dependencies = [
 [[package]]
 name = "serde_esri"
 version = "0.1.0"
-source = "git+https://github.com/JosiahParry/serde_esri#f34fd7e7229d75df73effc26d131cc3f46ecfdcf"
+source = "git+https://github.com/JosiahParry/serde_esri#a07657856cb26c23abe8ed310aab4d7aee08bae2"
 dependencies = [
  "serde",
  "serde_json",

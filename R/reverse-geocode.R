@@ -132,9 +132,10 @@ reverse_geocode <- function(
   # convert to EsriPoint JSON
   locs_json <- as_esri_point_json(locations, in_crs)
 
-  b_req <- httr2::req_url_path_append(
-    arc_base_req(geocoder, token),
-    "reverseGeocode"
+  b_req <- arc_base_req(
+    geocoder,
+    token,
+    path ="reverseGeocode"
   )
 
   # allocate list to store requests

@@ -65,8 +65,8 @@ check_bool <- function(x,
                        ...,
                        allow_na = FALSE,
                        allow_null = FALSE,
-                       arg = caller_arg(x),
-                       call = caller_env()) {
+                       arg = rlang::caller_arg(x),
+                       call = rlang::caller_env()) {
   if (!missing(x) && .standalone_types_check_dot_call(rlang::ffi_standalone_is_bool_1.0.7, x, allow_na, allow_null)) {
     return(invisible(NULL))
   }
@@ -87,8 +87,8 @@ check_string <- function(x,
                          allow_empty = TRUE,
                          allow_na = FALSE,
                          allow_null = FALSE,
-                         arg = caller_arg(x),
-                         call = caller_env()) {
+                         arg = rlang::caller_arg(x),
+                         call = rlang::caller_env()) {
   if (!missing(x)) {
     is_string <- .rlang_check_is_string(
       x,
@@ -117,12 +117,12 @@ check_string <- function(x,
                                    allow_na,
                                    allow_null) {
   if (is_string(x)) {
-    if (allow_empty || !is_string(x, "")) {
+    if (allow_empty || !rlang::is_string(x, "")) {
       return(TRUE)
     }
   }
 
-  if (allow_null && is_null(x)) {
+  if (allow_null && rlang::is_null(x)) {
     return(TRUE)
   }
 
@@ -136,8 +136,8 @@ check_string <- function(x,
 check_name <- function(x,
                        ...,
                        allow_null = FALSE,
-                       arg = caller_arg(x),
-                       call = caller_env()) {
+                       arg = rlang::caller_arg(x),
+                       call = rlang::caller_env()) {
   if (!missing(x)) {
     is_string <- .rlang_check_is_string(
       x,
@@ -172,8 +172,8 @@ check_number_decimal <- function(x,
                                  allow_infinite = TRUE,
                                  allow_na = FALSE,
                                  allow_null = FALSE,
-                                 arg = caller_arg(x),
-                                 call = caller_env()) {
+                                 arg = rlang::caller_arg(x),
+                                 call = rlang::caller_env()) {
   if (missing(x)) {
     exit_code <- IS_NUMBER_false
   } else if (0 == (exit_code <- .standalone_types_check_dot_call(
@@ -210,8 +210,8 @@ check_number_whole <- function(x,
                                allow_infinite = FALSE,
                                allow_na = FALSE,
                                allow_null = FALSE,
-                               arg = caller_arg(x),
-                               call = caller_env()) {
+                               arg = rlang::caller_arg(x),
+                               call = rlang::caller_env()) {
   if (missing(x)) {
     exit_code <- IS_NUMBER_false
   } else if (0 == (exit_code <- .standalone_types_check_dot_call(
@@ -308,11 +308,13 @@ check_symbol <- function(x,
   )
 }
 
-check_arg <- function(x,
-                      ...,
-                      allow_null = FALSE,
-                      arg = caller_arg(x),
-                      call = caller_env()) {
+check_arg <- function(
+    x,
+    ...,
+    allow_null = FALSE,
+    arg = rlang::caller_arg(x),
+    call = rlang::caller_env()
+) {
   if (!missing(x)) {
     if (is_symbol(x)) {
       return(invisible(NULL))
@@ -333,11 +335,13 @@ check_arg <- function(x,
   )
 }
 
-check_call <- function(x,
-                       ...,
-                       allow_null = FALSE,
-                       arg = caller_arg(x),
-                       call = caller_env()) {
+check_call <- function(
+    x,
+    ...,
+    allow_null = FALSE,
+    arg = rlang::caller_arg(x),
+    call = rlang::caller_env()
+) {
   if (!missing(x)) {
     if (is_call(x)) {
       return(invisible(NULL))
@@ -358,16 +362,18 @@ check_call <- function(x,
   )
 }
 
-check_environment <- function(x,
-                              ...,
-                              allow_null = FALSE,
-                              arg = caller_arg(x),
-                              call = caller_env()) {
+check_environment <- function(
+    x,
+    ...,
+    allow_null = FALSE,
+    arg = rlang::caller_arg(x),
+    call = rlang::caller_env()
+) {
   if (!missing(x)) {
-    if (is_environment(x)) {
+    if (rlang::is_environment(x)) {
       return(invisible(NULL))
     }
-    if (allow_null && is_null(x)) {
+    if (allow_null && rlang::is_null(x)) {
       return(invisible(NULL))
     }
   }
@@ -383,16 +389,18 @@ check_environment <- function(x,
   )
 }
 
-check_function <- function(x,
-                           ...,
-                           allow_null = FALSE,
-                           arg = caller_arg(x),
-                           call = caller_env()) {
+check_function <- function(
+    x,
+    ...,
+    allow_null = FALSE,
+    arg = rlang::caller_arg(x),
+    call = rlang::caller_env()
+) {
   if (!missing(x)) {
-    if (is_function(x)) {
+    if (rlang::is_function(x)) {
       return(invisible(NULL))
     }
-    if (allow_null && is_null(x)) {
+    if (allow_null && rlang::is_null(x)) {
       return(invisible(NULL))
     }
   }
@@ -411,13 +419,13 @@ check_function <- function(x,
 check_closure <- function(x,
                           ...,
                           allow_null = FALSE,
-                          arg = caller_arg(x),
-                          call = caller_env()) {
+                          arg = rlang::caller_arg(x),
+                          call = rlang::caller_env()) {
   if (!missing(x)) {
-    if (is_closure(x)) {
+    if (rlang::is_closure(x)) {
       return(invisible(NULL))
     }
-    if (allow_null && is_null(x)) {
+    if (allow_null && rlang::is_null(x)) {
       return(invisible(NULL))
     }
   }
@@ -433,16 +441,18 @@ check_closure <- function(x,
   )
 }
 
-check_formula <- function(x,
-                          ...,
-                          allow_null = FALSE,
-                          arg = caller_arg(x),
-                          call = caller_env()) {
+check_formula <- function(
+    x,
+    ...,
+    allow_null = FALSE,
+    arg = rlang::caller_arg(x),
+    call = rlang::caller_env()
+) {
   if (!missing(x)) {
-    if (is_formula(x)) {
+    if (rlang::is_formula(x)) {
       return(invisible(NULL))
     }
-    if (allow_null && is_null(x)) {
+    if (allow_null && rlang::is_null(x)) {
       return(invisible(NULL))
     }
   }
@@ -464,13 +474,13 @@ check_formula <- function(x,
 check_character <- function(x,
                             ...,
                             allow_null = FALSE,
-                            arg = caller_arg(x),
-                            call = caller_env()) {
+                            arg = rlang::caller_arg(x),
+                            call = rlang::caller_env()) {
   if (!missing(x)) {
-    if (is_character(x)) {
+    if (rlang::is_character(x)) {
       return(invisible(NULL))
     }
-    if (allow_null && is_null(x)) {
+    if (allow_null && rlang::is_null(x)) {
       return(invisible(NULL))
     }
   }
@@ -489,13 +499,13 @@ check_character <- function(x,
 check_logical <- function(x,
                           ...,
                           allow_null = FALSE,
-                          arg = caller_arg(x),
-                          call = caller_env()) {
+                          arg = rlang::caller_arg(x),
+                          call = rlang::caller_env()) {
   if (!missing(x)) {
-    if (is_logical(x)) {
+    if (rlang::is_logical(x)) {
       return(invisible(NULL))
     }
-    if (allow_null && is_null(x)) {
+    if (allow_null && rlang::is_null(x)) {
       return(invisible(NULL))
     }
   }
@@ -514,13 +524,13 @@ check_logical <- function(x,
 check_data_frame <- function(x,
                              ...,
                              allow_null = FALSE,
-                             arg = caller_arg(x),
-                             call = caller_env()) {
+                             arg = rlang::caller_arg(x),
+                             call = rlang::caller_env()) {
   if (!missing(x)) {
     if (is.data.frame(x)) {
       return(invisible(NULL))
     }
-    if (allow_null && is_null(x)) {
+    if (allow_null && rlang::is_null(x)) {
       return(invisible(NULL))
     }
   }

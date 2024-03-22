@@ -16,6 +16,9 @@ fn parse_sr(sr: Robj) -> Option<SpatialReference> {
     sr.ok()
 }
 
+mod find_candidates;
+mod iso3166;
+
 mod reverse;
 use crate::reverse::*;
 use std::sync::Arc;
@@ -196,69 +199,13 @@ fn parse_rev_geocode_resp(resps: Strings) -> List {
 }
 
 
-#[extendr]
-/// @export
-fn is_iso3166(code: &str) -> bool {
-    let code = code.to_uppercase();
-    //https://developers.arcgis.com/rest/geocode/api-reference/geocode-coverage.htm#GUID-D61FB53E-32DF-4E0E-A1CC-473BA38A23C0
-    let non_iso_valid = ["EUR", "NCY", "PLI", "RKS", "SPI"];
-
-    // check these first
-    if non_iso_valid.contains(&code.as_str()) {
-        return true;
-    }
-
-    // check the rest
-    let alpha2 = rust_iso3166::from_alpha2(&code);
-
-    if alpha2.is_some() {
-        return true
-    }
-
-    let alpha3 = rust_iso3166::from_alpha3(&code);
-
-    if alpha3.is_some() {
-        return true
-    }
-
-    false
-}
-
-#[extendr]
-fn iso_3166_2() -> Strings {
-    let iso = rust_iso3166::ALL;
-    iso
-        .iter()
-        .map(|c| c.alpha2)
-        .collect::<Strings>()
-}
-
-#[extendr]
-fn iso_3166_3() -> Strings {
-    let iso = rust_iso3166::ALL;
-    iso
-        .iter()
-        .map(|c| c.alpha3)
-        .collect::<Strings>()
-}
-
-#[extendr]
-fn iso_3166_names() -> Strings {
-    let iso = rust_iso3166::ALL;
-    iso
-        .iter()
-        .map(|c| c.name)
-        .collect::<Strings>()
-}
-
-
 extendr_module! {
     mod arcgeocode;
     fn as_esri_point_json;
     fn reverse_geocode_rs;
     fn parse_rev_geocode_resp;
-    fn is_iso3166;
-    fn iso_3166_2;
-    fn iso_3166_3;
-    fn iso_3166_names;
+
+
+    use find_candidates;
+    use iso3166;
 }

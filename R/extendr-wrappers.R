@@ -13,11 +13,12 @@ NULL
 
 as_esri_point_json <- function(x, sr) .Call(wrap__as_esri_point_json, x, sr)
 
-reverse_geocode_rs <- function(service_url, locations, crs, lang, for_storage, feature_type, location_type, preferred_label_values, `_token`) .Call(wrap__reverse_geocode_rs, service_url, locations, crs, lang, for_storage, feature_type, location_type, preferred_label_values, `_token`)
+reverse_geocode_rs <- function(service_url, locations, crs, lang, for_storage, feature_type, location_type, preferred_label_values, token) .Call(wrap__reverse_geocode_rs, service_url, locations, crs, lang, for_storage, feature_type, location_type, preferred_label_values, token)
 
 parse_rev_geocode_resp <- function(resps) .Call(wrap__parse_rev_geocode_resp, resps)
 
-#' @export
+parse_candidate_json <- function(x) .Call(wrap__parse_candidate_json, x)
+
 is_iso3166 <- function(code) .Call(wrap__is_iso3166, code)
 
 iso_3166_2 <- function() .Call(wrap__iso_3166_2)

@@ -16,6 +16,7 @@ RoxygenNote: 7.3.1
 Imports: 
     arcgisutils (>= 0.2.0.9000),
     httr2 (>= 1.0.0),
+    jsonify,
     rlang (>= 1.1.0),
     sf
 Config/rextendr/version: 0.3.1.9000

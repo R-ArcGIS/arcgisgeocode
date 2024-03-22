@@ -2,7 +2,13 @@
 
 # single line poi search tips:
 # https://developers.arcgis.com/rest/geocode/api-reference/geocoding-find-address-candidates.htm#GUID-8C5C17DC-064E-4F25-A1F2-3DEB481A4CED
-find_address_candidate <- function(
+
+
+#' Find Address Candidates
+#'
+#' @inheritParams reverse_geocode
+#' @export
+find_address_candidates <- function(
     single_line = NULL,
     address = NULL,
     address2 = NULL,
@@ -23,35 +29,42 @@ find_address_candidate <- function(
     max_locations = NULL, # max 50
     for_storage = FALSE, # warn
     match_out_of_range = NULL,
-    location_type = c("rooftop", "street"),
+    location_type = NULL,
     lang_code = NULL,
     source_country = NULL, # iso code
-    preferred_label_values = c("postalCity", "localCity"),
+    preferred_label_values = NULL,
     geocoder = default_geocoder(),
     token = arc_token(),
     .progress = TRUE
 ) {
 
+  # TODO CHECKS
+  # - search_extent
+  # - crs
+  # - geocoder
+  check_bool(.progress, allow_na = FALSE, allow_null = FALSE)
+
   # type checking for all character types
   # they can be either NULL or not. When not, they cannot have NA values
-  check_character(single_line, allow_null = TRUE, allow_na = FALSE)
-  check_character(address, allow_null = TRUE, allow_na = FALSE)
-  check_character(address2, allow_null = TRUE, allow_na = FALSE)
-  check_character(address3, allow_null = TRUE, allow_na = FALSE)
-  check_character(neighborhood, allow_null = TRUE, allow_na = FALSE)
-  check_character(city, allow_null = TRUE, allow_na = FALSE)
-  check_character(subregion, allow_null = TRUE, allow_na = FALSE)
-  check_character(region, allow_null = TRUE, allow_na = FALSE)
-  check_character(postal, allow_null = TRUE, allow_na = FALSE)
-  check_character(postal_ext, allow_null = TRUE, allow_na = FALSE)
-  check_character(category, allow_null = TRUE, allow_na = FALSE)
-  check_character(location_type, allow_null = TRUE, allow_na = FALSE)
-  check_character(source_country, allow_null = TRUE, allow_na = FALSE)
-  check_character(preferred_label_values, allow_null = TRUE, allow_na = FALSE)
+  check_character(single_line, allow_null = TRUE)
+  check_character(address, allow_null = TRUE)
+  check_character(address2, allow_null = TRUE)
+  check_character(address3, allow_null = TRUE)
+  check_character(neighborhood, allow_null = TRUE)
+  check_character(city, allow_null = TRUE)
+  check_character(subregion, allow_null = TRUE)
+  check_character(region, allow_null = TRUE)
+  check_character(postal, allow_null = TRUE)
+  check_character(postal_ext, allow_null = TRUE)
+  check_character(category, allow_null = TRUE)
+  check_character(location_type, allow_null = TRUE)
+  check_character(preferred_label_values, allow_null = TRUE)
 
   # iso 3166 checks
-  check_iso_3166(country_code, allow_null = TRUE, allow_na = TRUE, scalar = FALSE)
-  check_iso_3166(lang_code, allow_null = TRUE, allow_na = TRUE, scalar = FALSE)
+  check_iso_3166(country_code, allow_null = TRUE, scalar = FALSE)
+  check_iso_3166(lang_code, allow_null = TRUE, scalar = FALSE)
+  check_iso_3166(source_country, allow_null = TRUE, scalar = FALSE)
+
   check_logical(
     match_out_of_range,
     allow_null = TRUE,
@@ -66,6 +79,7 @@ find_address_candidate <- function(
     call = rlang::current_env()
   )
 
+  # this also checks the token
   check_for_storage(for_storage, token, call = rlang::current_env())
 
   # check that either single_line or address are not-null
@@ -74,15 +88,97 @@ find_address_candidate <- function(
   # It could be actually really easy to capture all of the arguments
   # except .progress, token, and geocoder to turn it into a data.frame
   # iterate through the rows and create the requests
-  all_args <- rlang::fn_fmls()
+  # fml_nms <- rlang::fn_fmls_names()
+  fml_nms <- names(rlang::fn_fmls())
 
-  to_include <- !names(all_args) %in%
-    c("crs", ".progress", "token", "geocoder")
+  # get all values passed in
+  all_args <- rlang::env_get_list(nms = fml_nms)
 
-  all_args[to_include & !vapply(all_args, is.null, logical(1))]
-  # lets return all output fields always, just easier that way
-  # outFields=*
+  null_args <- vapply(all_args, is.null, logical(1))
+
+  to_exclude <- c("crs", ".progress", "token", "geocoder", "for_storage", "max_locations")
+  to_include <- !names(all_args) %in% to_exclude
+
+  non_null_vals <- all_args[to_include & !null_args]
+
+  # validate the preferred_label_values
+  if (!is.null(non_null_vals[["preferred_label_values"]])) {
+    non_null_vals[["preferred_label_values"]] <-  match_label_values(
+      non_null_vals[["preferred_label_values"]],
+      .multiple = TRUE
+    )
+  }
+
+  # validate location types
+  if (!is.null(non_null_vals[["location_type"]])) {
+    non_null_vals[["location_type"]] <- match_location_type(
+      non_null_vals[["location_type"]],
+      .multiple = TRUE
+    )
+  }
+
+  # check for locations
+  check_locations(location)
+
+  # convert to esri json if not missing
+  if (!is.null(location)) {
+    in_crs <- sf::st_crs(location)
+    in_sr <- validate_crs(in_crs, call = call)[[1]]
+    non_null_vals[["location"]] <- as_esri_point_json(location, in_sr)
+  }
+
+
+  # check lengths
+  ns <- lengths(non_null_vals)
+  n_checks <- ns == max(ns) | ns == 1L
+
+  if (!all(n_checks)) {
+    cli::cli_abort(
+      c(
+        "All arguments must be the same or length 1",
+        ">" = "Problems with: {names(non_null_vals)[!n_checks]}"
+      )
+    )
+  }
+
+  # handle outSR
+  if (!is.null(crs)) {
+    crs <- jsonify::to_json(validate_crs(crs)[[1]], unbox = TRUE)
+  }
+
+  # create the base request
+  b_req <- arc_base_req(
+    geocoder,
+    token,
+    path = "findAddressCandidates",
+    query = c("f" = "json")
+  )
+
+  # create a data frame to take advantage of auto-recycling
+  params_df <- data.frame(non_null_vals)
+
+  # how many requests we will have to make
+  n <- nrow(params_df)
+
+  # pre-allocate list
+  all_reqs <- vector(mode = "list", length = n)
+
+  for (i in seq_along(params_df)) {
+    # capture params as a list
+    params_i <- as.list(params_df[i,])
+    # convert the names to lowerCamel for endpoint
+    names(params_i) <- to_lower_camel(names(params_i))
+    # store in list
+    all_reqs[[i]] <- httr2::req_body_form(
+      b_req,
+      !!!params_i,
+      outFields = "*",
+      outSR = crs
+    )
+  }
+
+  all_reqs
   # httr2::req_perform()
 }
 
-# find_address_candidate(1, "a", list())
+

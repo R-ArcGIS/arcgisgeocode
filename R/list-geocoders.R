@@ -16,7 +16,7 @@ list_geocoders <- function(
 ) {
 
   # extract helper services
-  self <- arc_self_meta(call = rlang::current_call())
+  self <- arc_self_meta(error_call = rlang::current_call())
   # extrac geocode metadata
   geocoder_metadata <- self[["helperServices"]][["geocode"]]
 
@@ -43,11 +43,12 @@ list_geocoders <- function(
 #' @export
 #' @rdname list_geocoders
 default_geocoder <- function(token = arc_token()) {
-  res <- list_geocoders(token = token, call = call)
-
-  if (nrow(res) > 1) {
-    cli::cli_abort("No geocoder services found.")
-  }
-
-  res[1, "url"]
+  "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
+  # res <- list_geocoders(token = token, call = call)
+  #
+  # if (nrow(res) > 1) {
+  #   cli::cli_abort("No geocoder services found.")
+  # }
+  #
+  # res[1, "url"]
 }

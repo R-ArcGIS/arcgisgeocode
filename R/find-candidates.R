@@ -39,9 +39,8 @@ find_address_candidates <- function(
 ) {
 
   # TODO CHECKS
-  # - search_extent
-  # - crs
   # - geocoder
+
   check_bool(.progress, allow_na = FALSE, allow_null = FALSE)
 
   # type checking for all character types
@@ -146,6 +145,23 @@ find_address_candidates <- function(
     crs <- jsonify::to_json(validate_crs(crs)[[1]], unbox = TRUE)
   }
 
+  # handle extent
+  # only 1 extent per function call, this will not be vectorized
+  check_extent(search_extent, arg = rlang::caller_arg(search_extent), call = call)
+
+  if (!is.null(search_extent)) {
+    extent_crs <- validate_crs(
+      sf::st_crs(search_extent),
+      call = rlang::current_call()
+    )[[1]]
+
+    extent_json_raw <- c(
+      as.list(search_extent),
+      spatialReference = list(extent_crs)
+    )
+    search_extent <- jsonify::to_json(extent_json_raw, unbox = TRUE)
+  }
+
   # create the base request
   b_req <- arc_base_req(
     geocoder,
@@ -173,11 +189,18 @@ find_address_candidates <- function(
       b_req,
       !!!params_i,
       outFields = "*",
-      outSR = crs
+      outSR = crs,
+      searchExtent = search_extent
     )
   }
 
-  all_reqs
+  all_resps <- httr2::req_perform_parallel(
+    all_reqs,
+    on_error = "continue",
+    progress = .progress
+  )
+
+  all_resps
   # httr2::req_perform()
 }
 

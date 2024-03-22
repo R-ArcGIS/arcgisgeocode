@@ -72,7 +72,11 @@ check_iso_3166 <- function(
 }
 
 
-check_locations <- function(locations, allow_null = TRUE, call = rlang::caller_env()) {
+check_locations <- function(
+    locations,
+    allow_null = TRUE,
+    call = rlang::caller_env()
+) {
 
   if (is.null(locations)) {
     return(invisible(NULL))
@@ -80,6 +84,21 @@ check_locations <- function(locations, allow_null = TRUE, call = rlang::caller_e
 
   if (!rlang::inherits_all(locations, c("sfc_POINT", "sfc"))) {
     stop_input_type(locations, "sfc_POINT", call = call)
+  }
+}
+
+check_extent <- function(
+    extent,
+    allow_null = TRUE,
+    arg = rlang::caller_arg(extent),
+    call = rlang::caller_env()
+) {
+  if (is.null(extent)) {
+    return(invisible(NULL))
+  }
+
+  if (!rlang::inherits_all(extent, "bbox")) {
+    stop_input_type(extent, "bbox", call = call)
   }
 }
 

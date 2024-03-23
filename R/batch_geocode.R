@@ -33,7 +33,6 @@ geocode_addresses <- function(
   # TODO
   # - check token
   # - check geocoder
-  # - paginate batch size
   # - single line has a maximum character limit set by the geocoder service
   #    - this needs to be checked
 
@@ -93,21 +92,145 @@ geocode_addresses <- function(
   # single_line and addresses are mutually exclusive
   rlang::check_exclusive(single_line, address)
 
-  address_fields <- c(
-    "single_line",
-    "address",
-    "address2",
-    "address3",
-    "neighborhood",
-    "city",
-    "subregion",
-    "region",
-    "postal",
-    "postal_ext",
-    "country_code",
-    "location"
+  address_fields <- c("single_line", "address", "address2", "address3", "neighborhood", "city", "subregion", "region", "postal", "postal_ext", "country_code", "location")
+
+  # browser()
+  fn_args <- rlang::env_get_list(nms = address_fields)
+  arg_lengths <- lengths(fn_args)
+  n <- max(arg_lengths)
+
+  # do lengths check
+  are_scalar <- arg_lengths == 1L
+  are_null <- arg_lengths == 0L
+  are_long <- arg_lengths == n
+  n_checks <- are_scalar | are_null | are_long
+
+  # abort if some are the wrong length
+  if (!all(n_checks)) {
+    cli::cli_abort(
+      c(
+        "Inconsistent number of elements in address fields",
+        "i" = "must be a scalar or of equal length (expected {.val {n}} elements)",
+        ">" = "problems with: {.field {names(n_checks)[!n_checks]}}"
+      )
+    )
+  }
+
+  if (!is.null(single_line)) {
+    too_long <- nchar(single_line) > 200
+    if (any(too_long)) {
+      ids <- which(too_long)
+      cli::cli_abort(
+        c(
+          "{.arg single_line} cannot be longer than 200 characters",
+          ">" = "problems with features: {which(too_long)} "
+        )
+      )
+    }
+  }
+
+  # input crs if location is provided
+  if (!is.null(location)) {
+    in_sr <- validate_crs(sf::st_crs(location))[[1]]
+  } else {
+    in_sr = NULL
+  }
+
+  # remove null fields and convert into a data.frame
+  # by converting to a data.frame, scalars are automatically lengthened
+  to_partition <- data.frame(compact(fn_args))
+
+  # identify the arguments that are missing that will need to be curried
+  missing_vals <- setdiff(address_fields, names(to_partition))
+
+  # we need to curry these missing NULLs into the call
+  to_curry <- rlang::set_names(
+    vector(mode = "list", length = length(missing_vals)),
+    missing_vals
   )
 
-  rlang::env_get_list(nms = address_fields)
+  # TODO identify the suggested batch size from the geocoding service
+  # metadata. This will need to be integrated with arc_open()? Or something...
+  # This is going to be the hard part. For now, hard-code to 150
+  if (is.null(batch_size)) batch_size <- 150L
 
+  # determine chunk indices
+  indices <- chunk_indices(n, batch_size)
+  # count how many chunks we will need
+  n_chunks <- length(indices[["start"]])
+
+  # instantiate empty vector for addresses
+  address_batch_json <- character(n_chunks)
+
+  # TODO make this into a simpler function
+  # fill vector with json string
+  # browser()
+  for (i in seq_len(n_chunks)) {
+    start <- indices[["start"]][i]
+    end <- indices[["end"]][i]
+
+    create_json_call <- rlang::call2(
+      create_records,
+      # subset the data frame
+      !!!to_partition[start:end, , drop = FALSE],
+      sr = in_sr,
+      # FIXME n is used to populate objectid field in json
+      # when chunked there will be duplicates. does this matter????
+      n = end - start + 1
+    )
+
+    # execute the call and fill the numeric vector
+    address_batch_json[i] <- rlang::eval_bare(
+      rlang::call_modify(create_json_call, !!!to_curry)
+    )
+  }
+
+  # create the base request
+  b_req <- arc_base_req(
+    geocoder,
+    token,
+    path = "geocodeAddresses",
+    query = list(f = "json")
+  )
+
+  # additional params
+  addtl_params <- list(
+    matchOutOfRange = match_out_of_range,
+    category = category,
+    locationType = location_type,
+    preferredLabelValues = preferred_label_values,
+    sourceCountry = source_country,
+    langCode = lang_code,
+    outSR = crs,
+    searchExtent = search_extent,
+    outFields = "*"
+  )
+
+  all_reqs <- lapply(address_batch_json, function(.addresses) {
+    httr2::req_body_form(
+      addresses = .addresses,
+      b_req, !!!addtl_params
+    )
+  })
+
+  all_reqs
 }
+
+
+#' Might want to migrate into arcgisutils
+#' https://github.com/R-ArcGIS/arcgislayers/blob/6e55b5f5b2c6037df1940fc10b72bfc42a11d9d6/R/utils.R#L84C1-L98C1
+#' For a given number of items and a chunk size, determine the start and end
+#' positions of each chunk.
+#'
+#' @param n the number of rows
+#' @param m the chunk size
+#' @keywords internal
+#' @noRd
+chunk_indices <- function(n, m) {
+  n_chunks <- ceiling(n/m)
+  chunk_starts <- seq(1, n, by = m)
+  chunk_ends <- seq_len(n_chunks) * m
+  chunk_ends[n_chunks] <- n
+  list(start = chunk_starts, end = chunk_ends)
+}
+

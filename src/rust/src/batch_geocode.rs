@@ -1,9 +1,11 @@
 use extendr_api::prelude::*;
 use serde::{Deserialize, Serialize};
 use serde_esri::geometry::EsriPoint;
+use serde_with::skip_serializing_none;
 
 use crate::parse_sr;
 
+#[skip_serializing_none]
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Address {
     objectid: i32,
@@ -52,7 +54,7 @@ pub fn create_records(
     n: i32,
 ) -> String {
     let n = n as usize;
-    let spatial_ref = parse_sr(sr).unwrap();
+    let spatial_ref = parse_sr(sr);
     let mut record_vec: Vec<Record> = Vec::with_capacity(n);
 
     for i in 0..n {
@@ -145,6 +147,7 @@ pub fn create_records(
         };
 
         let loc = match location {
+            // If not-null that means the spatial ref also has to not be null
             NotNull(ref a) => {
                 let loc = Doubles::try_from(a.elt(i).unwrap()).unwrap();
                 let p = EsriPoint {
@@ -152,7 +155,7 @@ pub fn create_records(
                     y: loc[1].inner(),
                     z: None,
                     m: None,
-                    spatialReference: Some(spatial_ref.clone()),
+                    spatialReference: Some(spatial_ref.clone().unwrap()),
                 };
 
                 Some(p)

@@ -14,10 +14,11 @@ fn parse_sr(sr: Robj) -> Option<SpatialReference> {
     sr.ok()
 }
 
+mod batch_geocode;
 mod find_candidates;
 mod iso3166;
-
 mod reverse;
+
 use crate::reverse::*;
 use std::sync::Arc;
 

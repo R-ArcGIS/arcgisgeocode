@@ -316,7 +316,7 @@ pub fn parse_candidate_json(x: &str) -> Robj {
     }
 }
 
-fn parse_candidate(x: Candidate) -> (Robj, Robj, Robj) {
+fn _parse_candidate(x: Candidate) -> (Robj, Robj, Robj) {
     let loc = as_sfg(x.location);
     let Extent {
         xmin,

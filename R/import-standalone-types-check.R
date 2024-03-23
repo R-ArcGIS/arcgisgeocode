@@ -268,7 +268,7 @@ check_number_whole <- function(x,
     } else if (x > max) {
       what <- sprintf("%s smaller than or equal to %s", what, max)
     } else {
-      abort("Unexpected state in OOB check", .internal = TRUE)
+      rlang::abort("Unexpected state in OOB check", .internal = TRUE)
     }
   }
 

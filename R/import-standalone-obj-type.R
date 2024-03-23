@@ -76,14 +76,14 @@ obj_type_friendly <- function(x, value = TRUE) {
     return(sprintf("a <%s> object", type))
   }
 
-  if (!is_vector(x)) {
+  if (!rlang::is_vector(x)) {
     return(.rlang_as_friendly_type(typeof(x)))
   }
 
   n_dim <- length(dim(x))
 
   if (!n_dim) {
-    if (!is_list(x) && length(x) == 1) {
+    if (!rlang::is_list(x) && length(x) == 1) {
       if (rlang::is_na(x)) {
         return(switch(
           typeof(x),
@@ -170,8 +170,8 @@ obj_type_friendly <- function(x, value = TRUE) {
 }
 
 vec_type_friendly <- function(x, length = FALSE) {
-  if (!is_vector(x)) {
-    abort("`x` must be a vector.")
+  if (!rlang::is_vector(x)) {
+    rlang::abort("`x` must be a vector.")
   }
   type <- typeof(x)
   n_dim <- length(dim(x))
@@ -336,7 +336,7 @@ stop_input_type <- function(
     obj_type_friendly(x, value = show_value)
   )
 
-  abort(message, ..., call = call, arg = arg)
+  rlang::abort(message, ..., call = call, arg = arg)
 }
 
 oxford_comma <- function(chr, sep = ", ", final = "or") {

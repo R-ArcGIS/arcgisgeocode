@@ -188,7 +188,7 @@ extendr_module! {
     fn reverse_geocode_rs;
     fn parse_rev_geocode_resp;
 
-
+    use batch_geocode;
     use find_candidates;
     use iso3166;
 }

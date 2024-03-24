@@ -1,9 +1,25 @@
+use crate::find_candidates::Attributes;
+use crate::{as_sfg, parse_sr};
 use extendr_api::prelude::*;
 use serde::{Deserialize, Serialize};
-use serde_esri::geometry::EsriPoint;
+use serde_esri::{geometry::EsriPoint, spatial_reference::SpatialReference};
 use serde_with::skip_serializing_none;
 
-use crate::parse_sr;
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct GeocodeAdddressesResults {
+    #[serde(rename = "spatialReference")]
+    pub spatial_reference: SpatialReference,
+    pub locations: Vec<Location>,
+}
+
+#[skip_serializing_none]
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct Location {
+    pub address: Option<String>,
+    pub location: EsriPoint,
+    pub score: f64,
+    pub attributes: Attributes,
+}
 
 #[skip_serializing_none]
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -190,7 +206,42 @@ pub fn create_records(
     serde_json::to_string(&recs).unwrap()
 }
 
+#[extendr]
+pub fn parse_location_json(x: &str) -> Robj {
+    let parsed = serde_json::from_str::<GeocodeAdddressesResults>(x);
+
+    match parsed {
+        Ok(p) => {
+            let n = p.locations.len();
+            let mut location_res = List::new(n);
+
+            let location_attrs = p
+                .locations
+                .into_iter()
+                .enumerate()
+                .map(|(i, pi)| {
+                    let _ = location_res.set_elt(i, as_sfg(pi.location));
+
+                    pi.attributes
+                })
+                .collect::<Vec<_>>();
+
+            let res = location_attrs.into_dataframe().unwrap();
+            let location_attrs = res.as_robj().clone();
+
+            list!(
+                attributes = location_attrs,
+                locations = location_res,
+                sr = extendr_api::serializer::to_robj(&p.spatial_reference).unwrap()
+            )
+            .into_robj()
+        }
+        Err(_) => ().into_robj(),
+    }
+}
+
 extendr_module! {
     mod batch_geocode;
     fn create_records;
+    fn parse_location_json;
 }

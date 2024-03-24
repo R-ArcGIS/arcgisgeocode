@@ -19,6 +19,8 @@ parse_rev_geocode_resp <- function(resps) .Call(wrap__parse_rev_geocode_resp, re
 
 create_records <- function(single_line, address, address2, address3, neighborhood, city, subregion, region, postal, postal_ext, country_code, location, sr, n) .Call(wrap__create_records, single_line, address, address2, address3, neighborhood, city, subregion, region, postal, postal_ext, country_code, location, sr, n)
 
+parse_location_json <- function(x) .Call(wrap__parse_location_json, x)
+
 parse_candidate_json <- function(x) .Call(wrap__parse_candidate_json, x)
 
 is_iso3166 <- function(code) .Call(wrap__is_iso3166, code)

@@ -1,11 +1,8 @@
+use crate::as_sfg;
 use extendr_api::{prelude::*, Attributes as ExtendrAttr};
-
 use serde::{Deserialize, Serialize};
 use serde_esri::{geometry::EsriPoint, spatial_reference::SpatialReference};
-
 use serde_with::{serde_as, NoneAsEmptyString};
-
-use crate::as_sfg;
 
 #[serde_as]
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -294,10 +291,6 @@ pub fn parse_candidate_json(x: &str) -> Robj {
                     let _ = extent_res.set_elt(i, extent);
 
                     pi.attributes
-                    // let ri = parse_candidate(pi);
-                    // let _ = extent_res.set_elt(i, ri.1);
-                    // let _ = location_res.set_elt(i, ri.2);
-                    // ri.0
                 })
                 .collect::<Vec<_>>();
 

@@ -213,7 +213,31 @@ geocode_addresses <- function(
     )
   })
 
-  all_reqs
+  all_resps <- httr2::req_perform_parallel(
+    all_reqs,
+    on_error = "continue",
+    progress = .progress
+  )
+
+  # TODO! Handle errors
+  all_results <- lapply(all_resps, function(.resp) {
+    string <- httr2::resp_body_string(.resp)
+
+    parse_locations_res(string)
+  })
+
+  collapse::rowbind(all_results)
+
+}
+
+parse_locations_res <- function(string) {
+  res_list <- parse_location_json(string)
+  res <- res_list[["attributes"]]
+  geometry <- sf::st_sfc(res_list[["locations"]], crs = res_list$sr$wkid)
+  sf::st_sf(
+    res,
+    geometry
+  )
 }
 
 

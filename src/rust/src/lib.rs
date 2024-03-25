@@ -18,6 +18,7 @@ mod batch_geocode;
 mod find_candidates;
 mod iso3166;
 mod reverse;
+mod suggest;
 
 use crate::reverse::*;
 use std::sync::Arc;
@@ -113,9 +114,6 @@ fn reverse_geocode_rs(
             preferred_label_values: pref_lab_vals.clone(),
         };
 
-        // let hm = param.as_form_body();
-        // let hm2 = hm.into_iter().map(|(k, v)| (k, v.into())).collect::<HashMap<&str, Robj>>();
-        // let _ = res_list.set_elt(i, List::from_hashmap(hm2).into());
         params.push(param);
     }
     // res_list
@@ -191,4 +189,5 @@ extendr_module! {
     use batch_geocode;
     use find_candidates;
     use iso3166;
+    use suggest;
 }

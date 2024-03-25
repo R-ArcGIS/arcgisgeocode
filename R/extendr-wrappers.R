@@ -31,5 +31,7 @@ iso_3166_3 <- function() .Call(wrap__iso_3166_3)
 
 iso_3166_names <- function() .Call(wrap__iso_3166_names)
 
+parse_suggestions <- function(x) .Call(wrap__parse_suggestions, x)
+
 
 # nolint end

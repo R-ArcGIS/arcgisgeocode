@@ -1,5 +1,5 @@
 #' Batch Geocode Addresses
-#' @inheritParams find_candidates
+#' @inheritParams find_address_candidates
 #' @export
 geocode_addresses <- function(
     single_line = NULL,

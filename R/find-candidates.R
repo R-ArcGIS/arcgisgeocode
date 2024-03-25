@@ -33,6 +33,7 @@ find_address_candidates <- function(
     lang_code = NULL,
     source_country = NULL, # iso code
     preferred_label_values = NULL,
+    magic_key = NULL,
     geocoder = default_geocoder(),
     token = arc_token(),
     .progress = TRUE
@@ -58,6 +59,7 @@ find_address_candidates <- function(
   check_character(category, allow_null = TRUE)
   check_character(location_type, allow_null = TRUE)
   check_character(preferred_label_values, allow_null = TRUE)
+  check_character(magic_key, allow_null = TRUE)
 
   # iso 3166 checks
   check_iso_3166(country_code, allow_null = TRUE, scalar = FALSE)

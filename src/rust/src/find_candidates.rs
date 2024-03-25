@@ -27,7 +27,6 @@ pub struct Candidate {
 #[derive(Debug, Clone, Serialize, Deserialize, IntoDataFrameRow)]
 #[serde(rename_all = "camelCase")]
 pub struct Attributes {
-    #[serde_as(as = "NoneAsEmptyString")]
     #[serde(rename = "Loc_name")]
     pub loc_name: Option<String>,
 
@@ -305,7 +304,10 @@ pub fn parse_candidate_json(x: &str) -> Robj {
             )
             .into_robj()
         }
-        Err(_) => ().into_robj(),
+        Err(e) => {
+            rprintln!("{:?}", e);
+            ().into_robj()
+        }
     }
 }
 

@@ -1,3 +1,13 @@
+#' Search Suggestion
+#'
+#' @details
+#'
+#' Unlike the other functions in this package, `suggest_places()` is not
+#' vectorized as it is intended to provide search suggestions for individual
+#' queries such as those made in a search bar.
+#'
+#' @returns
+#' A `data.frame` with 3 columns: `text`, `magic_key`, and `is_collection`.
 suggest_places <- function(
     text,
     location = NULL,
@@ -20,6 +30,20 @@ suggest_places <- function(
     call = rlang::current_env()
   )
 
+
+  if (!is.null(search_extent)) {
+    extent_crs <- validate_crs(
+      sf::st_crs(search_extent),
+      call = rlang::current_call()
+    )[[1]]
+
+    extent_json_raw <- c(
+      as.list(search_extent),
+      spatialReference = list(extent_crs)
+    )
+    search_extent <- jsonify::to_json(extent_json_raw, unbox = TRUE)
+  }
+
   check_number_whole(
     max_suggestions,
     min = 1,
@@ -40,7 +64,26 @@ suggest_places <- function(
     geocoder, path = "suggest", query = list(f = "json")
   )
 
-  httr2::req_body_form(
+  if (!is.null(location)) {
+    in_sr <- validate_crs(sf::st_crs(location))[[1]]
+  } else {
+    in_sr = NULL
+  }
 
+  loc_json <- as_esri_point_json(location, in_sr)
+
+  req <- httr2::req_body_form(
+    b_req,
+    text = text,
+    location = loc_json,
+    maxSuggestions = max_suggestions,
+    countryCode = country_code,
+    preferredLabelValues = preferred_label_values
   )
+
+  resp <- httr2::req_perform(req)
+
+  # TODO 0 rows are returned when there was an issue parsing
+  # should there be a warning?
+  parse_suggestions(httr2::resp_body_string(resp))
 }

@@ -20,5 +20,7 @@ Imports:
     jsonify,
     rlang (>= 1.1.0),
     sf
+Remotes:
+    R-ArcGIS/arcgisutils
 Config/rextendr/version: 0.3.1.9000
 SystemRequirements: Cargo (Rust's package manager), rustc

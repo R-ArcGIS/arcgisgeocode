@@ -6,8 +6,30 @@
 #' vectorized as it is intended to provide search suggestions for individual
 #' queries such as those made in a search bar.
 #'
+#' @inheritParams find_address_candidates
 #' @returns
 #' A `data.frame` with 3 columns: `text`, `magic_key`, and `is_collection`.
+#' @export
+#' @examples
+#' # identify a search point
+#' location <- sf::st_sfc(sf::st_point(c(-84.34, 33.74)), crs = 4326)
+#'
+#' # create a search extent from it
+#' search_extent <- sf::st_bbox(sf::st_buffer(location, 10))
+#'
+#' # find suggestions from it
+#' suggestions <- suggest_places(
+#'   "bellwood",
+#'   location,
+#'   search_extent = search_extent
+#' )
+#'
+#' # get address candidate information
+#' # using the text and the magic key
+#' find_address_candidates(
+#'   suggestions$text,
+#'   magic_key = suggestions$magic_key
+#' )
 suggest_places <- function(
     text,
     location = NULL,
@@ -19,6 +41,9 @@ suggest_places <- function(
     geocoder = default_geocoder(),
     token = arc_token()
 ) {
+
+  # FIXME
+  # Location should be able to be a length 2 numeric vector or an sfg POINT
 
   check_string(text)
   check_string(category, allow_null = TRUE)
@@ -70,6 +95,7 @@ suggest_places <- function(
     in_sr = NULL
   }
 
+  # get the location as json
   loc_json <- as_esri_point_json(location, in_sr)
 
   req <- httr2::req_body_form(

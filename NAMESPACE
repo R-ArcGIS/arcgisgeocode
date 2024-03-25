@@ -2,6 +2,7 @@
 
 export(default_geocoder)
 export(find_address_candidates)
+export(geocode_addresses)
 export(iso_3166_codes)
 export(list_geocoders)
 export(reverse_geocode)

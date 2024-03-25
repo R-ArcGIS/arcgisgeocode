@@ -5,7 +5,10 @@
 #
 # geocoder <- RcppSimdJson::fparse(res)
 #
-#
+# geocoder$categories$categories[[1]] |> str(2)
+# geocoder$categories$categories[[2]] |> str(2)
+# geocoder$categories$categories[[3]]$name |> str(2)
+
 # str(geocoder, 1)
 #
 # geocoder$candidateFields |> str(1)

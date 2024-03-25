@@ -36,7 +36,7 @@ pub struct Attributes {
     pub status: Option<String>,
 
     #[serde(rename = "Score")]
-    pub score: Option<i32>,
+    pub score: Option<f64>,
 
     #[serde(rename = "Match_addr")]
     #[serde_as(as = "NoneAsEmptyString")]
@@ -75,7 +75,7 @@ pub struct Attributes {
     pub url: Option<String>,
 
     #[serde(rename = "Rank")]
-    pub rank: Option<i32>,
+    pub rank: Option<f64>,
 
     #[serde(rename = "AddBldg")]
     #[serde_as(as = "NoneAsEmptyString")]
@@ -307,88 +307,6 @@ pub fn parse_candidate_json(x: &str) -> Robj {
         }
         Err(_) => ().into_robj(),
     }
-}
-
-fn _parse_candidate(x: Candidate) -> (Robj, Robj, Robj) {
-    let loc = as_sfg(x.location);
-    let Extent {
-        xmin,
-        ymin,
-        xmax,
-        ymax,
-    } = x.extent;
-
-    let extent = Doubles::from_values([xmin, ymin, xmax, ymax])
-        .into_robj()
-        .set_attrib("names", ["xmin", "ymin", "xmax", "ymax"])
-        .unwrap();
-
-    let attrs = x.attributes;
-
-    let attribute_res = list!(
-        address = x.address,
-        score = x.score,
-        loc_name = attrs.loc_name,
-        status = attrs.status,
-        match_addr = attrs.match_addr,
-        long_label = attrs.long_label,
-        short_label = attrs.short_label,
-        addr_type = attrs.addr_type,
-        type_field = attrs.type_field,
-        place_name = attrs.place_name,
-        place_addr = attrs.place_addr,
-        phone = attrs.phone,
-        url = attrs.url,
-        rank = attrs.rank,
-        add_bldg = attrs.add_bldg,
-        add_num = attrs.add_num,
-        add_num_from = attrs.add_num_from,
-        add_num_to = attrs.add_num_to,
-        add_range = attrs.add_range,
-        side = attrs.side,
-        st_pre_dir = attrs.st_pre_dir,
-        st_pre_type = attrs.st_pre_type,
-        st_name = attrs.st_name,
-        st_type = attrs.st_type,
-        st_dir = attrs.st_dir,
-        bldg_type = attrs.bldg_type,
-        bldg_name = attrs.bldg_name,
-        level_type = attrs.level_type,
-        level_name = attrs.level_name,
-        unit_type = attrs.unit_type,
-        unit_name = attrs.unit_name,
-        sub_addr = attrs.sub_addr,
-        st_addr = attrs.st_addr,
-        block = attrs.block,
-        sector = attrs.sector,
-        nbrhd = attrs.nbrhd,
-        district = attrs.district,
-        city = attrs.city,
-        metro_area = attrs.metro_area,
-        subregion = attrs.subregion,
-        region = attrs.region,
-        region_abbr = attrs.region_abbr,
-        territory = attrs.territory,
-        zone = attrs.zone,
-        postal = attrs.postal,
-        postal_ext = attrs.postal_ext,
-        country = attrs.country,
-        cntry_name = attrs.cntry_name,
-        lang_code = attrs.lang_code,
-        distance = attrs.distance,
-        x = attrs.x,
-        y = attrs.y,
-        display_x = attrs.display_x,
-        display_y = attrs.display_y,
-        xmin = attrs.xmin,
-        xmax = attrs.xmax,
-        ymin = attrs.ymin,
-        ymax = attrs.ymax,
-        ex_info = attrs.ex_info,
-    )
-    .into_robj();
-
-    (attribute_res, extent, loc)
 }
 
 extendr_module! {

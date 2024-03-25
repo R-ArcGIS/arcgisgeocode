@@ -209,7 +209,7 @@ find_address_candidates <- function(
     parse_candidate_res(string)
   })
 
-  collapse::rowbind(all_results)
+  rbind_results(all_results)
 }
 
 

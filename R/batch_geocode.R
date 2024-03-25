@@ -1,3 +1,6 @@
+#' Batch Geocode Addresses
+#' @inheritParams find_candidates
+#' @export
 geocode_addresses <- function(
     single_line = NULL,
     address = NULL,
@@ -31,7 +34,6 @@ geocode_addresses <- function(
   obj_check_token(token)
 
   # TODO
-  # - check token
   # - check geocoder
   # - single line has a maximum character limit set by the geocoder service
   #    - this needs to be checked
@@ -73,13 +75,13 @@ geocode_addresses <- function(
   check_extent(
     search_extent,
     arg = rlang::caller_arg(search_extent),
-    call = call
+    call = rlang::current_env()
   )
 
   if (!is.null(search_extent)) {
     extent_crs <- validate_crs(
       sf::st_crs(search_extent),
-      call = rlang::current_call()
+      call = rlang::current_env()
     )[[1]]
 
     extent_json_raw <- c(
@@ -222,16 +224,34 @@ geocode_addresses <- function(
   # TODO! Handle errors
   all_results <- lapply(all_resps, function(.resp) {
     string <- httr2::resp_body_string(.resp)
-
     parse_locations_res(string)
   })
 
-  collapse::rowbind(all_results)
+
+  results <- rbind_results(all_results)
+  # if any issues occured they would've happened here
+  errors <- attr(results, "null_elements")
+  n_errors <- length(errors)
+
+  # if errors occurred attach as an attribute
+  if (n_errors > 0) {
+    attr(results, "error_requests") <- all_reqsp[errors]
+    # add a warning when n_errors > 0
+    cli::cli_warn(c(
+      "x" = "Issue{cli::qty(n_errors)}{?s} encountered when processing response{cli::qty(n_errors)}{?s} {cli::qty(n_errors)} {errors}",
+      "i" = "access problem requests with {.code attr(result, \"error_requests\")}"
+    ))
+  }
+
+  results
 
 }
 
 parse_locations_res <- function(string) {
   res_list <- parse_location_json(string)
+  if (is.null(res_list)) {
+    return(NULL)
+  }
   res <- res_list[["attributes"]]
   geometry <- sf::st_sfc(res_list[["locations"]], crs = res_list$sr$wkid)
   sf::st_sf(
@@ -239,7 +259,6 @@ parse_locations_res <- function(string) {
     geometry
   )
 }
-
 
 #' Might want to migrate into arcgisutils
 #' https://github.com/R-ArcGIS/arcgislayers/blob/6e55b5f5b2c6037df1940fc10b72bfc42a11d9d6/R/utils.R#L84C1-L98C1

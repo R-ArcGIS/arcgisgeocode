@@ -18,14 +18,8 @@ pub struct Suggestions {
 pub fn parse_suggestions(x: &str) -> Robj {
     let sugg = serde_json::from_str::<Suggestions>(x);
     match sugg {
-        Ok(s) => Dataframe::try_from_values(s.suggestions)
-            .unwrap()
-            .as_robj()
-            .clone(),
-        Err(_) => Dataframe::try_from_values(Suggestions::default().suggestions)
-            .unwrap()
-            .as_robj()
-            .clone(),
+        Ok(s) => Dataframe::try_from_values(s.suggestions).unwrap().as_robj().clone(),
+        Err(_) => Dataframe::try_from_values(Suggestions::default().suggestions).unwrap().as_robj().clone(),
     }
 }
 

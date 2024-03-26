@@ -3,9 +3,9 @@ use extendr_api::prelude::*;
 use extendr_api::deserializer::from_robj;
 use extendr_api::serializer::to_robj;
 use serde_json::to_string;
-use tokio::runtime::Runtime;
+// use tokio::runtime::Runtime;
 
-use reqwest::Url;
+// use reqwest::Url;
 use serde_esri::geometry::EsriPoint;
 use serde_esri::spatial_reference::SpatialReference;
 
@@ -53,84 +53,84 @@ fn sfc_point_to_esri_point(pnts: List, sr: SpatialReference) -> Vec<Option<EsriP
     esri_pnts
 }
 
-#[extendr]
-fn reverse_geocode_rs(
-    service_url: &str,
-    locations: List,
-    crs: Robj,
-    lang: Option<&str>,
-    for_storage: Option<bool>,
-    feature_type: Option<&str>,
-    location_type: Option<&str>,
-    preferred_label_values: Option<&str>,
-    token: Option<String>,
-) -> Strings {
-    // create a url
-    let service_url = Url::parse(service_url).unwrap();
+// #[extendr]
+// fn reverse_geocode_rs(
+//     service_url: &str,
+//     locations: List,
+//     crs: Robj,
+//     lang: Option<&str>,
+//     for_storage: Option<bool>,
+//     feature_type: Option<&str>,
+//     location_type: Option<&str>,
+//     preferred_label_values: Option<&str>,
+//     token: Option<String>,
+// ) -> Strings {
+//     // create a url
+//     let service_url = Url::parse(service_url).unwrap();
 
-    // extract spatial reference
-    let sr = Arc::new(parse_sr(crs).unwrap());
+//     // extract spatial reference
+//     let sr = Arc::new(parse_sr(crs).unwrap());
 
-    let ftype = feature_type.map_or(None, |f| match f {
-        "StreetInt" => Some(FeatureType::StreetInt),
-        "DistanceMarker" => Some(FeatureType::DistanceMarker),
-        "StreetAddress" => Some(FeatureType::StreetAddress),
-        "StreetName" => Some(FeatureType::StreetName),
-        "POI" => Some(FeatureType::POI),
-        "Subaddress" => Some(FeatureType::Subaddress),
-        "PointAddress" => Some(FeatureType::PointAddress),
-        "Postal" => Some(FeatureType::Postal),
-        "Locality" => Some(FeatureType::Locality),
-        _ => None,
-    });
+//     let ftype = feature_type.map_or(None, |f| match f {
+//         "StreetInt" => Some(FeatureType::StreetInt),
+//         "DistanceMarker" => Some(FeatureType::DistanceMarker),
+//         "StreetAddress" => Some(FeatureType::StreetAddress),
+//         "StreetName" => Some(FeatureType::StreetName),
+//         "POI" => Some(FeatureType::POI),
+//         "Subaddress" => Some(FeatureType::Subaddress),
+//         "PointAddress" => Some(FeatureType::PointAddress),
+//         "Postal" => Some(FeatureType::Postal),
+//         "Locality" => Some(FeatureType::Locality),
+//         _ => None,
+//     });
 
-    let ltype = location_type.map_or(None, |l| match l {
-        "Rooftop" => Some(LocationType::Rooftop),
-        "Street" => Some(LocationType::Street),
-        _ => None,
-    });
+//     let ltype = location_type.map_or(None, |l| match l {
+//         "Rooftop" => Some(LocationType::Rooftop),
+//         "Street" => Some(LocationType::Street),
+//         _ => None,
+//     });
 
-    let pref_lab_vals = preferred_label_values.map_or(None, |p| match p {
-        "PostalCity" => Some(PreferredLabelValues::PostalCity),
-        "LocalCity" => Some(PreferredLabelValues::LocalCity),
-        _ => None,
-    });
+//     let pref_lab_vals = preferred_label_values.map_or(None, |p| match p {
+//         "PostalCity" => Some(PreferredLabelValues::PostalCity),
+//         "LocalCity" => Some(PreferredLabelValues::LocalCity),
+//         _ => None,
+//     });
 
-    // get the locations as esri points
-    let locs = sfc_point_to_esri_point(locations, sr.as_ref().clone());
+//     // get the locations as esri points
+//     let locs = sfc_point_to_esri_point(locations, sr.as_ref().clone());
 
-    // allocate params vec
-    let mut params = Vec::with_capacity(locs.len());
+//     // allocate params vec
+//     let mut params = Vec::with_capacity(locs.len());
 
-    // fill in the params vec
-    for (_, loc) in locs.into_iter().enumerate() {
-        let param = ReverseGeocodeParams {
-            location: loc.unwrap(),
-            out_sr: sr.as_ref().clone(),
-            lang_code: lang.map_or(None, |l| Some(String::from(l))),
-            for_storage: for_storage,
-            feature_types: ftype.clone(),
-            location_type: ltype.clone(),
-            preferred_label_values: pref_lab_vals.clone(),
-        };
+//     // fill in the params vec
+//     for (_, loc) in locs.into_iter().enumerate() {
+//         let param = ReverseGeocodeParams {
+//             location: loc.unwrap(),
+//             out_sr: sr.as_ref().clone(),
+//             lang_code: lang.map_or(None, |l| Some(String::from(l))),
+//             for_storage: for_storage,
+//             feature_types: ftype.clone(),
+//             location_type: ltype.clone(),
+//             preferred_label_values: pref_lab_vals.clone(),
+//         };
 
-        params.push(param);
-    }
-    // res_list
-    // create new runtime
-    let rt = Runtime::new().unwrap();
+//         params.push(param);
+//     }
+//     // res_list
+//     // create new runtime
+//     let rt = Runtime::new().unwrap();
 
-    // run the reverse geocode in parallel
-    let res = rt.block_on(reverse_geocode_(service_url, params, token));
+//     // run the reverse geocode in parallel
+//     let res = rt.block_on(reverse_geocode_(service_url, params, token));
 
-    res.into_iter()
-        .map(|r| {
-            let rr = r.unwrap();
-            let json = serde_json::to_string(&rr).unwrap();
-            json
-        })
-        .collect::<Strings>()
-}
+//     res.into_iter()
+//         .map(|r| {
+//             let rr = r.unwrap();
+//             let json = serde_json::to_string(&rr).unwrap();
+//             json
+//         })
+//         .collect::<Strings>()
+// }
 
 // convert an EsriPoint to an sfg
 fn as_sfg(x: EsriPoint) -> Robj {
@@ -183,7 +183,7 @@ fn parse_rev_geocode_resp(resps: Strings) -> List {
 extendr_module! {
     mod arcgeocode;
     fn as_esri_point_json;
-    fn reverse_geocode_rs;
+    // fn reverse_geocode_rs;
     fn parse_rev_geocode_resp;
 
     use batch_geocode;

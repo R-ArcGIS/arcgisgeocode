@@ -1,51 +1,51 @@
 use serde::{Deserialize, Serialize};
 use serde_esri::{geometry::EsriPoint, spatial_reference::SpatialReference};
 
-use reqwest::Url;
-use std::result::Result;
-use std::sync::Arc;
+// use reqwest::Url;
+// use std::result::Result;
+// use std::sync::Arc;
 
-pub async fn reverse_geocode_(
-    service_url: Url,
-    params: Vec<ReverseGeocodeParams>,
-    token: Option<String>,
-) -> Vec<Result<ReverseGeocodeResponse, reqwest::Error>> {
-    let url = Arc::new(service_url);
-    let client = reqwest::Client::new();
-    let token = Arc::new(token.unwrap_or("".to_string()));
+// pub async fn reverse_geocode_(
+//     service_url: Url,
+//     params: Vec<ReverseGeocodeParams>,
+//     token: Option<String>,
+// ) -> Vec<Result<ReverseGeocodeResponse, reqwest::Error>> {
+//     let url = Arc::new(service_url);
+//     let client = reqwest::Client::new();
+//     let token = Arc::new(token.unwrap_or("".to_string()));
 
-    let mut tasks = Vec::with_capacity(params.len());
+//     let mut tasks = Vec::with_capacity(params.len());
 
-    // create a task for each param
-    for param in params {
-        let task = client
-            .clone()
-            .post(url.as_ref().clone())
-            .query(&[("f", "json")])
-            .form(&param.as_form_body())
-            .header("X-Esri-Authorization", token.as_ref().clone())
-            .send();
+//     // create a task for each param
+//     for param in params {
+//         let task = client
+//             .clone()
+//             .post(url.as_ref().clone())
+//             .query(&[("f", "json")])
+//             .form(&param.as_form_body())
+//             .header("X-Esri-Authorization", token.as_ref().clone())
+//             .send();
 
-        tasks.push(tokio::spawn(task));
-    }
+//         tasks.push(tokio::spawn(task));
+//     }
 
-    // create a vector to store the output
-    let mut outputs = Vec::with_capacity(tasks.len());
+//     // create a vector to store the output
+//     let mut outputs = Vec::with_capacity(tasks.len());
 
-    // capture the output of each task
-    for task in tasks {
-        let task_res = task.await.unwrap();
-        match task_res {
-            Ok(res) => {
-                let res = res.json::<ReverseGeocodeResponse>().await;
-                outputs.push(res);
-            }
-            Err(e) => outputs.push(Err(e)),
-        }
-    }
+//     // capture the output of each task
+//     for task in tasks {
+//         let task_res = task.await.unwrap();
+//         match task_res {
+//             Ok(res) => {
+//                 let res = res.json::<ReverseGeocodeResponse>().await;
+//                 outputs.push(res);
+//             }
+//             Err(e) => outputs.push(Err(e)),
+//         }
+//     }
 
-    outputs
-}
+//     outputs
+// }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ReverseGeocodeParams {
@@ -64,64 +64,64 @@ pub struct ReverseGeocodeParams {
     pub preferred_label_values: Option<PreferredLabelValues>,
 }
 
-use serde_json::to_string;
-use std::collections::HashMap;
+// use serde_json::to_string;
+// use std::collections::HashMap;
 
-impl ReverseGeocodeParams {
-    pub fn as_form_body(self) -> HashMap<&'static str, String> {
-        let mut map = HashMap::new();
-        map.insert("location", to_string(&self.location).unwrap());
+// impl ReverseGeocodeParams {
+//     pub fn as_form_body(self) -> HashMap<&'static str, String> {
+//         let mut map = HashMap::new();
+//         map.insert("location", to_string(&self.location).unwrap());
 
-        // insert spatialReference
-        map.insert("outSR", to_string(&self.out_sr).unwrap());
+//         // insert spatialReference
+//         map.insert("outSR", to_string(&self.out_sr).unwrap());
 
-        // inserts langCode if present
-        self.lang_code
-            .map(|lang_code| map.insert("langCode", to_string(&lang_code).unwrap()));
+//         // inserts langCode if present
+//         self.lang_code
+//             .map(|lang_code| map.insert("langCode", to_string(&lang_code).unwrap()));
 
-        // inserts forStorage if present
-        self.for_storage
-            .map(|for_storage| map.insert("forStorage", to_string(&for_storage).unwrap()));
+//         // inserts forStorage if present
+//         self.for_storage
+//             .map(|for_storage| map.insert("forStorage", to_string(&for_storage).unwrap()));
 
-        // inserts locationType if present
-        self.location_type
-            .map(|location_type| map.insert("locationType", to_string(&location_type).unwrap()));
+//         // inserts locationType if present
+//         self.location_type
+//             .map(|location_type| map.insert("locationType", to_string(&location_type).unwrap()));
 
-        // inserts preferredLabelValues if present
-        self.preferred_label_values.map(|preferred_label_values| {
-            map.insert(
-                "preferredLabelValues",
-                to_string(&preferred_label_values).unwrap(),
-            )
-        });
+//         // inserts preferredLabelValues if present
+//         self.preferred_label_values.map(|preferred_label_values| {
+//             map.insert(
+//                 "preferredLabelValues",
+//                 to_string(&preferred_label_values).unwrap(),
+//             )
+//         });
 
-        map
-    }
+//         map
+//     }
 
-    pub fn _new(x: f64, y: f64) -> Self {
-        ReverseGeocodeParams {
-            location: EsriPoint {
-                x,
-                y,
-                z: None,
-                m: None,
-                spatialReference: None,
-            },
-            out_sr: SpatialReference {
-                wkid: Some(3857),
-                latest_wkid: None,
-                vcs_wkid: None,
-                latest_vcs_wkid: None,
-                wkt: None,
-            },
-            lang_code: None,
-            for_storage: None,
-            feature_types: None,
-            location_type: None,
-            preferred_label_values: None,
-        }
-    }
-}
+//     pub fn _new(x: f64, y: f64) -> Self {
+//         ReverseGeocodeParams {
+//             location: EsriPoint {
+//                 x,
+//                 y,
+//                 z: None,
+//                 m: None,
+//                 spatialReference: None,
+//             },
+//             out_sr: SpatialReference {
+//                 wkid: Some(3857),
+//                 latest_wkid: None,
+//                 vcs_wkid: None,
+//                 latest_vcs_wkid: None,
+//                 wkt: None,
+//             },
+//             lang_code: None,
+//             for_storage: None,
+//             feature_types: None,
+//             location_type: None,
+//             preferred_label_values: None,
+//         }
+//     }
+// }
 
 impl Default for ReverseGeocodeParams {
     fn default() -> Self {

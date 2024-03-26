@@ -6,13 +6,7 @@ Authors@R:
            comment = c(ORCID = "0000-0001-9910-865X"))
 Description: What the package does (one paragraph).
 License: Apache License (>= 2)
-Suggests: 
-    testthat (>= 3.0.0)
-Config/testthat/edition: 3
-Encoding: UTF-8
-Language: en
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+URL: https://github.com/r-arcgis/arcgeocode, https://r.esri.com/arcgeocode
 Imports: 
     arcgisutils (>= 0.2.0.9000),
     collapse,
@@ -20,7 +14,14 @@ Imports:
     jsonify,
     rlang (>= 1.1.0),
     sf
+Suggests: 
+    testthat (>= 3.0.0)
 Remotes:
     R-ArcGIS/arcgisutils
 Config/rextendr/version: 0.3.1.9000
+Config/testthat/edition: 3
+Encoding: UTF-8
+Language: en
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
 SystemRequirements: Cargo (Rust's package manager), rustc

@@ -11,14 +11,15 @@ Description: A very fast and robust interface to 'ArcGIS Geocode
     'arcgisgeocode' for all services except batch geocoding.
     'arcgisgeocode' also integrates with 'arcgisutils' to provide access
     to private custom locators or 'ArcGIS World Geocoder's.
-License: Apache License (>= 2)
+License: Apache License (>= 2) + file LICENSE
 URL: https://github.com/r-arcgis/arcgisgeocode,
     https://r.esri.com/arcgisgeocode
 Imports: 
     arcgisutils (>= 0.2.0.9000),
-    collapse,
+    cli,
     httr2 (>= 1.0.0),
     jsonify,
+    RcppSimdJson,
     rlang (>= 1.1.0),
     sf
 Suggests: 

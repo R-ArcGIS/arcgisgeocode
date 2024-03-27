@@ -40,18 +40,17 @@
 #' @param crs the CRS of the returned geometries. Passed to `sf::st_crs()`.
 #' @param ... unused.
 #' @param lang_code default `NULL`. An ISO 3166 country code.
-#'   See [`iso_3166_codes()`] for valid ISO codes.
+#'   See [`iso_3166_codes()`] for valid ISO codes. Optional.
 #' @param feature_type limits the possible match types returned. Must be one of
 #' `"StreetInt"`, `"DistanceMarker"`, `"StreetAddress"`, `"StreetName"`,
-#' `"POI"`, `"Subaddress"`, `"PointAddress"`, `"Postal"`, or `"Locality"`.
+#' `"POI"`, `"Subaddress"`, `"PointAddress"`, `"Postal"`, or `"Locality"`. Optional.
 #' @param location_type default `"rooftop"`. Must be one of `"rooftop"` or `"street"`.
+#'  Optional.
 #' @param preferred_label_values default NULL. Must be one of `"postalCity"`
-#'  or `"localCity"`.
+#'  or `"localCity"`. Optional.
 #' @param for_storage default `FALSE`. Whether or not the results will be saved
 #'    for long term storage.
-#' @param geocoder default [`world_geocoder`], the public
-#'   [ArcGIS World Geocoder](https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder).
-#'   See [`geocode_server()`] to use a different geocoder service.
+#' @param geocoder default [`default_geocoder()`].
 #' @param .progress default `TRUE`. Whether a progress bar should be provided.
 #' @inheritParams arcgisutils::arc_base_req
 #' @export
@@ -64,7 +63,7 @@ reverse_geocode <- function(
     location_type = c("rooftop", "street"),
     preferred_label_values = c("postalCity", "localCity"),
     for_storage = FALSE,
-    geocoder = world_geocoder,
+    geocoder = default_geocoder(),
     token = arc_token(),
     .progress = TRUE) {
   # TODO ask users to verify their `for_storage` use

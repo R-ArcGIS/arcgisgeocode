@@ -1,12 +1,44 @@
-# [category] can also be passed in a request on its own without the singleline or address parameters
-
-# single line poi search tips:
-# https://developers.arcgis.com/rest/geocode/api-reference/geocoding-find-address-candidates.htm#GUID-8C5C17DC-064E-4F25-A1F2-3DEB481A4CED
-
-
 #' Find Address Candidates
 #'
+#' Given an address, returns geocode result candidates.
+#'
+#' @param single_line a character vector of addresses to geocode. If provided
+#'  other `address` fields cannot be used. If `address` is not provided,
+#'  `single_line` must be.
+#' @param address a character vector of the first part of a street address.
+#'  Typically used for the street name and house number. But can also be a place
+#'  or building name. If `single_line` is not provided, `address` must be.
+#' @param address2 a character vector of the second part of a street address.
+#'  Typically includes a house number, sub-unit, street, building, or place name.
+#'  Optional.
+#' @param address3 a character vector of the third part of an address. Optional.
+#' @param neighborhood a character vector of the smallest administrative division
+#'  associated with an address. Typically, a neighborhood or a section of a
+#'  larger populated place. Optional.
+#' @param city a character vector of the next largest administrative division
+#'  associated with an address, typically, a city or municipality. A city is a
+#'  subdivision of a subregion or a region. Optional.
+#' @param subregion a character vector of the next largest administrative division
+#'  associated with an address. Depending on the country, a subregion can
+#'  represent a county, state, or province. Optional.
+#' @param region a character vector of the largest administrative division
+#'  associated with an address, typically, a state or province. Optional.
+#' @param postal a character vector of the standard postal code for an address,
+#'  typically, a three– to six-digit alphanumeric code. Optional.
+#' @param postal_ext a character vector of the postal code extension, such as
+#'  the United States Postal Service ZIP+4 code, provides finer resolution or
+#'  higher accuracy when also passing postal. Optional.
+#' @param max_locations the maximum number of results to return. The default is
+#'   15 with a maximum of 50. Optional.
+#' @param match_out_of_range set to `TRUE` by service by default. Matches locations Optional.
+#' @param source_country default `NULL`. An ISO 3166 country code.
+#'   See [`iso_3166_codes()`] for valid ISO codes. Optional.
+#' @param magic_key a unique identifier returned from [`suggest_places()`].
+#'   When a `magic_key` is provided, results are returned faster. Optional.
+#' @inheritParams suggest_places
 #' @inheritParams reverse_geocode
+#' @returns
+#' An `sf` object with 60 columns.
 #' @export
 find_address_candidates <- function(
     single_line = NULL,
@@ -34,7 +66,7 @@ find_address_candidates <- function(
     source_country = NULL, # iso code
     preferred_label_values = NULL,
     magic_key = NULL,
-    geocoder = default_geocoder(),
+    geocoder = world_geocoder,
     token = arc_token(),
     .progress = TRUE
 ) {
@@ -166,7 +198,7 @@ find_address_candidates <- function(
 
   # create the base request
   b_req <- arc_base_req(
-    geocoder,
+    geocoder[["url"]],
     token,
     path = "findAddressCandidates",
     query = c("f" = "json")
@@ -211,7 +243,15 @@ find_address_candidates <- function(
     parse_candidate_res(string)
   })
 
-  rbind_results(all_results)
+  # combine together
+  res <- rbind_results(all_results)
+
+  # FIXME should the IDs be included as optional into `rbind_results()`?
+  n_ids <- vapply(all_results, nrow, integer(1))
+  ids <- rep.int(1:length(all_results), n_ids)
+
+  # cbind() is slow but not that bad?
+  cbind(input_id = ids, res)
 }
 
 

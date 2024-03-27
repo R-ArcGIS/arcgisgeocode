@@ -44,13 +44,26 @@ list_geocoders <- function(
   )
 }
 
+#' Provides a default GeocodeServer
+#'
+#' For users who have not signed into a private portal or ArcGIS Online,
+#' the public [ArcGIS World Geocoder](https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder) is used. Otherwise, the first available geocoding service associated
+#' with your authorization token is used.
+#'
+#' To manually create a `GeocodeServer` object, see [`geocode_server()`].
+#' @inheritParams arc_token
 #' @export
 #' @rdname list_geocoders
 default_geocoder <- function(token = arc_token()) {
+
+  if (is.null(token)) {
+    return(world_geocoder)
+  }
+
   res <- list_geocoders(token = token)
 
   if (nrow(res) > 1) {
-    cli::cli_abort("No geocoder services found.")
+    return(world_geocoder)
   }
 
   geocode_server(res[1, "url"])

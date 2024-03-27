@@ -1,6 +1,6 @@
 #' Search Suggestion
 #'
-#' This function returns candidaate locations based on a partial search query.
+#' This function returns candidate locations based on a partial search query.
 #' It is designed to be used in an interactive search experience in a client
 #' facing application.
 #'
@@ -13,12 +13,12 @@
 #' [See REST API documentation for more](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-suggest.htm).
 #'
 #' @param text a scalar character of search key to generate a place suggestion.
-#' @param location an `sfc_POINT` object that centers the search.
+#' @param location an `sfc_POINT` object that centers the search. Optional.
 #' @param category a scalar character. Place or address type that can be used to
-#'  filter suggest results.
-#' @param search_extent an object of class `bbox` that limits the search area. This is especially useful for applications in which a user will search for places and addresses within the current map extent.
+#'  filter suggest results. Optional.
+#' @param search_extent an object of class `bbox` that limits the search area. This is especially useful for applications in which a user will search for places and addresses within the current map extent. Optional.
 #' @param country_code default `NULL.` An ISO 3166 country code.
-#'   See [`iso_3166_codes()`] for valid ISO codes.
+#'   See [`iso_3166_codes()`] for valid ISO codes. Optional.
 #' @inheritParams reverse_geocode
 #' @returns
 #' A `data.frame` with 3 columns: `text`, `magic_key`, and `is_collection`.
@@ -51,7 +51,7 @@ suggest_places <- function(
     max_suggestions = NULL,
     country_code = NULL,
     preferred_label_values = NULL,
-    geocoder = world_geocoder,
+    geocoder = default_geocoder(),
     token = arc_token()
 ) {
 
@@ -105,7 +105,7 @@ suggest_places <- function(
   }
 
   b_req <- arc_base_req(
-    geocoder,
+    geocoder[["url"]],
     path = "suggest", query = list(f = "json")
   )
 

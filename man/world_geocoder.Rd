@@ -5,7 +5,7 @@
 \alias{world_geocoder}
 \title{ArcGIS World Geocoder}
 \format{
-An object of class \code{GeocodeServer} (inherits from \code{list}) of length 11.
+An object of class \code{GeocodeServer} (inherits from \code{list}) of length 12.
 }
 \usage{
 world_geocoder

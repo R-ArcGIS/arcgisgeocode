@@ -55,7 +55,7 @@ check_iso_3166 <- function(
   }
 
   if (scalar) {
-    check_string(x, allow_null = allow_null, allow_na = allow_na)
+    check_string(x, allow_null = allow_null)
   } else {
     check_character(x, allow_null = allow_null)
   }

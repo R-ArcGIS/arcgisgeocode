@@ -20,9 +20,15 @@ a \code{data.frame}.
 Evaluates the logged in user from an authorization token and returns
 a data.frame containing the available geocoding services for the
 associated token.
+
+For users who have not signed into a private portal or ArcGIS Online,
+the public \href{https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder}{ArcGIS World Geocoder} is used. Otherwise, the first available geocoding service associated
+with your authorization token is used.
 }
 \details{
 The \code{default_geocoder()}
+
+To manually create a \code{GeocodeServer} object, see \code{\link[=geocode_server]{geocode_server()}}.
 }
 \examples{
 list_geocoders()

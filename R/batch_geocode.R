@@ -235,7 +235,7 @@ geocode_addresses <- function(
 
   # if errors occurred attach as an attribute
   if (n_errors > 0) {
-    attr(results, "error_requests") <- all_reqsp[errors]
+    attr(results, "error_requests") <- all_reqs[errors]
     # add a warning when n_errors > 0
     cli::cli_warn(c(
       "x" = "Issue{cli::qty(n_errors)}{?s} encountered when processing response{cli::qty(n_errors)}{?s} {cli::qty(n_errors)} {errors}",

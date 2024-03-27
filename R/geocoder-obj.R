@@ -9,6 +9,7 @@ geocode_server <- function(url, token = arc_token()) {
   resp <- httr2::req_perform(b_req)
   jsn <- httr2::resp_body_string(resp)
   res <- RcppSimdJson::fparse(jsn)
+  res[["url"]] <- url
   structure(res, class = c("GeocodeServer", "list"))
 }
 

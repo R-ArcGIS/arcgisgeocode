@@ -69,29 +69,29 @@
       </header><div class="row">
   <div class="contents col-md-9">
 <div class="section level1">
-<div class="page-header"><h1 id="arcgeocode">arcgeocode<a class="anchor" aria-label="anchor" href="#arcgeocode"></a>
+<div class="page-header"><h1 id="arcgisgeocode">arcgisgeocode<a class="anchor" aria-label="anchor" href="#arcgisgeocode"></a>
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of arcgeocode is to provide access to ArcGIS geocoding services from R. Enables address canddiate identification, batch geocoding, reverse geocoding, autocomplete suggestions.</p>
+<p>The goal of arcgisgeocode is to provide access to ArcGIS geocoding services from R. Enables address canddiate identification, batch geocoding, reverse geocoding, autocomplete suggestions.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>arcgeocode uses <a href="https://extendr.github.io/" class="external-link"><code>extendr</code></a> and requires Rust to be available to install the development version of arcgeocode. Follow the <a href="https://rustup.rs/" class="external-link">rustup instructions</a> to install Rust and verify your installation is compatible using <a href="https://extendr.github.io/rextendr/dev/#sitrep" class="external-link"><code>rextendr::rust_sitrep()</code></a>.</p>
-<p>You can install the development version of arcgeocode like so:</p>
+<p>arcgisgeocode uses <a href="https://extendr.github.io/" class="external-link"><code>extendr</code></a> and requires Rust to be available to install the development version of arcgisgeocode. Follow the <a href="https://rustup.rs/" class="external-link">rustup instructions</a> to install Rust and verify your installation is compatible using <a href="https://extendr.github.io/rextendr/dev/#sitrep" class="external-link"><code>rextendr::rust_sitrep()</code></a>.</p>
+<p>You can install the development version of arcgisgeocode like so:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install pak if not available</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># install development version of {arcgeocode}</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"r-arcgis/arcgeocode"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># install development version of {arcgisgeocode}</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"r-arcgis/arcgisgeocode"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
 <p>List available geocoders based on an authorization token.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">arcgeocode</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-arcgis/arcgisgeocode" class="external-link">arcgisgeocode</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># create a point</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">117.172</span>, <span class="fl">34.052</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
@@ -101,18 +101,18 @@
 <span><span class="co">#&gt; Simple feature collection with 1 feature and 22 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
-<span><span class="co">#&gt; Bounding box:  xmin: -117.172 ymin: 34.052 xmax: -117.172 ymax: 34.052</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: -117.172 ymin: 34.05204 xmax: -117.172 ymax: 34.05204</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">#&gt;                                       Match_addr</span></span>
-<span><span class="co">#&gt; 1 600-620 E Home Pl, Redlands, California, 92374</span></span>
-<span><span class="co">#&gt;                                     LongLabel        ShortLabel     Addr_type</span></span>
-<span><span class="co">#&gt; 1 600-620 E Home Pl, Redlands, CA, 92374, USA 600-620 E Home Pl StreetAddress</span></span>
-<span><span class="co">#&gt;   Type PlaceName AddNum       Address Block Sector   Neighborhood District</span></span>
-<span><span class="co">#&gt; 1                   608 608 E Home Pl              South Redlands         </span></span>
-<span><span class="co">#&gt;       City     MetroArea             Subregion     Region RegionAbbr Territory</span></span>
-<span><span class="co">#&gt; 1 Redlands Inland Empire San Bernardino County California         CA          </span></span>
-<span><span class="co">#&gt;   Postal PostalExt     CntryName CountryCode                geometry</span></span>
-<span><span class="co">#&gt; 1  92374           United States         USA POINT (-117.172 34.052)</span></span>
+<span><span class="co">#&gt;                                     Match_addr</span></span>
+<span><span class="co">#&gt; 1 600-620 Home Pl, Redlands, California, 92374</span></span>
+<span><span class="co">#&gt;                                   LongLabel      ShortLabel     Addr_type Type</span></span>
+<span><span class="co">#&gt; 1 600-620 Home Pl, Redlands, CA, 92374, USA 600-620 Home Pl StreetAddress     </span></span>
+<span><span class="co">#&gt;   PlaceName AddNum     Address Block Sector   Neighborhood District     City</span></span>
+<span><span class="co">#&gt; 1              608 608 Home Pl              South Redlands          Redlands</span></span>
+<span><span class="co">#&gt;   MetroArea             Subregion     Region RegionAbbr Territory Postal</span></span>
+<span><span class="co">#&gt; 1           San Bernardino County California         CA            92374</span></span>
+<span><span class="co">#&gt;   PostalExt     CntryName CountryCode                  geometry</span></span>
+<span><span class="co">#&gt; 1           United States         USA POINT (-117.172 34.05204)</span></span>
 <span></span>
 <span><span class="co"># find address candidates</span></span>
 <span><span class="va">candidates</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/find_address_candidates.html">find_address_candidates</a></span><span class="op">(</span></span>
@@ -122,26 +122,22 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">candidates</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 2</span></span>
+<span><span class="co">#&gt; Rows: 1</span></span>
 <span><span class="co">#&gt; Columns: 11</span></span>
-<span><span class="co">#&gt; $ loc_name    &lt;chr&gt; "World", "World"</span></span>
-<span><span class="co">#&gt; $ status      &lt;chr&gt; "T", "T"</span></span>
-<span><span class="co">#&gt; $ score       &lt;int&gt; 100, 100</span></span>
-<span><span class="co">#&gt; $ match_addr  &lt;chr&gt; "Esri", "Esri"</span></span>
-<span><span class="co">#&gt; $ long_label  &lt;chr&gt; "Esri, 380 New York St, Redlands, CA, 92373, USA", "Esri, …</span></span>
-<span><span class="co">#&gt; $ short_label &lt;chr&gt; "Esri", "Esri"</span></span>
-<span><span class="co">#&gt; $ addr_type   &lt;chr&gt; "POI", "POI"</span></span>
-<span><span class="co">#&gt; $ type_field  &lt;chr&gt; "Business Facility", "Scientific Research"</span></span>
-<span><span class="co">#&gt; $ place_name  &lt;chr&gt; "Esri", "Esri"</span></span>
-<span><span class="co">#&gt; $ place_addr  &lt;chr&gt; "380 New York St, Redlands, California, 92373", "Redlands,…</span></span>
-<span><span class="co">#&gt; $ geometry    &lt;POINT [°]&gt; POINT (-117.1957 34.05609), POINT (-117.1957 34.05615)…</span></span>
+<span><span class="co">#&gt; $ input_id    &lt;int&gt; 1</span></span>
+<span><span class="co">#&gt; $ loc_name    &lt;chr&gt; "World"</span></span>
+<span><span class="co">#&gt; $ status      &lt;chr&gt; "M"</span></span>
+<span><span class="co">#&gt; $ score       &lt;dbl&gt; 100</span></span>
+<span><span class="co">#&gt; $ match_addr  &lt;chr&gt; "Esri"</span></span>
+<span><span class="co">#&gt; $ long_label  &lt;chr&gt; "Esri, 380 New York St, Redlands, CA, 92373, USA"</span></span>
+<span><span class="co">#&gt; $ short_label &lt;chr&gt; "Esri"</span></span>
+<span><span class="co">#&gt; $ addr_type   &lt;chr&gt; "POI"</span></span>
+<span><span class="co">#&gt; $ type_field  &lt;chr&gt; "Business Facility"</span></span>
+<span><span class="co">#&gt; $ place_name  &lt;chr&gt; "Esri"</span></span>
+<span><span class="co">#&gt; $ geometry    &lt;POINT [°]&gt; POINT (-117.1957 34.05609)</span></span>
 <span></span>
 <span><span class="co"># list available geocoding services for signed in account</span></span>
-<span><span class="fu"><a href="reference/list_geocoders.html">list_geocoders</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A data frame: 1 × 9</span></span>
-<span><span class="co">#&gt;   url         northLat southLat eastLon westLon name  batch placefinding suggest</span></span>
-<span><span class="co">#&gt; * &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;lgl&gt; &lt;lgl&gt;        &lt;lgl&gt;  </span></span>
-<span><span class="co">#&gt; 1 https://ge… Ymax     Ymin     Xmax    Xmin    ArcG… TRUE  TRUE         TRUE</span></span></code></pre></div>
+<span><span class="co"># list_geocoders()</span></span></code></pre></div>
 </div>
 </div>
   </div>
@@ -181,7 +177,8 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://CRAN.R-project.org/package=arcgeocode" class="external-link"><img src="https://www.r-pkg.org/badges/version/arcgeocode" alt="CRAN status"></a></li>
+<li><a href="https://CRAN.R-project.org/package=arcgisgeocode" class="external-link"><img src="https://www.r-pkg.org/badges/version/arcgisgeocode" alt="CRAN status"></a></li>
+<li><a href="https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
 

@@ -63,7 +63,7 @@ the public ArcGIS World Geocoder.</p>
 <span>  location_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rooftop"</span>, <span class="st">"street"</span><span class="op">)</span>,</span>
 <span>  preferred_label_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"postalCity"</span>, <span class="st">"localCity"</span><span class="op">)</span>,</span>
 <span>  for_storage <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  geocoder <span class="op">=</span> <span class="va">world_geocoder</span>,</span>
+<span>  geocoder <span class="op">=</span> <span class="fu"><a href="list_geocoders.html">default_geocoder</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  token <span class="op">=</span> <span class="fu">arc_token</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  .progress <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -85,22 +85,23 @@ the public ArcGIS World Geocoder.</p>
 
 <dt>lang_code</dt>
 <dd><p>default <code>NULL</code>. An ISO 3166 country code.
-See <code><a href="iso_3166_codes.html">iso_3166_codes()</a></code> for valid ISO codes.</p></dd>
+See <code><a href="iso_3166_codes.html">iso_3166_codes()</a></code> for valid ISO codes. Optional.</p></dd>
 
 
 <dt>feature_type</dt>
 <dd><p>limits the possible match types returned. Must be one of
 <code>"StreetInt"</code>, <code>"DistanceMarker"</code>, <code>"StreetAddress"</code>, <code>"StreetName"</code>,
-<code>"POI"</code>, <code>"Subaddress"</code>, <code>"PointAddress"</code>, <code>"Postal"</code>, or <code>"Locality"</code>.</p></dd>
+<code>"POI"</code>, <code>"Subaddress"</code>, <code>"PointAddress"</code>, <code>"Postal"</code>, or <code>"Locality"</code>. Optional.</p></dd>
 
 
 <dt>location_type</dt>
-<dd><p>default <code>"rooftop"</code>. Must be one of <code>"rooftop"</code> or <code>"street"</code>.</p></dd>
+<dd><p>default <code>"rooftop"</code>. Must be one of <code>"rooftop"</code> or <code>"street"</code>.
+Optional.</p></dd>
 
 
 <dt>preferred_label_values</dt>
 <dd><p>default NULL. Must be one of <code>"postalCity"</code>
-or <code>"localCity"</code>.</p></dd>
+or <code>"localCity"</code>. Optional.</p></dd>
 
 
 <dt>for_storage</dt>
@@ -109,9 +110,7 @@ for long term storage.</p></dd>
 
 
 <dt>geocoder</dt>
-<dd><p>default <code><a href="world_geocoder.html">world_geocoder</a></code>, the public
-<a href="https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder" class="external-link">ArcGIS World Geocoder</a>.
-See <code><a href="geocode_server.html">geocode_server()</a></code> to use a different geocoder service.</p></dd>
+<dd><p>default <code><a href="list_geocoders.html">default_geocoder()</a></code>.</p></dd>
 
 
 <dt>token</dt>

@@ -82,8 +82,87 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>crs</dt>
+    <dl><dt>single_line</dt>
+<dd><p>a character vector of addresses to geocode. If provided
+other <code>address</code> fields cannot be used. If <code>address</code> is not provided,
+<code>single_line</code> must be.</p></dd>
+
+
+<dt>address</dt>
+<dd><p>a character vector of the first part of a street address.
+Typically used for the street name and house number. But can also be a place
+or building name. If <code>single_line</code> is not provided, <code>address</code> must be.</p></dd>
+
+
+<dt>address2</dt>
+<dd><p>a character vector of the second part of a street address.
+Typically includes a house number, sub-unit, street, building, or place name.
+Optional.</p></dd>
+
+
+<dt>address3</dt>
+<dd><p>a character vector of the third part of an address. Optional.</p></dd>
+
+
+<dt>neighborhood</dt>
+<dd><p>a character vector of the smallest administrative division
+associated with an address. Typically, a neighborhood or a section of a
+larger populated place. Optional.</p></dd>
+
+
+<dt>city</dt>
+<dd><p>a character vector of the next largest administrative division
+associated with an address, typically, a city or municipality. A city is a
+subdivision of a subregion or a region. Optional.</p></dd>
+
+
+<dt>subregion</dt>
+<dd><p>a character vector of the next largest administrative division
+associated with an address. Depending on the country, a subregion can
+represent a county, state, or province. Optional.</p></dd>
+
+
+<dt>region</dt>
+<dd><p>a character vector of the largest administrative division
+associated with an address, typically, a state or province. Optional.</p></dd>
+
+
+<dt>postal</dt>
+<dd><p>a character vector of the standard postal code for an address,
+typically, a three– to six-digit alphanumeric code. Optional.</p></dd>
+
+
+<dt>postal_ext</dt>
+<dd><p>a character vector of the postal code extension, such as
+the United States Postal Service ZIP+4 code, provides finer resolution or
+higher accuracy when also passing postal. Optional.</p></dd>
+
+
+<dt>country_code</dt>
+<dd><p>default <code>NULL.</code> An ISO 3166 country code.
+See <code><a href="iso_3166_codes.html">iso_3166_codes()</a></code> for valid ISO codes. Optional.</p></dd>
+
+
+<dt>location</dt>
+<dd><p>an <code>sfc_POINT</code> object that centers the search. Optional.</p></dd>
+
+
+<dt>search_extent</dt>
+<dd><p>an object of class <code>bbox</code> that limits the search area. This is especially useful for applications in which a user will search for places and addresses within the current map extent. Optional.</p></dd>
+
+
+<dt>category</dt>
+<dd><p>a scalar character. Place or address type that can be used to
+filter suggest results. Optional.</p></dd>
+
+
+<dt>crs</dt>
 <dd><p>the CRS of the returned geometries. Passed to <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">sf::st_crs()</a></code>.</p></dd>
+
+
+<dt>max_locations</dt>
+<dd><p>the maximum number of results to return. The default is
+15 with a maximum of 50. Optional.</p></dd>
 
 
 <dt>for_storage</dt>
@@ -91,24 +170,32 @@
 for long term storage.</p></dd>
 
 
+<dt>match_out_of_range</dt>
+<dd><p>set to <code>TRUE</code> by service by default. Matches locations Optional.</p></dd>
+
+
 <dt>location_type</dt>
-<dd><p>default <code>"rooftop"</code>. Must be one of <code>"rooftop"</code> or <code>"street"</code>.</p></dd>
+<dd><p>default <code>"rooftop"</code>. Must be one of <code>"rooftop"</code> or <code>"street"</code>.
+Optional.</p></dd>
 
 
 <dt>lang_code</dt>
 <dd><p>default <code>NULL</code>. An ISO 3166 country code.
-See <code><a href="iso_3166_codes.html">iso_3166_codes()</a></code> for valid ISO codes.</p></dd>
+See <code><a href="iso_3166_codes.html">iso_3166_codes()</a></code> for valid ISO codes. Optional.</p></dd>
+
+
+<dt>source_country</dt>
+<dd><p>default <code>NULL</code>. An ISO 3166 country code.
+See <code><a href="iso_3166_codes.html">iso_3166_codes()</a></code> for valid ISO codes. Optional.</p></dd>
 
 
 <dt>preferred_label_values</dt>
 <dd><p>default NULL. Must be one of <code>"postalCity"</code>
-or <code>"localCity"</code>.</p></dd>
+or <code>"localCity"</code>. Optional.</p></dd>
 
 
 <dt>geocoder</dt>
-<dd><p>default <code><a href="world_geocoder.html">world_geocoder</a></code>, the public
-<a href="https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder" class="external-link">ArcGIS World Geocoder</a>.
-See <code><a href="geocode_server.html">geocode_server()</a></code> to use a different geocoder service.</p></dd>
+<dd><p>default <code><a href="list_geocoders.html">default_geocoder()</a></code>.</p></dd>
 
 
 <dt>token</dt>

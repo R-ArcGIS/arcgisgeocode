@@ -144,7 +144,7 @@ reverse_geocode <- function(
   locs_json <- as_esri_point_json(locations, in_crs)
 
   b_req <- arc_base_req(
-    geocoder,
+    geocoder[["url"]],
     token,
     path = "reverseGeocode"
   )

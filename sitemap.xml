@@ -25,6 +25,9 @@
     <loc>/reference/geocode_addresses.html</loc>
   </url>
   <url>
+    <loc>/reference/geocode_server.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
@@ -38,5 +41,8 @@
   </url>
   <url>
     <loc>/reference/suggest_places.html</loc>
+  </url>
+  <url>
+    <loc>/reference/world_geocoder.html</loc>
   </url>
 </urlset>

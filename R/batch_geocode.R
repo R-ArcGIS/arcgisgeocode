@@ -35,8 +35,6 @@ geocode_addresses <- function(
 
   # TODO
   # - check geocoder
-  # - single line has a maximum character limit set by the geocoder service
-  #    - this needs to be checked
 
   check_bool(.progress, allow_na = FALSE, allow_null = FALSE)
   check_for_storage(for_storage, token, call = rlang::current_env())
@@ -189,7 +187,7 @@ geocode_addresses <- function(
 
   # create the base request
   b_req <- arc_base_req(
-    geocoder,
+    geocoder[["url"]],
     token,
     path = "geocodeAddresses",
     query = list(f = "json")

@@ -39,9 +39,7 @@ suggest_places <- function(
     country_code = NULL,
     preferred_label_values = NULL,
     geocoder = default_geocoder(),
-    token = arc_token()
-) {
-
+    token = arc_token()) {
   # FIXME
   # Location should be able to be a length 2 numeric vector or an sfg POINT
 
@@ -86,17 +84,22 @@ suggest_places <- function(
   }
 
   b_req <- arc_base_req(
-    geocoder, path = "suggest", query = list(f = "json")
+    geocoder,
+    path = "suggest", query = list(f = "json")
   )
 
   if (!is.null(location)) {
     in_sr <- validate_crs(sf::st_crs(location))[[1]]
   } else {
-    in_sr = NULL
+    in_sr <- NULL
   }
 
   # get the location as json
-  loc_json <- as_esri_point_json(location, in_sr)
+  if (!is.null(location)) {
+    loc_json <- as_esri_point_json(location, in_sr)
+  } else {
+    loc_json <- NULL
+  }
 
   req <- httr2::req_body_form(
     b_req,

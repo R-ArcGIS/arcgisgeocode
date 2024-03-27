@@ -11,12 +11,14 @@
 #' @examples
 #' list_geocoders()
 list_geocoders <- function(
-    token = arc_token(),
-    call = rlang::current_call()
-) {
+    token = arc_token()) {
+  # capture current env for error propagation
+  # There may be a reason to include it in the
+  # function arguments but im not convinced yet
+  call <- rlang::current_env()
 
   # extract helper services
-  self <- arc_self_meta(error_call = rlang::current_call())
+  self <- arc_self_meta(error_call = call)
   # extrac geocode metadata
   geocoder_metadata <- self[["helperServices"]][["geocode"]]
 
@@ -43,12 +45,11 @@ list_geocoders <- function(
 #' @export
 #' @rdname list_geocoders
 default_geocoder <- function(token = arc_token()) {
-  "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
-  # res <- list_geocoders(token = token, call = call)
-  #
-  # if (nrow(res) > 1) {
-  #   cli::cli_abort("No geocoder services found.")
-  # }
-  #
-  # res[1, "url"]
+  res <- list_geocoders(token = token)
+
+  if (nrow(res) > 1) {
+    cli::cli_abort("No geocoder services found.")
+  }
+
+  geocode_server(res[1, "url"])
 }

@@ -28,7 +28,7 @@ find_address_candidates(
   source_country = NULL,
   preferred_label_values = NULL,
   magic_key = NULL,
-  geocoder = world_geocoder,
+  geocoder = default_geocoder(),
   token = arc_token(),
   .progress = TRUE
 )

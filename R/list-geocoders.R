@@ -12,13 +12,18 @@
 #' @export
 #' @examples
 #' list_geocoders()
-list_geocoders <- function(
-    token = arc_token()) {
+list_geocoders <- function(token = arc_token()) {
   # capture current env for error propagation
   # There may be a reason to include it in the
   # function arguments but im not convinced yet
   call <- rlang::current_env()
 
+  if (is.null(token)) {
+    cli::cli_abort(
+      "{.arg token} is {.code NULL}. Cannot search for geocoders."
+    )
+
+  }
   # extract helper services
   self <- arc_self_meta(error_call = call)
   # extrac geocode metadata

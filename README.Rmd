@@ -13,28 +13,28 @@ knitr::opts_chunk$set(
 )
 ```
 
-# arcgeocode
+# arcgisgeocode
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![CRAN status](https://www.r-pkg.org/badges/version/arcgeocode)](https://CRAN.R-project.org/package=arcgeocode)
-[![R-CMD-check](https://github.com/R-ArcGIS/arcgeocode/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-ArcGIS/arcgeocode/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/arcgisgeocode)](https://CRAN.R-project.org/package=arcgisgeocode)
+[![R-CMD-check](https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of arcgeocode is to provide access to ArcGIS geocoding services from R. Enables address canddiate identification, batch geocoding, reverse geocoding, autocomplete suggestions. 
+The goal of arcgisgeocode is to provide access to ArcGIS geocoding services from R. Enables address canddiate identification, batch geocoding, reverse geocoding, autocomplete suggestions. 
 
 ## Installation
 
-arcgeocode uses [`extendr`](https://extendr.github.io/) and requires Rust to be available to install the development version of arcgeocode. Follow the  [rustup instructions](https://rustup.rs/) to install Rust and verify your installation is compatible using [`rextendr::rust_sitrep()`](https://extendr.github.io/rextendr/dev/#sitrep).
+arcgisgeocode uses [`extendr`](https://extendr.github.io/) and requires Rust to be available to install the development version of arcgisgeocode. Follow the  [rustup instructions](https://rustup.rs/) to install Rust and verify your installation is compatible using [`rextendr::rust_sitrep()`](https://extendr.github.io/rextendr/dev/#sitrep).
 
-You can install the development version of arcgeocode like so:
+You can install the development version of arcgisgeocode like so:
 
 ``` r
 # install pak if not available
 if (!requireNamespace("pak")) install.packages("pak")
 
-# install development version of {arcgeocode}
-pak::pak("r-arcgis/arcgeocode")
+# install development version of {arcgisgeocode}
+pak::pak("r-arcgis/arcgisgeocode")
 ```
 
 ## Example
@@ -42,7 +42,7 @@ pak::pak("r-arcgis/arcgeocode")
 List available geocoders based on an authorization token. 
 
 ```{r}
-library(arcgeocode)
+library(arcgisgeocode)
 
 # create a point
 x <- sf::st_sfc(sf::st_point(c(-117.172, 34.052)), crs = 4326)
@@ -60,5 +60,5 @@ candidates <- find_address_candidates(
 dplyr::glimpse(candidates[,1:10])
 
 # list available geocoding services for signed in account
-list_geocoders()
+# list_geocoders()
 ```

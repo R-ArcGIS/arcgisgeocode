@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(arcgeocode)
+library(arcgisgeocode)
 
-test_check("arcgeocode")
+test_check("arcgisgeocode")

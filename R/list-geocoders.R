@@ -4,6 +4,8 @@
 #' a data.frame containing the available geocoding services for the
 #' associated token.
 #'
+#' The `default_geocoder()`
+#'
 #' @returns a `data.frame`.
 #'
 #' @inheritParams arcgisutils::arc_base_req

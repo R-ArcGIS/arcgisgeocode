@@ -48,3 +48,8 @@ print.GeocodeServer <- function(x, ...) {
 #' authorization token. The [`geocode_addresses()`] funciton requires an
 #' authorization token to be used for batch geocoding.
 "world_geocoder"
+
+
+capabilities <- function(geocoder) {
+  tolower(strsplit(geocoder[["capabilities"]], ",")[[1]])
+}

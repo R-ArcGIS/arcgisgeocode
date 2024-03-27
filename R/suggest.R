@@ -1,12 +1,25 @@
 #' Search Suggestion
 #'
+#' This function returns candidaate locations based on a partial search query.
+#' It is designed to be used in an interactive search experience in a client
+#' facing application.
+#'
 #' @details
 #'
 #' Unlike the other functions in this package, `suggest_places()` is not
 #' vectorized as it is intended to provide search suggestions for individual
 #' queries such as those made in a search bar.
 #'
-#' @inheritParams find_address_candidates
+#' [See REST API documentation for more](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-suggest.htm).
+#'
+#' @param text a scalar character of search key to generate a place suggestion.
+#' @param location an `sfc_POINT` object that centers the search.
+#' @param category a scalar character. Place or address type that can be used to
+#'  filter suggest results.
+#' @param search_extent an object of class `bbox` that limits the search area. This is especially useful for applications in which a user will search for places and addresses within the current map extent.
+#' @param country_code default `NULL.` An ISO 3166 country code.
+#'   See [`iso_3166_codes()`] for valid ISO codes.
+#' @inheritParams reverse_geocode
 #' @returns
 #' A `data.frame` with 3 columns: `text`, `magic_key`, and `is_collection`.
 #' @export
@@ -38,8 +51,16 @@ suggest_places <- function(
     max_suggestions = NULL,
     country_code = NULL,
     preferred_label_values = NULL,
-    geocoder = default_geocoder(),
-    token = arc_token()) {
+    geocoder = world_geocoder,
+    token = arc_token()
+) {
+
+
+  if (!"suggest" %in% capabilities(geocoder)) {
+    arg <- rlang::caller_arg(geocoder)
+    cli::cli_abort("{.arg {arg}} does not support  the {.path /suggest} endpoint")
+  }
+
   # FIXME
   # Location should be able to be a length 2 numeric vector or an sfg POINT
 

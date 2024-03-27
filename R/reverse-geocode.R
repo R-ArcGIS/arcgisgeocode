@@ -1,22 +1,24 @@
-#  Intersection matches are only returned when featureTypes=StreetInt is included in the request.
-
-# The locationType parameter only affects the location object in the geocode JSON response. It does not change the X/Y or DisplayX/DisplayY attribute values.
 
 # loation_type
 # Specifies whether the output geometry of PointAddress and Subaddress matches should be the rooftop point or street entrance location. Valid values are rooftop and street. The default value is rooftop.
+
+
 #' Reverse Geocode Locations
+#'
+#' Determines the address for a given point. This function utilizes the
+#' [`/reverseGeocode`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-reverse-geocode.htm) endpoint of a geocodeing service. By default, it uses
+#' the public ArcGIS World Geocoder.
 #'
 #' @details
 #'
-#' ## Feature Types
+#' - Intersection matches are only returned when `feature_types = "StreetInt"`. See [REST documentation for more](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-reverse-geocode.htm#ESRI_SECTION3_1FE6B6D350714E45B2707845ADA22E1E).
 #'
-#' Valid `feature_type` values are `"StreetInt"`, `"DistanceMarker"`,
-#' `"StreetAddress"`, `"StreetName"`, `"POI"`, `"Subaddress"`, `"PointAddress"`,
-#' `"Postal"`, and `"Locality"`.
+#' ## Location Type
 #'
-#' Intersection matches are only returned when `feature_types = "StreetInt"`.
-#'
-#' See [documentation](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-reverse-geocode.htm#ESRI_SECTION3_1FE6B6D350714E45B2707845ADA22E1E).
+#' - Specifies whether the output geometry shuold be the rooftop point or the
+#' street entrance location.
+#' - The `location_type` parameter changes the geometry's placement but does not
+#' change the attribute values of `X`, `Y`, or `DisplayX`, and `DisplayY`.
 #'
 #' ## Storage
 #'
@@ -27,17 +29,29 @@
 #' contractual obligations to appropriately set this argument. **You cannot save
 #' or persist results** when `for_storage = FALSE` (the default).
 #'
+#' ## Execution
+#'
+#' The `/reverseGeocode` endpoint can only handle one address at a time. To
+#' make the operation as performant as possible, requests are sent in parallel
+#' using [`httr2::req_perform_parallel()`]. The JSON responses are then processed
+#' using Rust and returned as an sf object.
+#'
 #' @param locations an `sfc_POINT` object of the locations to be reverse geocoded.
 #' @param crs the CRS of the returned geometries. Passed to `sf::st_crs()`.
 #' @param ... unused.
-#' @param feature_type limits the possible match types returned. See Details.
-#' @param for_storage default `FALSE`. Whether or not the results will be saved
-#'    for long term storage. See Details.
+#' @param lang_code default `NULL`. An ISO 3166 country code.
+#'   See [`iso_3166_codes()`] for valid ISO codes.
+#' @param feature_type limits the possible match types returned. Must be one of
+#' `"StreetInt"`, `"DistanceMarker"`, `"StreetAddress"`, `"StreetName"`,
+#' `"POI"`, `"Subaddress"`, `"PointAddress"`, `"Postal"`, or `"Locality"`.
 #' @param location_type default `"rooftop"`. Must be one of `"rooftop"` or `"street"`.
 #' @param preferred_label_values default NULL. Must be one of `"postalCity"`
 #'  or `"localCity"`.
-#' @param geocoder the url to the geocoder service.
-#'  Default provided by `default_geocoder()`.
+#' @param for_storage default `FALSE`. Whether or not the results will be saved
+#'    for long term storage.
+#' @param geocoder default [`world_geocoder`], the public
+#'   [ArcGIS World Geocoder](https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder).
+#'   See [`geocode_server()`] to use a different geocoder service.
 #' @param .progress default `TRUE`. Whether a progress bar should be provided.
 #' @inheritParams arcgisutils::arc_base_req
 #' @export
@@ -47,14 +61,12 @@ reverse_geocode <- function(
     ...,
     lang_code = NULL,
     feature_type = NULL,
-    for_storage = FALSE,
     location_type = c("rooftop", "street"),
     preferred_label_values = c("postalCity", "localCity"),
-    geocoder = default_geocoder(),
+    for_storage = FALSE,
+    geocoder = world_geocoder,
     token = arc_token(),
-    .progress = TRUE
-) {
-
+    .progress = TRUE) {
   # TODO ask users to verify their `for_storage` use
   # This is super important and can lead to contractual violations
   check_bool(for_storage)
@@ -135,7 +147,7 @@ reverse_geocode <- function(
   b_req <- arc_base_req(
     geocoder,
     token,
-    path ="reverseGeocode"
+    path = "reverseGeocode"
   )
 
   # allocate list to store requests
@@ -184,7 +196,6 @@ reverse_geocode <- function(
   # approach to it.
   # or use tokio....
   # I'll try both
-
 }
 
 

@@ -4,7 +4,7 @@
 \alias{geocode_server}
 \title{Create a GeocodeServer}
 \usage{
-geocode_server(url = world_geocoder_url)
+geocode_server(url, token = arc_token())
 }
 \arguments{
 \item{url}{the url}

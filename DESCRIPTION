@@ -1,12 +1,19 @@
-Package: arcgeocode
-Title: What the Package Does (One Line, Title Case)
+Package: arcgisgeocode
+Title: A Robust Interface to ArcGIS Geocode Services
 Version: 0.0.0.9000
 Authors@R: 
     person("Josiah", "Parry", , "josiah.parry@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9910-865X"))
-Description: What the package does (one paragraph).
+Description: A very fast and robust interface to 'ArcGIS Geocode
+    Services.' Provides capabilities to reverse geocode, find address
+    candidates, search autosuggestion, and batch geocoding. The public
+    'ArcGIS World Geocoder' is accessible to the public via
+    'arcgisgeocode' for all services except batch geocoding.
+    'arcgisgeocode' also integrates with 'arcgisutils' to provide access
+    to private custom locators or 'ArcGIS World Geocoder's.
 License: Apache License (>= 2)
-URL: https://github.com/r-arcgis/arcgeocode, https://r.esri.com/arcgeocode
+URL: https://github.com/r-arcgis/arcgisgeocode,
+    https://r.esri.com/arcgisgeocode
 Imports: 
     arcgisutils (>= 0.2.0.9000),
     collapse,

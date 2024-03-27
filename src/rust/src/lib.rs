@@ -181,7 +181,7 @@ fn parse_rev_geocode_resp(resps: Strings) -> List {
 }
 
 extendr_module! {
-    mod arcgeocode;
+    mod arcgisgeocode;
     fn as_esri_point_json;
     // fn reverse_geocode_rs;
     fn parse_rev_geocode_resp;

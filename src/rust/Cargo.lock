@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "arcgeocode"
+name = "arcgisgeocode"
 version = "0.1.0"
 dependencies = [
  "extendr-api",

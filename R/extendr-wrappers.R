@@ -4,16 +4,14 @@
 
 #
 # This file was created with the following call:
-#   .Call("wrap__make_arcgeocode_wrappers", use_symbols = TRUE, package_name = "arcgeocode")
+#   .Call("wrap__make_arcgisgeocode_wrappers", use_symbols = TRUE, package_name = "arcgisgeocode")
 
 #' @docType package
 #' @usage NULL
-#' @useDynLib arcgeocode, .registration = TRUE
+#' @useDynLib arcgisgeocode, .registration = TRUE
 NULL
 
 as_esri_point_json <- function(x, sr) .Call(wrap__as_esri_point_json, x, sr)
-
-reverse_geocode_rs <- function(service_url, locations, crs, lang, for_storage, feature_type, location_type, preferred_label_values, token) .Call(wrap__reverse_geocode_rs, service_url, locations, crs, lang, for_storage, feature_type, location_type, preferred_label_values, token)
 
 parse_rev_geocode_resp <- function(resps) .Call(wrap__parse_rev_geocode_resp, resps)
 

@@ -1,7 +1,7 @@
 TARGET_DIR = ./rust/target
 LIBDIR = $(TARGET_DIR)/release
-STATLIB = $(LIBDIR)/libarcgeocode.a
-PKG_LIBS = -L$(LIBDIR) -larcgeocode -lssl
+STATLIB = $(LIBDIR)/libarcgisgeocode.a
+PKG_LIBS = -L$(LIBDIR) -larcgisgeocode -lssl
 
 all: C_clean
 

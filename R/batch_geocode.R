@@ -135,7 +135,7 @@ geocode_addresses <- function(
   if (!is.null(location)) {
     in_sr <- validate_crs(sf::st_crs(location))[[1]]
   } else {
-    in_sr = NULL
+    in_sr <- NULL
   }
 
   # remove null fields and convert into a data.frame

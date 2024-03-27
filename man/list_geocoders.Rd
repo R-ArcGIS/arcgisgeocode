@@ -5,7 +5,7 @@
 \alias{default_geocoder}
 \title{List Available Geocoder Services}
 \usage{
-list_geocoders(token = arc_token(), call = rlang::current_call())
+list_geocoders(token = arc_token())
 
 default_geocoder(token = arc_token())
 }
@@ -20,6 +20,9 @@ a \code{data.frame}.
 Evaluates the logged in user from an authorization token and returns
 a data.frame containing the available geocoding services for the
 associated token.
+}
+\details{
+The \code{default_geocoder()}
 }
 \examples{
 list_geocoders()

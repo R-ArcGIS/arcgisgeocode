@@ -16,7 +16,7 @@ pub struct GeocodeAdddressesResults {
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Location {
     pub address: Option<String>,
-    pub location: EsriPoint,
+    pub location: Option<EsriPoint>,
     pub score: f64,
     pub attributes: Attributes,
 }
@@ -220,8 +220,9 @@ pub fn parse_location_json(x: &str) -> Robj {
                 .into_iter()
                 .enumerate()
                 .map(|(i, pi)| {
-                    let _ = location_res.set_elt(i, as_sfg(pi.location));
-
+                    if let Some(loc) = pi.location {
+                        let _ = location_res.set_elt(i, as_sfg(loc));
+                    }
                     pi.attributes
                 })
                 .collect::<Vec<_>>();

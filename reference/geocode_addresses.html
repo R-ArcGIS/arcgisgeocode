@@ -218,9 +218,6 @@ elements. The batches are then sent to the geocoding service
 in parallel using <code><a href="https://httr2.r-lib.org/reference/req_perform_parallel.html" class="external-link">httr2::req_perform_parallel()</a></code>.
 The JSON responses are then processed
 using Rust and returned as an sf object.</p>
-<p>If using a custom geocoding service with custom output variables
-they are not captured at this time.
-Please create a <a href="https://github.com/R-ArcGIS/arcgisgeocode/issues/new" class="external-link">GitHub issue</a>.</p>
 <p>Utilizes the <a href="https://developers.arcgis.com/rest/geocode/api-reference/geocoding-geocode-addresses.htm" class="external-link"><code>/geocodeAddresses</code></a> endpoint.</p>
     </div>
 

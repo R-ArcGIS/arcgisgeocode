@@ -13,7 +13,8 @@ world_geocoder
 \description{
 The \href{https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder}{ArcGIS World Geocoder}
 is made publicly available for some uses. The \code{world_geocoder} object is used
-as the default \code{GeocodeServer} object. The \code{\link[=find_address_candidates]{find_address_candidates()}},
+as the default \code{GeocodeServer} object in \code{\link[=default_geocoder]{default_geocoder()}} when no
+authorization token is found. The \code{\link[=find_address_candidates]{find_address_candidates()}},
 \code{\link[=reverse_geocode]{reverse_geocode()}}, and \code{\link[=suggest_places]{suggest_places()}} can be used without an
 authorization token. The \code{\link[=geocode_addresses]{geocode_addresses()}} funciton requires an
 authorization token to be used for batch geocoding.

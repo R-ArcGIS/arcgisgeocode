@@ -246,14 +246,20 @@ geocode_addresses <- function(
     progress = .progress
   )
 
+  # Before we can process the responses, we must know if
+  # the locator has custom fields. If so, we need to use
+  # RcppSimdJson and _not_ the Rust based implementation
+  # FIXME
+
   # TODO! Handle errors
   all_results <- lapply(all_resps, function(.resp) {
     string <- httr2::resp_body_string(.resp)
-    parse_locations_res(string)
+    parse_locations_res(string, FALSE, call = rlang::current_env())
   })
 
   results <- rbind_results(all_results)
 
+  # browser()
   # if any issues occured they would've happened here
   errors <- attr(results, "null_elements")
   n_errors <- length(errors)
@@ -271,16 +277,48 @@ geocode_addresses <- function(
   results
 }
 
-parse_locations_res <- function(string) {
-  res_list <- parse_location_json(string)
+parse_locations_res <- function(
+    string,
+    has_custom_fields,
+    call = rlang::caller_env()) {
+  check_bool(has_custom_fields, allow_na = FALSE, allow_null = FALSE, call = call)
+
+  if (has_custom_fields) {
+    res_list <- parse_custom_location_json(string)
+  } else {
+    res_list <- parse_location_json(string)
+  }
+
   if (is.null(res_list)) {
     return(NULL)
   }
+
   res <- res_list[["attributes"]]
   geometry <- sf::st_sfc(res_list[["locations"]], crs = res_list$sr$wkid)
   # craft the {sf} object
   sf::st_sf(res, geometry)
 }
+
+#' When there are custom fields in the locator
+#' they will be omitted when parsed with Rust
+#' we need to handle them using RcppSimdJson
+#' to ensure that they are returned
+parse_custom_location_json <- function(x) {
+  raw_res <- RcppSimdJson::fparse(x)
+  attrs <- data.frame(raw_res$locations$attributes)
+  list(
+    attributes = attrs,
+    locations = custom_locs_as_sfc_point(raw_res$locations$location),
+    sr = raw_res$spatialReference
+  )
+}
+
+custom_locs_as_sfc_point <- function(x) {
+  lapply(x, function(.x) {
+    sf::st_point(c(.x[["x"]] %||% NA_real_, .x[["y"]] %||% NA_real_))
+  })
+}
+
 
 #' Might want to migrate into arcgisutils
 #' https://github.com/R-ArcGIS/arcgislayers/blob/6e55b5f5b2c6037df1940fc10b72bfc42a11d9d6/R/utils.R#L84C1-L98C1

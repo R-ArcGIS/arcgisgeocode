@@ -49,7 +49,8 @@ print.GeocodeServer <- function(x, ...) {
 #'
 #' The [ArcGIS World Geocoder](https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder)
 #' is made publicly available for some uses. The `world_geocoder` object is used
-#' as the default `GeocodeServer` object. The [`find_address_candidates()`],
+#' as the default `GeocodeServer` object in [`default_geocoder()`] when no
+#' authorization token is found. The [`find_address_candidates()`],
 #' [`reverse_geocode()`], and [`suggest_places()`] can be used without an
 #' authorization token. The [`geocode_addresses()`] funciton requires an
 #' authorization token to be used for batch geocoding.

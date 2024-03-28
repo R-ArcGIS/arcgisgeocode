@@ -7,10 +7,10 @@ Authors@R:
 Description: A very fast and robust interface to 'ArcGIS Geocode
     Services.' Provides capabilities to reverse geocode, find address
     candidates, search autosuggestion, and batch geocoding. The public
-    'ArcGIS World Geocoder' is accessible to the public via
-    'arcgisgeocode' for all services except batch geocoding.
-    'arcgisgeocode' also integrates with 'arcgisutils' to provide access
-    to private custom locators or 'ArcGIS World Geocoder's.
+    'ArcGIS World Geocoder' is accessible for free use via 'arcgisgeocode'
+    for all services except batch geocoding.  'arcgisgeocode' also
+    integrates with 'arcgisutils' to provide access to custom locators or
+    'ArcGIS World Geocoder's hosted on 'ArcGIS Enterprise'.
 License: Apache License (>= 2)
 URL: https://github.com/r-arcgis/arcgisgeocode,
     https://r.esri.com/arcgisgeocode

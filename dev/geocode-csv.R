@@ -1,6 +1,6 @@
 library(readr)
 library(arcgis)
-library(arcgeocode)
+library(arcgisgeocode)
 
 customer_addresses <- read_csv(
   "/Users/josiahparry/Downloads/Atlanta_customers.csv"
@@ -24,4 +24,5 @@ geocoding_res <- customer_addresses |>
   ) |>
   tidyr::unnest(geocoded)
 
-geocoding_res
+geocoding_res |>
+  dplyr::glimpse()

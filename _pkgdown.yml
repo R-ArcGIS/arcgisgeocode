@@ -16,6 +16,7 @@ reference:
   - geocode_server
   - default_geocoder
   - list_geocoders
+  - world_geocoder
 
 - title: Utilities
   contents:

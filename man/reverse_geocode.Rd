@@ -49,11 +49,12 @@ or related function}
 \item{.progress}{default \code{TRUE}. Whether a progress bar should be provided.}
 }
 \description{
-Determines the address for a given point. This function utilizes the
-\href{https://developers.arcgis.com/rest/geocode/api-reference/geocoding-reverse-geocode.htm}{\verb{/reverseGeocode}} endpoint of a geocodeing service. By default, it uses
-the public ArcGIS World Geocoder.
+Determines the address for a given point.
 }
 \details{
+This function utilizes the
+\href{https://developers.arcgis.com/rest/geocode/api-reference/geocoding-reverse-geocode.htm}{\verb{/reverseGeocode}} endpoint of a geocoding service. By default, it uses
+the public ArcGIS World Geocoder.
 \itemize{
 \item Intersection matches are only returned when \code{feature_types = "StreetInt"}. See \href{https://developers.arcgis.com/rest/geocode/api-reference/geocoding-reverse-geocode.htm#ESRI_SECTION3_1FE6B6D350714E45B2707845ADA22E1E}{REST documentation for more}.
 }

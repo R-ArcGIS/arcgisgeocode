@@ -63,6 +63,7 @@ suggest_places <- function(
 
   # FIXME
   # Location should be able to be a length 2 numeric vector or an sfg POINT
+  check_geocoder(geocoder, call = rlang::caller_env())
 
   check_string(text)
   check_string(category, allow_null = TRUE)

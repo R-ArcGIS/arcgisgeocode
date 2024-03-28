@@ -102,7 +102,9 @@ See \code{\link[=iso_3166_codes]{iso_3166_codes()}} for valid ISO codes. Optiona
 \item{preferred_label_values}{default NULL. Must be one of \code{"postalCity"}
 or \code{"localCity"}. Optional.}
 
-\item{batch_size}{the number of addresses to geocode per request.}
+\item{batch_size}{the number of addresses to geocode per
+request. Uses the suggested batch size property of the
+\code{geocoder}.}
 
 \item{geocoder}{default \code{\link[=default_geocoder]{default_geocoder()}}.}
 
@@ -112,5 +114,15 @@ or related function}
 \item{.progress}{default \code{TRUE}. Whether a progress bar should be provided.}
 }
 \description{
-Batch Geocode Addresses
+Gecocode a vector of addresses in batches.
+}
+\details{
+Addresses are partitioned into batches of up to \code{batch_size}
+elements. The batches are then sent to the geocoding service
+in parallel using \code{\link[httr2:req_perform_parallel]{httr2::req_perform_parallel()}} and
+the responses are processed using Rust.
+
+If using a custom geocoding service with output variables
+
+Utilizes the \href{https://developers.arcgis.com/rest/geocode/api-reference/geocoding-geocode-addresses.htm}{\verb{/geocodeAddresses}} endpoint.
 }

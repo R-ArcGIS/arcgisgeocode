@@ -36,7 +36,7 @@ To manually create a \code{GeocodeServer} object, see \code{\link[=geocode_serve
 \examples{
 
 # Default geocoder object
-# ArcGIS World Geocoder
+# ArcGIS World Geocoder b/c no token
 default_geocoder()
 
 # Requires an Authorization Token

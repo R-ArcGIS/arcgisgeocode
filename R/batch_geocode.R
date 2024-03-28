@@ -1,5 +1,19 @@
 #' Batch Geocode Addresses
-#' @param batch_size the number of addresses to geocode per request.
+#'
+#' Gecocode a vector of addresses in batches.
+#'
+#' Addresses are partitioned into batches of up to `batch_size`
+#' elements. The batches are then sent to the geocoding service
+#' in parallel using [`httr2::req_perform_parallel()`] and
+#' the responses are processed using Rust.
+#'
+#' If using a custom geocoding service with output variables
+#'
+#' Utilizes the [`/geocodeAddresses`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-geocode-addresses.htm) endpoint.
+#'
+#' @param batch_size the number of addresses to geocode per
+#'   request. Uses the suggested batch size property of the
+#'   `geocoder`.
 #' @inheritParams find_address_candidates
 #' @inheritParams arc_base_token
 #' @export
@@ -32,9 +46,7 @@ geocode_addresses <- function(
     .progress = TRUE) {
   # check that token exists
   obj_check_token(token)
-
-  # TODO
-  # - check geocoder
+  check_geocoder(geocoder, call = rlang::caller_env())
 
   check_bool(.progress, allow_na = FALSE, allow_null = FALSE)
   check_for_storage(for_storage, token, call = rlang::current_env())
@@ -149,10 +161,22 @@ geocode_addresses <- function(
     missing_vals
   )
 
-  # TODO identify the suggested batch size from the geocoding service
-  # metadata. This will need to be integrated with arc_open()? Or something...
-  # This is going to be the hard part. For now, hard-code to 150
-  if (is.null(batch_size)) batch_size <- 150L
+  # check the batch size and ensure it conforms
+  max_batch_size <- geocoder[["locatorProperties"]][["MaxBatchSize"]]
+
+  suggested_batch_size <- geocoder[["locatorProperties"]][["SuggestedBatchSize"]]
+
+  if (is.null(batch_size)) {
+    # batch_size <- 150L
+    batch_size <- suggested_batch_size %||% 150L
+  } else if (batch_size > max_batch_size) {
+    cli::cli_warn(c(
+      "{.arg batch_size} exceeds maximum supported by service: {max_batch_size}",
+      "!" = "using suggested batch size of {suggested_batch_size}"
+    ))
+
+    batch_size <- suggested_batch_size
+  }
 
   # determine chunk indices
   indices <- chunk_indices(n, batch_size)

@@ -85,8 +85,7 @@ find_address_candidates <- function(
     geocoder = default_geocoder(),
     token = arc_token(),
     .progress = TRUE) {
-  # TODO CHECKS
-  # - geocoder
+  check_geocoder(geocoder, call = rlang::caller_env())
 
   check_bool(.progress, allow_na = FALSE, allow_null = FALSE)
 

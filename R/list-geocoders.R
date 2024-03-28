@@ -16,7 +16,7 @@
 #' @examples
 #'
 #' # Default geocoder object
-#' # ArcGIS World Geocoder
+#' # ArcGIS World Geocoder b/c no token
 #' default_geocoder()
 #'
 #' # Requires an Authorization Token

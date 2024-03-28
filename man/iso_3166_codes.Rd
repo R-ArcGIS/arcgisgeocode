@@ -7,10 +7,10 @@
 iso_3166_codes()
 }
 \value{
-a \code{data.frame}
+a \code{data.frame} with columns \code{country}, \code{code_2}, \code{code_3}.
 }
 \description{
-List all ISO 3166 2 and 3 digit Country codes.
+Create a data.frame of ISO 3166 2 and 3 digit Country codes.
 }
 \details{
 Country codes provided by \href{https://docs.rs/rust_iso3166/latest/rust_iso3166/index.html}{\code{rust_iso3166}}.

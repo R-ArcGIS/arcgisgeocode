@@ -10,7 +10,7 @@
 #' vectorized as it is intended to provide search suggestions for individual
 #' queries such as those made in a search bar.
 #'
-#' [See REST API documentation for more](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-suggest.htm).
+#' Utilizes the [`/suggest`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-suggest.htm) endpoint.
 #'
 #' @param text a scalar character of search key to generate a place suggestion.
 #' @param location an `sfc_POINT` object that centers the search. Optional.

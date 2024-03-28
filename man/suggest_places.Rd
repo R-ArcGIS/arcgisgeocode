@@ -53,7 +53,7 @@ Unlike the other functions in this package, \code{suggest_places()} is not
 vectorized as it is intended to provide search suggestions for individual
 queries such as those made in a search bar.
 
-\href{https://developers.arcgis.com/rest/geocode/api-reference/geocoding-suggest.htm}{See REST API documentation for more}.
+Utilizes the \href{https://developers.arcgis.com/rest/geocode/api-reference/geocoding-suggest.htm}{\verb{/suggest}} endpoint.
 }
 \examples{
 # identify a search point

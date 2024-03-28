@@ -4,10 +4,14 @@
 #'
 #' Addresses are partitioned into batches of up to `batch_size`
 #' elements. The batches are then sent to the geocoding service
-#' in parallel using [`httr2::req_perform_parallel()`] and
-#' the responses are processed using Rust.
+#' in parallel using [`httr2::req_perform_parallel()`].
+#' The JSON responses are then processed
+#' using Rust and returned as an sf object.
 #'
-#' If using a custom geocoding service with output variables
+#' If using a custom geocoding service with custom output variables
+#' they are not captured at this time.
+#' Please create a [GitHub issue](https://github.com/R-ArcGIS/arcgisgeocode/issues/new).
+#'
 #'
 #' Utilizes the [`/geocodeAddresses`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-geocode-addresses.htm) endpoint.
 #'

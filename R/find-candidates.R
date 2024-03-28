@@ -2,6 +2,14 @@
 #'
 #' Given an address, returns geocode result candidates.
 #'
+#' @details
+#' Utilizes the [`/findAddressCandidates`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-find-address-candidates.htm) endpoint.
+#'
+#' The endpoint can only handle one request at a time. To
+#' make the operation as performant as possible, requests are sent in parallel
+#' using [`httr2::req_perform_parallel()`]. The JSON responses are then processed
+#' using Rust and returned as an sf object.
+#'
 #' @examples
 #' candidates_from_single <- find_address_candidates(
 #'   single_line = "Bellwood Coffee, 1366 Glenwood Ave SE, Atlanta, GA, 30316, USA"

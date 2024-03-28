@@ -10,6 +10,7 @@
 #' This function utilizes the
 #' [`/reverseGeocode`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-reverse-geocode.htm) endpoint of a geocoding service. By default, it uses
 #' the public ArcGIS World Geocoder.
+#'
 #' - Intersection matches are only returned when `feature_types = "StreetInt"`. See [REST documentation for more](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-reverse-geocode.htm#ESRI_SECTION3_1FE6B6D350714E45B2707845ADA22E1E).
 #'
 #' ## Location Type

@@ -105,7 +105,7 @@ geocode_addresses <- function(
   }
 
   # single_line and addresses are mutually exclusive
-  # rlang::check_exclusive(single_line, address)
+  rlang::check_exclusive(single_line, address)
 
   address_fields <- c("single_line", "address", "address2", "address3", "neighborhood", "city", "subregion", "region", "postal", "postal_ext", "country_code", "location")
 
@@ -250,6 +250,7 @@ geocode_addresses <- function(
   # RcppSimdJson and _not_ the Rust based implementation
   use_custom_json_processing <- has_custom_fields(geocoder)
 
+
   # TODO Handle errors
   all_results <- lapply(all_resps, function(.resp) {
     string <- httr2::resp_body_string(.resp)
@@ -283,11 +284,13 @@ geocode_addresses <- function(
 parse_locations_res <- function(
     string,
     has_custom_fields,
+    n,
+    geocoder,
     call = rlang::caller_env()) {
   check_bool(has_custom_fields, allow_na = FALSE, allow_null = FALSE, call = call)
 
   if (has_custom_fields) {
-    res_list <- parse_custom_location_json(string)
+    res_list <- parse_custom_loc_json(json, geocoder, n, call)
   } else {
     res_list <- parse_location_json(string)
   }
@@ -308,15 +311,19 @@ parse_locations_res <- function(
 #' to ensure that they are returned
 #' @keywords internal
 #' @noRd
-parse_custom_location_json <- function(x) {
-  raw_res <- RcppSimdJson::fparse(x)
-  attrs <- data.frame(raw_res$locations$attributes)
-  list(
-    attributes = attrs,
-    locations = custom_locs_as_sfc_point(raw_res$locations$location),
-    sr = raw_res$spatialReference
-  )
+parse_custom_loc_json <- function(json, geocoder, n, call = rlang::caller_env()) {
+  tbl_to_fill <- ptype_tbl(geocoder$candidateFields[, c("name", "type")], n = n, call = call)
+  parse_custom_location_json_(json, tbl_to_fill)
 }
+# parse_custom_location_json <- function(x) {
+#   raw_res <- RcppSimdJson::fparse(x)
+#   attrs <- data.frame(raw_res$locations$attributes)
+#   list(
+#     attributes = attrs,
+#     locations = custom_locs_as_sfc_point(raw_res$locations$location),
+#     sr = raw_res$spatialReference
+#   )
+# }
 
 custom_locs_as_sfc_point <- function(x) {
   lapply(x, function(.x) {

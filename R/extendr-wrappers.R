@@ -29,7 +29,7 @@ iso_3166_3 <- function() .Call(wrap__iso_3166_3)
 
 iso_3166_names <- function() .Call(wrap__iso_3166_names)
 
-parse_any_json <- function(x, to_fill) invisible(.Call(wrap__parse_any_json, x, to_fill))
+parse_custom_location_json_ <- function(x, to_fill) .Call(wrap__parse_custom_location_json_, x, to_fill)
 
 parse_suggestions <- function(x) .Call(wrap__parse_suggestions, x)
 

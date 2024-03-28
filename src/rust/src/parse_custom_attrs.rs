@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use extendr_api::prelude::*;
+use extendr_api::serializer::to_robj;
 use serde_json::{de::from_str, Value};
 
 // Takes a dataframe and creates a hashmap of column names and types
@@ -49,8 +50,10 @@ fn insert_into_df(x: &mut List, key: &str, rtype: &Rtype, val: Value, i: usize) 
     };
 }
 
+// Takes a data.frame (list) that is modified by reference
+// it must be completely pre-allocated otherwise a panic occurs
 #[extendr]
-fn parse_any_json(x: &str, to_fill: List) {
+fn parse_custom_location_json_(x: &str, to_fill: List) -> Robj {
     let col_maps = make_df_type_map(&to_fill);
     let mut to_fill = to_fill;
 
@@ -58,16 +61,26 @@ fn parse_any_json(x: &str, to_fill: List) {
     let res = res.as_object_mut();
     let locs = res.filter(|xi| xi.contains_key("locations"));
 
+    // create bindings to set from inside the scope of the iterator
+    let mut res_locs = ().into_robj();
+    let mut res_sr = ().into_robj();
     locs.into_iter().for_each(|li| {
-        let _ = li
+        let sr = li.get("spatialReference");
+        res_sr = match to_robj(&sr) {
+            Ok(r) => r,
+            Err(_) => ().into_robj(),
+        };
+
+        let r = li
             .get("locations")
             .unwrap()
             .as_array()
             .unwrap()
             .into_iter()
             .enumerate()
-            .for_each(|(i, loc)| {
-                loc.get("attributes")
+            .map(|(i, loc)| {
+                let _r = loc
+                    .get("attributes")
                     .unwrap()
                     .as_object()
                     .into_iter()
@@ -76,16 +89,48 @@ fn parse_any_json(x: &str, to_fill: List) {
                             // FIXME this should not be cloned!!!
                             let key = li.0.as_str();
                             let val = li.1.clone();
-                            println!("{:?}", li);
-                            let ctype = col_maps.get(key).unwrap();
-                            let _inserted = insert_into_df(&mut to_fill, key, ctype, val, i);
+                            // if this is None then we have an unexpected value
+                            // it is skipped
+                            let ctype = col_maps.get(key);
+                            match ctype {
+                                Some(c) => {
+                                    let _inserted = insert_into_df(&mut to_fill, key, c, val, i);
+                                }
+                                None => (),
+                            };
                         });
-                    })
-            });
+                    });
+
+                let location_field = loc.get("location");
+
+                match location_field {
+                    Some(lf) => match lf.as_object() {
+                        Some(l) => {
+                            let xi = Rfloat::from(l.get("x").unwrap().as_f64());
+                            let yi = Rfloat::from(l.get("y").unwrap().as_f64());
+                            Doubles::from_values([xi, yi])
+                                .into_robj()
+                                .set_class(&["XY", "POINT", "sfg"])
+                                .unwrap()
+                        }
+                        None => Doubles::from_values([Rfloat::na(), Rfloat::na()])
+                            .into_robj()
+                            .set_class(&["XY", "POINT", "sfg"])
+                            .unwrap(),
+                    },
+                    None => Doubles::from_values([Rfloat::na(), Rfloat::na()])
+                        .into_robj()
+                        .set_class(&["XY", "POINT", "sfg"])
+                        .unwrap(),
+                }
+            })
+            .collect::<List>();
+        res_locs = r.into();
     });
+    list!(attributes = to_fill, locations = res_locs, sr = res_sr).into()
 }
 
 extendr_module! {
     mod parse_custom_attrs;
-    fn parse_any_json;
+    fn parse_custom_location_json_;
 }

@@ -218,6 +218,14 @@ or related function</p></dd>
 
 <p>An <code>sf</code> object with 60 columns.</p>
     </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>Utilizes the <a href="https://developers.arcgis.com/rest/geocode/api-reference/geocoding-find-address-candidates.htm" class="external-link"><code>/findAddressCandidates</code></a> endpoint.</p>
+<p>The endpoint can only handle one request at a time. To
+make the operation as performant as possible, requests are sent in parallel
+using <code><a href="https://httr2.r-lib.org/reference/req_perform_parallel.html" class="external-link">httr2::req_perform_parallel()</a></code>. The JSON responses are then processed
+using Rust and returned as an sf object.</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>

@@ -76,18 +76,32 @@ or related function</p></dd>
     <h2>Value</h2>
     
 
-<p>a <code>data.frame</code>.</p>
+<p>a <code>data.frame</code> with columns <code>url</code>, <code>northLat</code>, <code>southLat</code>,
+<code>eastLon</code>, <code>westLon</code>, <code>name</code>, <code>suggest</code>, <code>zoomScale</code>, <code>placefinding</code>, <code>batch</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>The <code>default_geocoder()</code></p>
+    <p>The <code>default_geocoder()</code> will return the ArcGIS World Geocoder if no
+token is available. <code>list_geocoder()</code> requires an authorization
+token.</p>
 <p>To manually create a <code>GeocodeServer</code> object, see <code><a href="geocode_server.html">geocode_server()</a></code>.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">list_geocoders</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in list_geocoders():</span> `token` is `NULL`. Cannot search for geocoders.</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Default geocoder object</span></span></span>
+<span class="r-in"><span><span class="co"># ArcGIS World Geocoder</span></span></span>
+<span class="r-in"><span><span class="fu">default_geocoder</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;GeocodeServer&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Description: World Geocoder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Version: 11.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CRS: 4326</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Requires an Authorization Token</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">list_geocoders</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>

@@ -290,7 +290,7 @@ parse_locations_res <- function(
   check_bool(has_custom_fields, allow_na = FALSE, allow_null = FALSE, call = call)
 
   if (has_custom_fields) {
-    res_list <- parse_custom_loc_json(json, geocoder, n, call)
+    res_list <- parse_custom_loc_json(string, geocoder, n, call)
   } else {
     res_list <- parse_location_json(string)
   }

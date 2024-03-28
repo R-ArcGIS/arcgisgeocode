@@ -1,0 +1,22 @@
+url: ~
+template:
+  bootstrap: 5
+
+reference:
+
+- title: Geocoding Services 
+  contents:
+  - geocode_addresses
+  - reverse_geocode
+  - find_address_candidates
+  - suggest_places
+
+- title: GeocodeServer objects
+  contents:
+  - geocode_server
+  - default_geocoder
+  - list_geocoders
+
+- title: Utilities
+  contents:
+  - iso_3166_codes

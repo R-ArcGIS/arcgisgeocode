@@ -7,3 +7,6 @@
 ^\.github$
 ^data-raw$
 ^dev$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

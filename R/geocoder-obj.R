@@ -3,7 +3,13 @@
 #' Create an object of class `GeocodeServer` from a URL. This object
 #' stores the service definition of the geocoding service as a list object.
 #'
-#' @param url the url
+#' @param url the URL of a geocoding server.
+#' @inheritParams arcgisutils::arc_base_req
+#' @examples
+#' server_url <- "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
+#' geocode_server(server_url)
+#' @export
+#' @returns an object of class `GeocodeServer`.
 geocode_server <- function(url, token = arc_token()) {
   b_req <- arc_base_req(url, token = token, query = c("f" = "json"))
   resp <- httr2::req_perform(b_req)
@@ -13,7 +19,6 @@ geocode_server <- function(url, token = arc_token()) {
   structure(res, class = c("GeocodeServer", "list"))
 }
 
-#' @export
 world_geocoder_url <- "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
 
 #' @export

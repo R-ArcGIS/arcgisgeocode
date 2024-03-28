@@ -14,7 +14,8 @@ default_geocoder(token = arc_token())
 or related function}
 }
 \value{
-a \code{data.frame}.
+a \code{data.frame} with columns \code{url}, \code{northLat}, \code{southLat},
+\code{eastLon}, \code{westLon}, \code{name}, \code{suggest}, \code{zoomScale}, \code{placefinding}, \code{batch}.
 }
 \description{
 Evaluates the logged in user from an authorization token and returns
@@ -26,10 +27,20 @@ the public \href{https://www.esri.com/en-us/arcgis/products/arcgis-world-geocode
 with your authorization token is used.
 }
 \details{
-The \code{default_geocoder()}
+The \code{default_geocoder()} will return the ArcGIS World Geocoder if no
+token is available. \code{list_geocoder()} requires an authorization
+token.
 
 To manually create a \code{GeocodeServer} object, see \code{\link[=geocode_server]{geocode_server()}}.
 }
 \examples{
+
+# Default geocoder object
+# ArcGIS World Geocoder
+default_geocoder()
+
+# Requires an Authorization Token
+\dontrun{
 list_geocoders()
+}
 }

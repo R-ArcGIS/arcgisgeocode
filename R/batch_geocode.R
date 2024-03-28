@@ -1,5 +1,7 @@
 #' Batch Geocode Addresses
+#' @param batch_size the number of addresses to geocode per request.
 #' @inheritParams find_address_candidates
+#' @inheritParams arc_base_token
 #' @export
 geocode_addresses <- function(
     single_line = NULL,
@@ -27,9 +29,7 @@ geocode_addresses <- function(
     batch_size = NULL,
     geocoder = default_geocoder(),
     token = arc_token(),
-    .progress = TRUE
-  ) {
-
+    .progress = TRUE) {
   # check that token exists
   obj_check_token(token)
 
@@ -164,7 +164,6 @@ geocode_addresses <- function(
 
   # TODO make this into a simpler function
   # fill vector with json string
-  # browser()
   for (i in seq_len(n_chunks)) {
     start <- indices[["start"]][i]
     end <- indices[["end"]][i]
@@ -225,8 +224,8 @@ geocode_addresses <- function(
     parse_locations_res(string)
   })
 
-
   results <- rbind_results(all_results)
+
   # if any issues occured they would've happened here
   errors <- attr(results, "null_elements")
   n_errors <- length(errors)
@@ -242,7 +241,6 @@ geocode_addresses <- function(
   }
 
   results
-
 }
 
 parse_locations_res <- function(string) {
@@ -252,10 +250,8 @@ parse_locations_res <- function(string) {
   }
   res <- res_list[["attributes"]]
   geometry <- sf::st_sfc(res_list[["locations"]], crs = res_list$sr$wkid)
-  sf::st_sf(
-    res,
-    geometry
-  )
+  # craft the {sf} object
+  sf::st_sf(res, geometry)
 }
 
 #' Might want to migrate into arcgisutils
@@ -268,10 +264,9 @@ parse_locations_res <- function(string) {
 #' @keywords internal
 #' @noRd
 chunk_indices <- function(n, m) {
-  n_chunks <- ceiling(n/m)
+  n_chunks <- ceiling(n / m)
   chunk_starts <- seq(1, n, by = m)
   chunk_ends <- seq_len(n_chunks) * m
   chunk_ends[n_chunks] <- n
   list(start = chunk_starts, end = chunk_ends)
 }
-

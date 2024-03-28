@@ -4,14 +4,25 @@
 #' a data.frame containing the available geocoding services for the
 #' associated token.
 #'
-#' The `default_geocoder()`
+#' The `default_geocoder()` will return the ArcGIS World Geocoder if no
+#' token is available. `list_geocoder()` requires an authorization
+#' token.
 #'
-#' @returns a `data.frame`.
+#' @returns a `data.frame` with columns `url`, `northLat`, `southLat`,
+#' `eastLon`, `westLon`, `name`, `suggest`, `zoomScale`, `placefinding`, `batch`.
 #'
 #' @inheritParams arcgisutils::arc_base_req
 #' @export
 #' @examples
+#'
+#' # Default geocoder object
+#' # ArcGIS World Geocoder
+#' default_geocoder()
+#'
+#' # Requires an Authorization Token
+#' \dontrun{
 #' list_geocoders()
+#' }
 list_geocoders <- function(token = arc_token()) {
   # capture current env for error propagation
   # There may be a reason to include it in the
@@ -22,7 +33,6 @@ list_geocoders <- function(token = arc_token()) {
     cli::cli_abort(
       "{.arg token} is {.code NULL}. Cannot search for geocoders."
     )
-
   }
   # extract helper services
   self <- arc_self_meta(error_call = call)
@@ -60,7 +70,6 @@ list_geocoders <- function(token = arc_token()) {
 #' @export
 #' @rdname list_geocoders
 default_geocoder <- function(token = arc_token()) {
-
   if (is.null(token)) {
     return(world_geocoder)
   }
@@ -73,3 +82,6 @@ default_geocoder <- function(token = arc_token()) {
 
   geocode_server(res[1, "url"])
 }
+
+
+utils::globalVariables("world_geocoder")

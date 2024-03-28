@@ -3,7 +3,10 @@
 #' @keywords internal
 #' @noRd
 to_lower_camel <- function(x, call = rlang::caller_env()) {
-  check_character(x, call = call)
+  check_character(x, call = call, allow_null = TRUE)
+  if (is.null(x)) {
+    return(NULL)
+  }
   vapply(strsplit(x, "_"), .lower_camel_case, character(1))
 }
 
@@ -15,6 +18,4 @@ to_lower_camel <- function(x, call = rlang::caller_env()) {
 
   .x[2:n] <- tools::toTitleCase(.x[2:n])
   paste(.x, collapse = "")
-
 }
-

@@ -118,3 +118,20 @@ An \code{sf} object with 60 columns.
 \description{
 Given an address, returns geocode result candidates.
 }
+\examples{
+candidates_from_single <- find_address_candidates(
+  single_line = "Bellwood Coffee, 1366 Glenwood Ave SE, Atlanta, GA, 30316, USA"
+)
+
+candidates_from_parts <- find_address_candidates(
+  address = c("Bellwood Coffee", "Joe's coffeehouse"),
+  address2 = c("1366 Glenwood Ave SE", "510 Flat Shoals Ave"),
+  city = "Atlanta",
+  region = "GA",
+  postal = "30316",
+  country_code = "USA"
+)
+
+str(candidates_from_parts)
+
+}

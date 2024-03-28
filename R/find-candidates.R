@@ -2,6 +2,22 @@
 #'
 #' Given an address, returns geocode result candidates.
 #'
+#' @examples
+#' candidates_from_single <- find_address_candidates(
+#'   single_line = "Bellwood Coffee, 1366 Glenwood Ave SE, Atlanta, GA, 30316, USA"
+#' )
+#'
+#' candidates_from_parts <- find_address_candidates(
+#'   address = c("Bellwood Coffee", "Joe's coffeehouse"),
+#'   address2 = c("1366 Glenwood Ave SE", "510 Flat Shoals Ave"),
+#'   city = "Atlanta",
+#'   region = "GA",
+#'   postal = "30316",
+#'   country_code = "USA"
+#' )
+#'
+#' str(candidates_from_parts)
+#'
 #' @param single_line a character vector of addresses to geocode. If provided
 #'  other `address` fields cannot be used. If `address` is not provided,
 #'  `single_line` must be.
@@ -68,9 +84,7 @@ find_address_candidates <- function(
     magic_key = NULL,
     geocoder = default_geocoder(),
     token = arc_token(),
-    .progress = TRUE
-) {
-
+    .progress = TRUE) {
   # TODO CHECKS
   # - geocoder
 
@@ -136,7 +150,7 @@ find_address_candidates <- function(
 
   # validate the preferred_label_values
   if (!is.null(non_null_vals[["preferred_label_values"]])) {
-    non_null_vals[["preferred_label_values"]] <-  match_label_values(
+    non_null_vals[["preferred_label_values"]] <- match_label_values(
       non_null_vals[["preferred_label_values"]],
       .multiple = TRUE
     )
@@ -215,9 +229,11 @@ find_address_candidates <- function(
 
   for (i in seq_len(n)) {
     # capture params as a list
-    params_i <- as.list(params_df[i,])
+    params_i <- as.list(params_df[i, , drop = FALSE])
+
     # convert the names to lowerCamel for endpoint
     names(params_i) <- to_lower_camel(names(params_i))
+
     # store in list
     all_reqs[[i]] <- httr2::req_body_form(
       b_req,
@@ -268,6 +284,3 @@ parse_candidate_res <- function(string) {
     geometry
   )
 }
-
-# parse_candidate_res(string)
-

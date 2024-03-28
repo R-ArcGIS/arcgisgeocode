@@ -19,7 +19,10 @@
 #' @param search_extent an object of class `bbox` that limits the search area. This is especially useful for applications in which a user will search for places and addresses within the current map extent. Optional.
 #' @param country_code default `NULL.` An ISO 3166 country code.
 #'   See [`iso_3166_codes()`] for valid ISO codes. Optional.
+#' @param max_suggestions default `NULL`. The maximum number of suggestions to return.
+#'   The service default is 5 with a maximum of 15.
 #' @inheritParams reverse_geocode
+#' @inheritParams find_address_candidates
 #' @returns
 #' A `data.frame` with 3 columns: `text`, `magic_key`, and `is_collection`.
 #' @export
@@ -52,10 +55,7 @@ suggest_places <- function(
     country_code = NULL,
     preferred_label_values = NULL,
     geocoder = default_geocoder(),
-    token = arc_token()
-) {
-
-
+    token = arc_token()) {
   if (!"suggest" %in% capabilities(geocoder)) {
     arg <- rlang::caller_arg(geocoder)
     cli::cli_abort("{.arg {arg}} does not support  the {.path /suggest} endpoint")

@@ -26,6 +26,9 @@ filter suggest results. Optional.}
 
 \item{search_extent}{an object of class \code{bbox} that limits the search area. This is especially useful for applications in which a user will search for places and addresses within the current map extent. Optional.}
 
+\item{max_suggestions}{default \code{NULL}. The maximum number of suggestions to return.
+The service default is 5 with a maximum of 15.}
+
 \item{country_code}{default \code{NULL.} An ISO 3166 country code.
 See \code{\link[=iso_3166_codes]{iso_3166_codes()}} for valid ISO codes. Optional.}
 

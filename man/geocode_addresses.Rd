@@ -123,9 +123,5 @@ in parallel using \code{\link[httr2:req_perform_parallel]{httr2::req_perform_par
 The JSON responses are then processed
 using Rust and returned as an sf object.
 
-If using a custom geocoding service with custom output variables
-they are not captured at this time.
-Please create a \href{https://github.com/R-ArcGIS/arcgisgeocode/issues/new}{GitHub issue}.
-
 Utilizes the \href{https://developers.arcgis.com/rest/geocode/api-reference/geocoding-geocode-addresses.htm}{\verb{/geocodeAddresses}} endpoint.
 }

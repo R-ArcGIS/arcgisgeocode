@@ -8,10 +8,9 @@
 #' The JSON responses are then processed
 #' using Rust and returned as an sf object.
 #'
-#' If using a custom geocoding service with custom output variables
-#' they are not captured at this time.
-#' Please create a [GitHub issue](https://github.com/R-ArcGIS/arcgisgeocode/issues/new).
-#'
+# #' If using a custom geocoding service with custom output variables
+# #' they are not captured at this time.
+# #' Please create a [GitHub issue](https://github.com/R-ArcGIS/arcgisgeocode/issues/new).
 #'
 #' Utilizes the [`/geocodeAddresses`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-geocode-addresses.htm) endpoint.
 #'
@@ -106,7 +105,7 @@ geocode_addresses <- function(
   }
 
   # single_line and addresses are mutually exclusive
-  rlang::check_exclusive(single_line, address)
+  # rlang::check_exclusive(single_line, address)
 
   address_fields <- c("single_line", "address", "address2", "address3", "neighborhood", "city", "subregion", "region", "postal", "postal_ext", "country_code", "location")
 
@@ -249,12 +248,16 @@ geocode_addresses <- function(
   # Before we can process the responses, we must know if
   # the locator has custom fields. If so, we need to use
   # RcppSimdJson and _not_ the Rust based implementation
-  # FIXME
+  use_custom_json_processing <- has_custom_fields(geocoder)
 
-  # TODO! Handle errors
+  # TODO Handle errors
   all_results <- lapply(all_resps, function(.resp) {
     string <- httr2::resp_body_string(.resp)
-    parse_locations_res(string, FALSE, call = rlang::current_env())
+    parse_locations_res(
+      string,
+      use_custom_json_processing,
+      call = rlang::current_env()
+    )
   })
 
   results <- rbind_results(all_results)
@@ -303,6 +306,8 @@ parse_locations_res <- function(
 #' they will be omitted when parsed with Rust
 #' we need to handle them using RcppSimdJson
 #' to ensure that they are returned
+#' @keywords internal
+#' @noRd
 parse_custom_location_json <- function(x) {
   raw_res <- RcppSimdJson::fparse(x)
   attrs <- data.frame(raw_res$locations$attributes)

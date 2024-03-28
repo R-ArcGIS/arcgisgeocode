@@ -15,6 +15,7 @@ geocode_server <- function(url, token = arc_token()) {
   resp <- httr2::req_perform(b_req)
   jsn <- httr2::resp_body_string(resp)
   res <- RcppSimdJson::fparse(jsn)
+  detect_errors(res) # check for any errors and report if thats the case
   res[["url"]] <- url
   structure(res, class = c("GeocodeServer", "list"))
 }
@@ -63,6 +64,18 @@ check_geocoder <- function(x, arg = rlang::caller_arg(x), call = rlang::current_
   invisible(NULL)
 }
 
+#' Returns the capabilities of the geocoder as a character vector
+#' @keywords internal
+#' @noRd
 capabilities <- function(geocoder) {
   tolower(strsplit(geocoder[["capabilities"]], ",")[[1]])
+}
+
+#' Determines if there are different fields in the geocoder object
+#' TRUE if there are fields that are not in the default world geocoder
+#' FALSE if there arent
+#' @keywords internal
+#' @noRd
+has_custom_fields <- function(x) {
+  length(setdiff(x$candidateFields$name, world_geocoder$candidateFields$name)) > 0
 }

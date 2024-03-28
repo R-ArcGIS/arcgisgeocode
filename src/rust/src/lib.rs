@@ -17,6 +17,7 @@ fn parse_sr(sr: Robj) -> Option<SpatialReference> {
 mod batch_geocode;
 mod find_candidates;
 mod iso3166;
+mod parse_custom_attrs;
 mod reverse;
 mod suggest;
 
@@ -189,5 +190,6 @@ extendr_module! {
     use batch_geocode;
     use find_candidates;
     use iso3166;
+    use parse_custom_attrs;
     use suggest;
 }

@@ -4,8 +4,7 @@
 check_for_storage <- function(
     for_storage,
     token,
-    call = rlang::caller_env()
-) {
+    call = rlang::caller_env()) {
   check_bool(for_storage, call = call)
   # Tokens are required for reverseGeocoding for storage
   if (for_storage) {
@@ -18,8 +17,7 @@ check_for_storage <- function(
 match_location_type <- function(
     location_type,
     .multiple = FALSE,
-    call = rlang::caller_env()
-) {
+    call = rlang::caller_env()) {
   # TODO maybe want to use error_arg for better message
   rlang::arg_match(
     location_type,
@@ -32,8 +30,7 @@ match_location_type <- function(
 match_label_values <- function(
     preferred_label_values,
     .multiple = FALSE,
-    call = rlang::caller_env()
-) {
+    call = rlang::caller_env()) {
   rlang::arg_match(
     preferred_label_values,
     values = c("postalCity", "localCity"),
@@ -47,9 +44,7 @@ check_iso_3166 <- function(
     allow_null = TRUE,
     scalar = FALSE,
     arg = rlang::caller_arg(x),
-    call = rlang::caller_env()
-) {
-
+    call = rlang::caller_env()) {
   if (is.null(x)) {
     return(invisible(NULL))
   }
@@ -75,9 +70,7 @@ check_iso_3166 <- function(
 check_locations <- function(
     locations,
     allow_null = TRUE,
-    call = rlang::caller_env()
-) {
-
+    call = rlang::caller_env()) {
   if (is.null(locations)) {
     return(invisible(NULL))
   }
@@ -91,8 +84,7 @@ check_extent <- function(
     extent,
     allow_null = TRUE,
     arg = rlang::caller_arg(extent),
-    call = rlang::caller_env()
-) {
+    call = rlang::caller_env()) {
   if (is.null(extent)) {
     return(invisible(NULL))
   }
@@ -101,6 +93,19 @@ check_extent <- function(
     stop_input_type(extent, "bbox", call = call)
   }
 }
+
+
+inform_for_storage <- function(call = rlang::current_env()) {
+  # TODO have a global option check that will supress this message
+  cli::cli_inform(
+    c(
+      "!" = "{.arg for_storage} is set to {.code FALSE}, results cannot be persisted",
+      "i" = "see legal obligations at {.url https://esri.com}"
+    ),
+    .frequency = "once", .frequency_id = "for_storage"
+  )
+}
+
 
 #
 # check_extent <- function(

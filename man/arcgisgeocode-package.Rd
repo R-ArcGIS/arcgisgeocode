@@ -5,9 +5,9 @@
 \alias{arcgisgeocode-package}
 \title{arcgisgeocode: A Robust Interface to ArcGIS Geocode Services}
 \description{
-A very fast and robust interface to 'ArcGIS Geocode Services.' Provides capabilities to reverse geocode, find address candidates, search autosuggestion, and batch geocoding. The public 'ArcGIS World Geocoder' is accessible to the public via 'arcgisgeocode' for all services except batch geocoding. 'arcgisgeocode' also integrates with 'arcgisutils' to provide access to private custom locators or 'ArcGIS World Geocoder's.
+A very fast and robust interface to 'ArcGIS Geocode Services.' Provides capabilities to reverse geocode, find address candidates, search autosuggestion, and batch geocoding. The public 'ArcGIS World Geocoder' is accessible for free use via 'arcgisgeocode' for all services except batch geocoding. 'arcgisgeocode' also integrates with 'arcgisutils' to provide access to custom locators or 'ArcGIS World Geocoder's hosted on 'ArcGIS Enterprise'.
 
-A very fast and robust interface to 'ArcGIS Geocode Services.' Provides capabilities to reverse geocode, find address candidates, search autosuggestion, and batch geocoding. The public 'ArcGIS World Geocoder' is accessible to the public via 'arcgisgeocode' for all services except batch geocoding. 'arcgisgeocode' also integrates with 'arcgisutils' to provide access to private custom locators or 'ArcGIS World Geocoder's.
+A very fast and robust interface to 'ArcGIS Geocode Services.' Provides capabilities to reverse geocode, find address candidates, search autosuggestion, and batch geocoding. The public 'ArcGIS World Geocoder' is accessible for free use via 'arcgisgeocode' for all services except batch geocoding. 'arcgisgeocode' also integrates with 'arcgisutils' to provide access to custom locators or 'ArcGIS World Geocoder's hosted on 'ArcGIS Enterprise'.
 }
 \seealso{
 Useful links:

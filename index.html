@@ -311,6 +311,111 @@
 <h2 id="batch-geocoding">Batch geocoding<a class="anchor" aria-label="anchor" href="#batch-geocoding"></a>
 </h2>
 <p>Many addresses can be geocoded very fast using the <code><a href="reference/geocode_addresses.html">geocode_addresses()</a></code> function which calls the <code>/geocodeAddresses</code> endpoint. Note that this function requires an authorization token. <code><a href="reference/geocode_addresses.html">geocode_addresses()</a></code> sends the input addresses in chunks as parallel requests.</p>
+<p>Batch geocoding requires a signed in user. Load the <a href="https://github.com/r-arcgis/arcgisutils" class="external-link"><code>{arcgisutils}</code></a> to authorize and set your token. This example uses the <a href="#id_%20https://datacatalog.urban.org/node/6158/revisions/14192/view" class="external-link">Geocoding Test Dataset</a> from the <a href="https://www.urban.org/" class="external-link">Urban Institute</a>.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/R-ArcGIS/arcgisutils" class="external-link">arcgisutils</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-arcgis/arcgisgeocode" class="external-link">arcgisgeocode</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r.esri.com/arcgisutils/reference/token.html" class="external-link">set_arc_token</a></span><span class="op">(</span><span class="fu"><a href="https://r.esri.com/arcgisutils/reference/auth.html" class="external-link">auth_user</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Example dataset from the Urban Institute </span></span>
+<span><span class="va">fp</span> <span class="op">&lt;-</span> <span class="st">"https://urban-data-catalog.s3.amazonaws.com/drupal-root-live/2020/02/25/geocoding_test_data.csv"</span></span>
+<span></span>
+<span><span class="va">to_geocode</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span><span class="va">fp</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 120 Columns: 8</span></span>
+<span><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Delimiter: ","</span></span>
+<span><span class="co">#&gt; chr (5): full_address, address, city, state, zip</span></span>
+<span><span class="co">#&gt; dbl (3): lat_true, lon_true, diff_level</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span></span>
+<span><span class="va">geocoded</span> <span class="op">&lt;-</span> <span class="va">to_geocode</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/reframe.html" class="external-link">reframe</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="reference/geocode_addresses.html">geocode_addresses</a></span><span class="op">(</span></span>
+<span>      address <span class="op">=</span> <span class="va">address</span>,</span>
+<span>      city <span class="op">=</span> <span class="va">city</span>,</span>
+<span>      region <span class="op">=</span> <span class="va">state</span>,</span>
+<span>      postal <span class="op">=</span> <span class="va">zip</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">geocoded</span></span>
+<span><span class="co">#&gt; # A tibble: 120 × 59</span></span>
+<span><span class="co">#&gt;    loc_name status score match_addr     long_label short_label addr_type</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;    </span></span>
+<span><span class="co">#&gt;  1 World    M      100   500 L'Enfant … 500 L'Enf… 500 L'Enfa… PointAdd…</span></span>
+<span><span class="co">#&gt;  2 World    M      100   200 K St NE, … 200 K St … 200 K St NE PointAdd…</span></span>
+<span><span class="co">#&gt;  3 World    M      100   500 L'Enfant … 500 L'Enf… 500 L'Enfa… PointAdd…</span></span>
+<span><span class="co">#&gt;  4 World    M      100   2197 Plumleig… 2197 Plum… 2197 Pluml… PointAdd…</span></span>
+<span><span class="co">#&gt;  5 World    U        0   &lt;NA&gt;           &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;     </span></span>
+<span><span class="co">#&gt;  6 World    M       97.9 2197 Plumleig… 2197 Plum… 2197 Pluml… PointAdd…</span></span>
+<span><span class="co">#&gt;  7 World    M      100   200 K St NE, … 200 K St … 200 K St NE PointAdd…</span></span>
+<span><span class="co">#&gt;  8 World    M       97.0 5034 Curtis S… 5034 Curt… 5034 Curti… PointAdd…</span></span>
+<span><span class="co">#&gt;  9 World    M       97.0 5034 Curtis S… 5034 Curt… 5034 Curti… PointAdd…</span></span>
+<span><span class="co">#&gt; 10 World    U        0   &lt;NA&gt;           &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;     </span></span>
+<span><span class="co">#&gt; # ℹ 110 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 52 more variables: type_field &lt;chr&gt;, place_name &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   place_addr &lt;chr&gt;, phone &lt;chr&gt;, url &lt;chr&gt;, rank &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   add_bldg &lt;chr&gt;, add_num &lt;chr&gt;, add_num_from &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   add_num_to &lt;chr&gt;, add_range &lt;chr&gt;, side &lt;chr&gt;, st_pre_dir &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   st_pre_type &lt;chr&gt;, st_name &lt;chr&gt;, st_type &lt;chr&gt;, st_dir &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   bldg_type &lt;chr&gt;, bldg_name &lt;chr&gt;, level_type &lt;chr&gt;, …</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="using-other-locators">Using other locators<a class="anchor" aria-label="anchor" href="#using-other-locators"></a>
+</h2>
+<p><a href="https://github.com/r-arcgis/arcgisgeocode" class="external-link">arcgisgeocode</a> can be used with any other geocoding service. For example, custom locators hosted on ArcGIS Online or Enterprise can be used. For example, we can use the <a href="https://www.nconemap.gov/pages/addresses" class="external-link">AddressNC</a> geocoding service <a href="https://www.arcgis.com/home/item.html?id=247dfe30ec42476a96926ad9e35f725f" class="external-link">available on ArcGIS Online</a>.</p>
+<p>Create a new <code>GeocodeServer</code> object using <code><a href="reference/geocode_server.html">geocode_server()</a></code>. The geocoder can to passed into the <code>geocoder</code> argument to any of the geocoding functions.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">address_nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/geocode_server.html">geocode_server</a></span><span class="op">(</span></span>
+<span>  <span class="st">"https://services.nconemap.gov/secure/rest/services/AddressNC/AddressNC_geocoder/GeocodeServer"</span>,</span>
+<span>  token <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/find_address_candidates.html">find_address_candidates</a></span><span class="op">(</span></span>
+<span>  address <span class="op">=</span> <span class="st">"rowan coffee"</span>,</span>
+<span>  city <span class="op">=</span> <span class="st">"asheville"</span>,</span>
+<span>  geocoder <span class="op">=</span> <span class="va">address_nc</span>,</span>
+<span>  token <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in CPL_crs_from_input(x): GDAL Error 1: PROJ:</span></span>
+<span><span class="co">#&gt; proj_create_from_database: crs not found</span></span>
+<span><span class="co">#&gt; Simple feature collection with 2 features and 60 fields</span></span>
+<span><span class="co">#&gt; Geometry type: POINT</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 943428.1 ymin: 631973.4 xmax: 948500.3 ymax: 681596.4</span></span>
+<span><span class="co">#&gt; CRS:           NA</span></span>
+<span><span class="co">#&gt;   input_id loc_name status score match_addr long_label short_label</span></span>
+<span><span class="co">#&gt; 1        1     &lt;NA&gt;      T    78  ASHEVILLE  ASHEVILLE   ASHEVILLE</span></span>
+<span><span class="co">#&gt; 2        1     &lt;NA&gt;      T    78  ASHEVILLE  ASHEVILLE   ASHEVILLE</span></span>
+<span><span class="co">#&gt;   addr_type type_field place_name place_addr phone  url rank add_bldg</span></span>
+<span><span class="co">#&gt; 1  Locality       City  ASHEVILLE  ASHEVILLE  &lt;NA&gt; &lt;NA&gt;   20     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2  Locality       City  ASHEVILLE  ASHEVILLE  &lt;NA&gt; &lt;NA&gt;   20     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   add_num add_num_from add_num_to add_range side st_pre_dir st_pre_type</span></span>
+<span><span class="co">#&gt; 1    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   st_name st_type st_dir bldg_type bldg_name level_type level_name</span></span>
+<span><span class="co">#&gt; 1    &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2    &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   unit_type unit_name sub_addr st_addr block sector nbrhd district</span></span>
+<span><span class="co">#&gt; 1      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;        city metro_area subregion region region_abbr territory zone</span></span>
+<span><span class="co">#&gt; 1 ASHEVILLE       &lt;NA&gt;  BUNCOMBE   &lt;NA&gt;        &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2 ASHEVILLE       &lt;NA&gt; HENDERSON   &lt;NA&gt;        &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   postal postal_ext country cntry_name lang_code distance        x</span></span>
+<span><span class="co">#&gt; 1   &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;        USA       ENG        0 943428.1</span></span>
+<span><span class="co">#&gt; 2   &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;        USA       ENG        0 948500.3</span></span>
+<span><span class="co">#&gt;          y display_x display_y       xmin      xmax       ymin</span></span>
+<span><span class="co">#&gt; 1 681596.4  943428.1  681596.4 -8530023.7 6181070.0 -6814694.2</span></span>
+<span><span class="co">#&gt; 2 631973.4  948500.3  631973.4   908369.6  988510.8   586446.6</span></span>
+<span><span class="co">#&gt;         ymax      ex_info                                extents</span></span>
+<span><span class="co">#&gt; 1 10142730.7 ROWAN COFFEE  -8530024, -6814694, 6181070, 10142731</span></span>
+<span><span class="co">#&gt; 2   677555.8 ROWAN COFFEE 908369.6, 586446.6, 988510.8, 677555.8</span></span>
+<span><span class="co">#&gt;                    geometry</span></span>
+<span><span class="co">#&gt; 1 POINT (943428.1 681596.4)</span></span>
+<span><span class="co">#&gt; 2 POINT (948500.3 631973.4)</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

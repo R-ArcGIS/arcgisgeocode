@@ -85,3 +85,8 @@ using \code{\link[httr2:req_perform_parallel]{httr2::req_perform_parallel()}}. T
 using Rust and returned as an sf object.
 }
 }
+\examples{
+x <- sf::st_sfc(sf::st_point(c(-117.172, 34.052)), crs = 4326)
+# Find addresses from locations
+reverse_geocode(x)
+}

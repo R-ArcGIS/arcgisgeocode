@@ -13,8 +13,6 @@ NULL
 
 as_esri_point_json <- function(x, sr) .Call(wrap__as_esri_point_json, x, sr)
 
-parse_rev_geocode_resp <- function(resps) .Call(wrap__parse_rev_geocode_resp, resps)
-
 create_records <- function(single_line, address, address2, address3, neighborhood, city, subregion, region, postal, postal_ext, country_code, location, sr, n) .Call(wrap__create_records, single_line, address, address2, address3, neighborhood, city, subregion, region, postal, postal_ext, country_code, location, sr, n)
 
 parse_location_json <- function(x) .Call(wrap__parse_location_json, x)
@@ -30,6 +28,8 @@ iso_3166_3 <- function() .Call(wrap__iso_3166_3)
 iso_3166_names <- function() .Call(wrap__iso_3166_names)
 
 parse_custom_location_json_ <- function(x, to_fill) .Call(wrap__parse_custom_location_json_, x, to_fill)
+
+parse_rev_geocode_resp <- function(resps) .Call(wrap__parse_rev_geocode_resp, resps)
 
 parse_suggestions <- function(x) .Call(wrap__parse_suggestions, x)
 

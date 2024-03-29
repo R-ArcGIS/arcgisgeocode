@@ -283,6 +283,10 @@ parse_candidate_res <- function(string) {
   res <- res_list[["attributes"]]
   res[["extents"]] <- res_list[["extents"]]
 
+  # TODO sometimes the wkid isn't a standard EPSG code.
+  # Then we need to add `ESRI:{wkid}` in front of it.
+  # But how do we know? The spatialReference database could be handy here.
+  # but thats so bigg.....
   geometry <- sf::st_sfc(res_list[["locations"]], crs = res_list$sr$wkid)
 
   # geometry

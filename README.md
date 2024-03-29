@@ -1,3 +1,8 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+
+
 # arcgisgeocode
 
 <!-- badges: start -->
@@ -260,5 +265,114 @@ To learn more about free and paid geocoding operations refer to the [storage par
 
 Many addresses can be geocoded very fast using the `geocode_addresses()` function which calls the `/geocodeAddresses` endpoint. Note that this function requires an authorization token. `geocode_addresses()` sends the input addresses in chunks as parallel requests. 
 
+Batch geocoding requires a signed in user. Load the [`{arcgisutils}`](https://github.com/r-arcgis/arcgisutils) to authorize and set your token. This example uses the [Geocoding Test Dataset](# https://datacatalog.urban.org/node/6158/revisions/14192/view) from the [Urban Institute](https://www.urban.org/).
 
 
+```r
+library(arcgisutils)
+library(arcgisgeocode)
+set_arc_token(auth_user())
+
+# Example dataset from the Urban Institute 
+fp <- "https://urban-data-catalog.s3.amazonaws.com/drupal-root-live/2020/02/25/geocoding_test_data.csv"
+
+to_geocode <- readr::read_csv(fp)
+#> Rows: 120 Columns: 8
+#> ── Column specification ────────────────────────────────────────────────
+#> Delimiter: ","
+#> chr (5): full_address, address, city, state, zip
+#> dbl (3): lat_true, lon_true, diff_level
+#> 
+#> ℹ Use `spec()` to retrieve the full column specification for this data.
+#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+geocoded <- to_geocode |>
+  dplyr::reframe(
+    geocode_addresses(
+      address = address,
+      city = city,
+      region = state,
+      postal = zip
+    )
+  )
+
+geocoded
+#> # A tibble: 120 × 59
+#>    loc_name status score match_addr     long_label short_label addr_type
+#>    <chr>    <chr>  <dbl> <chr>          <chr>      <chr>       <chr>    
+#>  1 World    M      100   500 L'Enfant … 500 L'Enf… 500 L'Enfa… PointAdd…
+#>  2 World    M      100   200 K St NE, … 200 K St … 200 K St NE PointAdd…
+#>  3 World    M      100   500 L'Enfant … 500 L'Enf… 500 L'Enfa… PointAdd…
+#>  4 World    M      100   2197 Plumleig… 2197 Plum… 2197 Pluml… PointAdd…
+#>  5 World    U        0   <NA>           <NA>       <NA>        <NA>     
+#>  6 World    M       97.9 2197 Plumleig… 2197 Plum… 2197 Pluml… PointAdd…
+#>  7 World    M      100   200 K St NE, … 200 K St … 200 K St NE PointAdd…
+#>  8 World    M       97.0 5034 Curtis S… 5034 Curt… 5034 Curti… PointAdd…
+#>  9 World    M       97.0 5034 Curtis S… 5034 Curt… 5034 Curti… PointAdd…
+#> 10 World    U        0   <NA>           <NA>       <NA>        <NA>     
+#> # ℹ 110 more rows
+#> # ℹ 52 more variables: type_field <chr>, place_name <chr>,
+#> #   place_addr <chr>, phone <chr>, url <chr>, rank <dbl>,
+#> #   add_bldg <chr>, add_num <chr>, add_num_from <chr>,
+#> #   add_num_to <chr>, add_range <chr>, side <chr>, st_pre_dir <chr>,
+#> #   st_pre_type <chr>, st_name <chr>, st_type <chr>, st_dir <chr>,
+#> #   bldg_type <chr>, bldg_name <chr>, level_type <chr>, …
+```
+
+## Using other locators 
+
+`{arcgisgeocode}` can be used with any other geocoding service. For example, custom locators hosted on ArcGIS Online or Enterprise can be used. For example, we can use the [AddressNC](https://www.nconemap.gov/pages/addresses) geocoding service [available on ArcGIS Online](https://www.arcgis.com/home/item.html?id=247dfe30ec42476a96926ad9e35f725f).
+
+Create a new `GeocodeServer` object using `geocode_server()`. The geocoder can to passed into the `geocoder` argument to any of the geocoding functions. 
+
+
+```r
+address_nc <- geocode_server(
+  "https://services.nconemap.gov/secure/rest/services/AddressNC/AddressNC_geocoder/GeocodeServer",
+  token = NULL
+)
+
+find_address_candidates(
+  address = "rowan coffee",
+  city = "asheville",
+  geocoder = address_nc,
+  token = NULL
+)
+#> Warning in CPL_crs_from_input(x): GDAL Error 1: PROJ:
+#> proj_create_from_database: crs not found
+#> Simple feature collection with 2 features and 60 fields
+#> Geometry type: POINT
+#> Dimension:     XY
+#> Bounding box:  xmin: 943428.1 ymin: 631973.4 xmax: 948500.3 ymax: 681596.4
+#> CRS:           NA
+#>   input_id loc_name status score match_addr long_label short_label
+#> 1        1     <NA>      T    78  ASHEVILLE  ASHEVILLE   ASHEVILLE
+#> 2        1     <NA>      T    78  ASHEVILLE  ASHEVILLE   ASHEVILLE
+#>   addr_type type_field place_name place_addr phone  url rank add_bldg
+#> 1  Locality       City  ASHEVILLE  ASHEVILLE  <NA> <NA>   20     <NA>
+#> 2  Locality       City  ASHEVILLE  ASHEVILLE  <NA> <NA>   20     <NA>
+#>   add_num add_num_from add_num_to add_range side st_pre_dir st_pre_type
+#> 1    <NA>         <NA>       <NA>      <NA> <NA>       <NA>        <NA>
+#> 2    <NA>         <NA>       <NA>      <NA> <NA>       <NA>        <NA>
+#>   st_name st_type st_dir bldg_type bldg_name level_type level_name
+#> 1    <NA>    <NA>   <NA>      <NA>      <NA>       <NA>       <NA>
+#> 2    <NA>    <NA>   <NA>      <NA>      <NA>       <NA>       <NA>
+#>   unit_type unit_name sub_addr st_addr block sector nbrhd district
+#> 1      <NA>      <NA>     <NA>    <NA>  <NA>   <NA>  <NA>     <NA>
+#> 2      <NA>      <NA>     <NA>    <NA>  <NA>   <NA>  <NA>     <NA>
+#>        city metro_area subregion region region_abbr territory zone
+#> 1 ASHEVILLE       <NA>  BUNCOMBE   <NA>        <NA>      <NA> <NA>
+#> 2 ASHEVILLE       <NA> HENDERSON   <NA>        <NA>      <NA> <NA>
+#>   postal postal_ext country cntry_name lang_code distance        x
+#> 1   <NA>       <NA>    <NA>        USA       ENG        0 943428.1
+#> 2   <NA>       <NA>    <NA>        USA       ENG        0 948500.3
+#>          y display_x display_y       xmin      xmax       ymin
+#> 1 681596.4  943428.1  681596.4 -8530023.7 6181070.0 -6814694.2
+#> 2 631973.4  948500.3  631973.4   908369.6  988510.8   586446.6
+#>         ymax      ex_info                                extents
+#> 1 10142730.7 ROWAN COFFEE  -8530024, -6814694, 6181070, 10142731
+#> 2   677555.8 ROWAN COFFEE 908369.6, 586446.6, 988510.8, 677555.8
+#>                    geometry
+#> 1 POINT (943428.1 681596.4)
+#> 2 POINT (948500.3 631973.4)
+```

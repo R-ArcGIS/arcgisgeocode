@@ -134,5 +134,47 @@ To learn more about free and paid geocoding operations refer to the [storage par
 
 Many addresses can be geocoded very fast using the `geocode_addresses()` function which calls the `/geocodeAddresses` endpoint. Note that this function requires an authorization token. `geocode_addresses()` sends the input addresses in chunks as parallel requests. 
 
+Batch geocoding requires a signed in user. Load the [`{arcgisutils}`](https://github.com/r-arcgis/arcgisutils) to authorize and set your token. This example uses the [Geocoding Test Dataset](# https://datacatalog.urban.org/node/6158/revisions/14192/view) from the [Urban Institute](https://www.urban.org/).
 
+```{r}
+library(arcgisutils)
+library(arcgisgeocode)
+set_arc_token(auth_user())
 
+# Example dataset from the Urban Institute 
+fp <- "https://urban-data-catalog.s3.amazonaws.com/drupal-root-live/2020/02/25/geocoding_test_data.csv"
+
+to_geocode <- readr::read_csv(fp)
+
+geocoded <- to_geocode |>
+  dplyr::reframe(
+    geocode_addresses(
+      address = address,
+      city = city,
+      region = state,
+      postal = zip
+    )
+  )
+
+geocoded
+```
+
+## Using other locators 
+
+`{arcgisgeocode}` can be used with any other geocoding service. For example, custom locators hosted on ArcGIS Online or Enterprise can be used. For example, we can use the [AddressNC](https://www.nconemap.gov/pages/addresses) geocoding service [available on ArcGIS Online](https://www.arcgis.com/home/item.html?id=247dfe30ec42476a96926ad9e35f725f).
+
+Create a new `GeocodeServer` object using `geocode_server()`. The geocoder can to passed into the `geocoder` argument to any of the geocoding functions. 
+
+```{r}
+address_nc <- geocode_server(
+  "https://services.nconemap.gov/secure/rest/services/AddressNC/AddressNC_geocoder/GeocodeServer",
+  token = NULL
+)
+
+find_address_candidates(
+  address = "rowan coffee",
+  city = "asheville",
+  geocoder = address_nc,
+  token = NULL
+)
+```

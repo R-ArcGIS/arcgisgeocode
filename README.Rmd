@@ -27,7 +27,9 @@ The goal of arcgisgeocode is to provide access to ArcGIS geocoding services from
 
 arcgisgeocode uses [`extendr`](https://extendr.github.io/) and requires Rust to be available to install the development version of arcgisgeocode. Follow the  [rustup instructions](https://rustup.rs/) to install Rust and verify your installation is compatible using [`rextendr::rust_sitrep()`](https://extendr.github.io/rextendr/dev/#sitrep).
 
-You can install the development version of arcgisgeocode like so:
+If you do not have Rust installed, you can install a binary for Mac, Windows, or Ubuntu from r-universe.
+
+You can install the package like so: 
 
 ``` r
 # install pak if not available
@@ -35,11 +37,24 @@ if (!requireNamespace("pak")) install.packages("pak")
 
 # install development version of {arcgisgeocode}
 pak::pak("r-arcgis/arcgisgeocode")
+
+# install from R-universe
+install.packages("arcgisgeocode", repos = c("https://r-arcgis.r-universe.dev", "https://cran.r-project.org"))
 ```
 
-## Example
+## Usage
 
-List available geocoders based on an authorization token. 
+By default, the public [ArcGIS World Geocoder](https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder) will be used. The public face geocoding server provides public access to the `/findAddressCandidates`, `reverseGeocode`, and `/suggest` endpoints made available va the `find_address_candidates()`, `reverse_geocode()`, and `suggest_places()` functions respectively. 
+
+The batch geocoding endpoint `/geocodeAddresses` is available via `geocode_addresses(). However, this requires the use of an authorization token and may consume credits. 
+
+### Reverse geocoding
+
+Reverse geocoding takes a location and finds the associated address. 
+
+```{r, include = FALSE}
+library(pillar)
+```
 
 ```{r}
 library(arcgisgeocode)
@@ -47,18 +62,77 @@ library(arcgisgeocode)
 # create a point
 x <- sf::st_sfc(sf::st_point(c(-117.172, 34.052)), crs = 4326)
 
-# reverse geocode
+# Find addresses from locations
 reverse_geocode(x)
+```
 
-# find address candidates
+### Address search
+
+The `find_address_candidates()` function returns geocoding candidate results. The function is vectorized over the input and will perform multiple requests in parallel. Each request geocodes one location at a time. 
+
+One or more candidates are returned from the endpoint. You can limit the number of candidates using the `max_locations` argument (with a maximum of 50).
+
+```{r}
+# Find addresses from address search
 candidates <- find_address_candidates(
-  address = c("esri"),
+  address = "esri",
+  address2 = "380 new york street",
   city = "redlands",
-  country_code = "usa"
+  country_code = "usa",
+  max_locations = 2
 )
 
 dplyr::glimpse(candidates[,1:10])
-
-# list available geocoding services for signed in account
-# list_geocoders()
 ```
+
+### Suggest locations 
+
+Geocoding services can also provide a location suggestion based on a search term and, optionally, a location or extent. The `suggest_places()` (`/suggest` endpoint) is intended to be used as part of a client facing application that provides autocomplete suggestions. 
+
+In this example we create a search extent around a single point and find suggestions based on the search term `"bellwood"`. 
+
+```{r}
+# identify a search point as a simple feature column
+location <- sf::st_sfc(
+  sf::st_point(c(-84.34, 33.74)),
+   crs = 4326
+)
+
+# buffer and create a bbox object 
+search_extent <- sf::st_bbox(
+  sf::st_buffer(location, 10)
+)
+
+# find suggestions within the bounding box
+suggestions <- suggest_places(
+  "bellwood",
+  location,
+  search_extent = search_extent
+)
+
+suggestions
+```
+
+The result is intended to be provided to `find_address_candidates()` to complete the geocoding process. The columns `text` contains the address to geocode. The column `magic_key` is a special identifier that make it much faster to fetch results. Pass this into the argument `magic_key`
+
+```{r}
+# get address candidate information
+# using the text and the magic key
+find_address_candidates(
+  suggestions$text,
+  magic_key = suggestions$magic_key
+)
+```
+
+## *Important*: Storing results
+
+By default, the argument `for_storage = FALSE` meaning that the results of the geocoding operation cannot be persisted. If you intend to persist the results of the geocoding operation, you must set `for_storage = TRUE`. 
+
+To learn more about free and paid geocoding operations refer to the [storage parameter documentation](https://developers.arcgis.com/documentation/mapping-apis-and-services/geocoding/services/geocoding-service/#storage-parameter). 
+
+## Batch geocoding
+
+Many addresses can be geocoded very fast using the `geocode_addresses()` function which calls the `/geocodeAddresses` endpoint. Note that this function requires an authorization token. `geocode_addresses()` sends the input addresses in chunks as parallel requests. 
+
+
+

@@ -1,18 +1,7 @@
-use extendr_api::prelude::*;
-
-use extendr_api::deserializer::from_robj;
-use extendr_api::serializer::to_robj;
+use extendr_api::{deserializer::from_robj, prelude::*};
+use serde_esri::{geometry::EsriPoint, spatial_reference::SpatialReference};
 use serde_json::to_string;
-// use tokio::runtime::Runtime;
-
-// use reqwest::Url;
-use serde_esri::geometry::EsriPoint;
-use serde_esri::spatial_reference::SpatialReference;
-
-fn parse_sr(sr: Robj) -> Option<SpatialReference> {
-    let sr: Result<SpatialReference> = from_robj(&sr);
-    sr.ok()
-}
+use std::sync::Arc;
 
 mod batch_geocode;
 mod find_candidates;
@@ -21,8 +10,21 @@ mod parse_custom_attrs;
 mod reverse;
 mod suggest;
 
-use crate::reverse::*;
-use std::sync::Arc;
+extendr_module! {
+    mod arcgisgeocode;
+    fn as_esri_point_json;
+    use batch_geocode;
+    use find_candidates;
+    use iso3166;
+    use parse_custom_attrs;
+    use reverse;
+    use suggest;
+}
+
+fn parse_sr(sr: Robj) -> Option<SpatialReference> {
+    let sr: Result<SpatialReference> = from_robj(&sr);
+    sr.ok()
+}
 
 fn sfc_point_to_esri_point(pnts: List, sr: SpatialReference) -> Vec<Option<EsriPoint>> {
     let sr = Arc::new(sr);
@@ -154,42 +156,4 @@ fn as_esri_point_json(x: List, sr: Robj) -> Strings {
             None => Rstr::na(),
         })
         .collect::<Strings>()
-}
-
-#[extendr]
-fn parse_rev_geocode_resp(resps: Strings) -> List {
-    let mut res_geo = List::new(resps.len());
-
-    let res_attrs = resps
-        .into_iter()
-        .enumerate()
-        .map(|(i, ri)| {
-            let resp = serde_json::from_str::<ReverseGeocodeResponse>(ri.as_str());
-            let res = match resp {
-                Ok(r) => {
-                    let res = to_robj(&r.address).unwrap().as_list().unwrap();
-                    let _ = res_geo.set_elt(i, as_sfg(r.location));
-                    res.into_robj()
-                }
-                Err(_) => ().into_robj(),
-            };
-            res
-        })
-        .collect::<List>()
-        .into();
-
-    List::from_names_and_values(&["attributes", "geometry"], [res_attrs, res_geo]).unwrap()
-}
-
-extendr_module! {
-    mod arcgisgeocode;
-    fn as_esri_point_json;
-    // fn reverse_geocode_rs;
-    fn parse_rev_geocode_resp;
-
-    use batch_geocode;
-    use find_candidates;
-    use iso3166;
-    use parse_custom_attrs;
-    use suggest;
 }

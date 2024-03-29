@@ -1,3 +1,4 @@
+use extendr_api::prelude::*;
 use serde::{Deserialize, Serialize};
 use serde_esri::{geometry::EsriPoint, spatial_reference::SpatialReference};
 
@@ -184,7 +185,7 @@ pub struct ReverseGeocodeResponse {
     pub location: EsriPoint,
 }
 
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize, IntoDataFrameRow)]
 #[serde(rename_all = "camelCase")]
 pub struct Address {
     #[serde(rename = "Match_addr")]
@@ -231,4 +232,35 @@ pub struct Address {
     pub country_name: String,
     #[serde(rename = "CountryCode")]
     pub country_code: String,
+}
+
+#[extendr]
+pub fn parse_rev_geocode_resp(resps: Strings) -> List {
+    let mut res_geo = List::new(resps.len());
+
+    let res_attrs = resps
+        .into_iter()
+        .enumerate()
+        .map(|(i, ri)| {
+            let resp = serde_json::from_str::<ReverseGeocodeResponse>(ri.as_str());
+            let res = match resp {
+                Ok(r) => {
+                    // let res = to_robj(&r.address).unwrap().as_list().unwrap();
+                    let _ = res_geo.set_elt(i, crate::as_sfg(r.location));
+                    vec![r.address].into_dataframe().unwrap().as_robj().clone()
+                    // res.into_robj()
+                }
+                Err(_) => ().into_robj(),
+            };
+            res
+        })
+        .collect::<List>()
+        .into();
+
+    List::from_names_and_values(&["attributes", "geometry"], [res_attrs, res_geo]).unwrap()
+}
+
+extendr_module! {
+    mod reverse;
+    fn parse_rev_geocode_resp;
 }

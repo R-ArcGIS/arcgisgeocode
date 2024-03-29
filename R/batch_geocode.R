@@ -300,7 +300,11 @@ parse_locations_res <- function(
   }
 
   res <- res_list[["attributes"]]
-  geometry <- sf::st_sfc(res_list[["locations"]], crs = res_list$sr$wkid)
+
+  geometry <- sf::st_sfc(
+    res_list[["locations"]],
+    crs = parse_wkid(res_list$sr$wkid)
+  )
   # craft the {sf} object
   sf::st_sf(res, geometry)
 }

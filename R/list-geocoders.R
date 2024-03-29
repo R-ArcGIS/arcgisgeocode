@@ -53,10 +53,7 @@ list_geocoders <- function(token = arc_token()) {
   }
 
   # use pillar -- should be done in arcgisutils
-  structure(
-    geocoder_metadata,
-    class = c("tbl", "data.frame")
-  )
+  data_frame(geocoder_metadata)
 }
 
 #' Provides a default GeocodeServer

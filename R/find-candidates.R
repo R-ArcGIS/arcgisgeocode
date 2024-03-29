@@ -287,7 +287,8 @@ parse_candidate_res <- function(string) {
   # Then we need to add `ESRI:{wkid}` in front of it.
   # But how do we know? The spatialReference database could be handy here.
   # but thats so bigg.....
-  geometry <- sf::st_sfc(res_list[["locations"]], crs = res_list$sr$wkid)
+  crs_obj <- parse_wkid(res_list$sr$wkid)
+  geometry <- sf::st_sfc(res_list[["locations"]], crs = crs_obj)
 
   # geometry
   sf::st_sf(

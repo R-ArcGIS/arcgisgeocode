@@ -36,6 +36,10 @@
 #' using [`httr2::req_perform_parallel()`]. The JSON responses are then processed
 #' using Rust and returned as an sf object.
 #'
+#' @examples
+#' x <- sf::st_sfc(sf::st_point(c(-117.172, 34.052)), crs = 4326)
+#' # Find addresses from locations
+#' reverse_geocode(x)
 #' @param locations an `sfc_POINT` object of the locations to be reverse geocoded.
 #' @param crs the CRS of the returned geometries. Passed to `sf::st_crs()`.
 #' @param ... unused.
@@ -97,10 +101,23 @@ reverse_geocode <- function(
     values = c("postalCity", "localCity")
   )
 
-  # TODO use wk to use any wk_handle-able points
-  if (!rlang::inherits_all(locations, c("sfc_POINT", "sfc"))) {
-    stop_input_type(locations, "sfc_POINT")
+  # if locations is not an sfc object, we set to 4326
+  # otherwise we validate output CRS
+  if (!rlang::inherits_all(x, c("sfc_POINT", "sfc"))) {
+    crs <- 4326
+  } else if (is.na(crs)) {
+    cli::cli_warn(
+      c(
+        "!" = "{.arg crs} is set to {.cls NA}",
+        "i" = "using {.code EPSG:4326}"
+      )
+    )
+    crs <- 4326
   }
+
+  # TODO use wk to use any wk_handle-able points
+  # validates location input
+  locations <- obj_as_points(locations)
 
   # ensure lang_code a single string
   check_string(lang_code, allow_null = TRUE)
@@ -115,16 +132,7 @@ reverse_geocode <- function(
     )
   }
 
-  # validate output CRS
-  if (is.na(crs)) {
-    cli::cli_warn(
-      c(
-        "!" = "{.arg crs} is set to {.cls NA}",
-        "i" = "using {.code EPSG:4326}"
-      )
-    )
-    crs <- 4326
-  }
+
 
   out_crs <- validate_crs(crs)[[1]]
 
@@ -182,7 +190,7 @@ reverse_geocode <- function(
 
   # TODO incorporate squish DF into arcgisutils. This is stopgap solution
   # https://github.com/R-ArcGIS/arcgislayers/pull/167
-  res_attr <- data_frame(do.call(rbind.data.frame, res_raw$attributes))
+  res_attr <- data_frame(rbind_results(res_raw$attributes))
 
   # cast into sf object
   res_sf <- sf::st_sf(

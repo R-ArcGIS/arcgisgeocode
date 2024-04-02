@@ -2,7 +2,7 @@ library(readr)
 library(arcgis)
 library(arcgisgeocode)
 
-customer_addresses <- read_csv(
+customer_addresses <- readr::read_csv(
   "/Users/josiahparry/Downloads/Atlanta_customers.csv"
 )
 

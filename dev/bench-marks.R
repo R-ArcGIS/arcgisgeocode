@@ -1,7 +1,7 @@
 library(magrittr)
 library(arcgisgeocode)
 
-addresses <- read_csv(fp)
+addresses <- readr::read_csv(fp)
 set_arc_token(auth_user())
 
 fp <- "https://urban-data-catalog.s3.amazonaws.com/drupal-root-live/2020/02/25/geocoding_test_data.csv"

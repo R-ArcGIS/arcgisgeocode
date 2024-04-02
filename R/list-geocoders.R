@@ -79,6 +79,3 @@ default_geocoder <- function(token = arc_token()) {
 
   geocode_server(res[1, "url"])
 }
-
-
-utils::globalVariables("world_geocoder")

@@ -153,6 +153,33 @@ using Rust and returned as an sf object.</p>
 
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">117.172</span>, <span class="fl">34.052</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Find addresses from locations</span></span></span>
+<span class="r-in"><span><span class="fu">reverse_geocode</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Registered S3 method overwritten by 'jsonify':</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   method     from    </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   print.json jsonlite</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 22 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -117.172 ymin: 34.05204 xmax: -117.172 ymax: 34.05204</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                     match_addr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 600-620 Home Pl, Redlands, California, 92374</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  long_label     short_label     addr_type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 600-620 Home Pl, Redlands, CA, 92374, USA 600-620 Home Pl StreetAddress</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   type_field place_name add_num     address block sector   neighborhood</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                           608 608 Home Pl              South Redlands</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   district     city metro_area             subregion     region region_abbr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          Redlands            San Bernardino County California          CA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   territory postal postal_ext  country_name country_code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1            92374            United States          USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    geometry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 POINT (-117.172 34.05204)</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

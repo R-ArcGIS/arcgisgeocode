@@ -103,7 +103,7 @@ reverse_geocode <- function(
 
   # if locations is not an sfc object, we set to 4326
   # otherwise we validate output CRS
-  if (!rlang::inherits_all(x, c("sfc_POINT", "sfc"))) {
+  if (!rlang::inherits_all(locations, c("sfc_POINT", "sfc"))) {
     crs <- 4326
   } else if (is.na(crs)) {
     cli::cli_warn(
@@ -132,8 +132,7 @@ reverse_geocode <- function(
     )
   }
 
-
-
+  # get the JSON output
   out_crs <- validate_crs(crs)[[1]]
 
   # create list of provided parameters

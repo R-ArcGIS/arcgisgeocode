@@ -22,6 +22,7 @@ geocode_server <- function(url, token = arc_token()) {
 
 world_geocoder_url <- "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
 
+# Print method for the geocoder, must be exported
 #' @export
 print.GeocodeServer <- function(x, ...) {
   # if the description is "" we don't print it
@@ -45,6 +46,7 @@ print.GeocodeServer <- function(x, ...) {
   invisible(x)
 }
 
+# handy check function to see if the type is a GeocodeServer
 check_geocoder <- function(x, arg = rlang::caller_arg(x), call = rlang::current_env()) {
   if (!rlang::inherits_any(x, "GeocodeServer")) {
     cli::cli_abort("Expected {.cls GeocodeServer}, {.arg {arg}} is {obj_type_friendly(x)}")

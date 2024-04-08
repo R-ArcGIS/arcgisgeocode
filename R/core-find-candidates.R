@@ -94,7 +94,6 @@ find_address_candidates <- function(
     token = arc_token(),
     .progress = TRUE) {
   check_geocoder(geocoder, call = rlang::caller_env())
-
   check_bool(.progress, allow_na = FALSE, allow_null = FALSE)
 
   # type checking for all character types
@@ -142,17 +141,19 @@ find_address_candidates <- function(
   # It could be actually really easy to capture all of the arguments
   # except .progress, token, and geocoder to turn it into a data.frame
   # iterate through the rows and create the requests
-  # fml_nms <- rlang::fn_fmls_names()
-  fml_nms <- names(rlang::fn_fmls())
+  fml_nms <- rlang::fn_fmls_names()
 
   # get all values passed in
   all_args <- rlang::env_get_list(nms = fml_nms)
 
+  # check to see if any are null
   null_args <- vapply(all_args, is.null, logical(1))
 
+  # these arguments are scalars and shold not be handled in a vectorized manner
   to_exclude <- c("crs", ".progress", "token", "geocoder", "for_storage")
   to_include <- !names(all_args) %in% to_exclude
 
+  # fetches all non-null arguments. These will be turned into a dataframe
   non_null_vals <- all_args[to_include & !null_args]
 
   # validate the preferred_label_values
@@ -172,7 +173,7 @@ find_address_candidates <- function(
   }
 
   # check for locations
-  check_locations(location)
+  obj_as_points(location, allow_null = TRUE)
 
   # convert to esri json if not missing
   if (!is.null(location)) {

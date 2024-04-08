@@ -21,3 +21,4 @@ reference:
 - title: Utilities
   contents:
   - iso_3166_codes
+  - esri_wkids

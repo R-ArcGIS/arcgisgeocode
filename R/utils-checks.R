@@ -105,6 +105,8 @@ inform_for_storage <- function(call = rlang::current_env()) {
   )
 }
 
+# This function will convert a number of different representations
+# into points that can be used instead of sfc
 obj_as_points <- function(
     x,
     allow_null = TRUE,

@@ -107,9 +107,12 @@ geocode_addresses <- function(
   # single_line and addresses are mutually exclusive
   rlang::check_exclusive(single_line, address)
 
+  # these are all of the fields that are used to fill in an address
+  # they can be identified from geocoder$addressFields
+  # the single line field can be found from geocoder$singleLineAddressField
   address_fields <- c("single_line", "address", "address2", "address3", "neighborhood", "city", "subregion", "region", "postal", "postal_ext", "country_code", "location")
 
-  # browser()
+  #
   fn_args <- rlang::env_get_list(nms = address_fields)
   arg_lengths <- lengths(fn_args)
   n <- max(arg_lengths)
@@ -261,9 +264,9 @@ geocode_addresses <- function(
     )
   })
 
+  # combine all the results
   results <- rbind_results(all_results)
 
-  # browser()
   # if any issues occured they would've happened here
   errors <- attr(results, "null_elements")
   n_errors <- length(errors)

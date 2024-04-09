@@ -1,22 +1,43 @@
 library(magrittr)
-library(arcgisgeocode)
-
-addresses <- readr::read_csv(fp)
-set_arc_token(auth_user())
+# library(arcgisgeocode)
 
 fp <- "https://urban-data-catalog.s3.amazonaws.com/drupal-root-live/2020/02/25/geocoding_test_data.csv"
 
-system.time(
-  addresses %$%
-    geocode_addresses(
-      address = address,
-      city = city,
-      region = state,
-      postal = zip
-    ) -> geocoded
-)
+addresses <- readr::read_csv(fp)
+# set_arc_token(auth_user())
+
+addresses %$% 
+  geocode_addresses(
+    address = address,
+    city = city,
+    region = state,
+    postal = zip
+  ) -> geocoded
+
+attr(geocoded, "error_messages")[[1]] |> 
 
 
+warns <- attr(geocoded, "error_requests")[[1]] |> 
+  httr2::req_perform() |> 
+  httr2::resp_body_string() |> 
+  RcppSimdJson::fparse() |>
+  arcgisutils:::report_errors() 
+
+
+warns <- attr(geocoded, "error_requests")[[1]] |> 
+    httr2::req_perform() |> 
+    httr2::resp_body_string() |> 
+    RcppSimdJson::fparse() |>
+    arcgisutils:::report_errors() 
+# system.time(
+#   addresses %$%
+#     geocode_addresses(
+#       address = address,
+#       city = city,
+#       region = state,
+#       postal = zip
+#     ) -> geocoded
+# )
 
 
 # Real geocoding ------------------------------------------------------

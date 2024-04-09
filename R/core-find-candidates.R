@@ -173,7 +173,7 @@ find_address_candidates <- function(
   }
 
   # check for locations
-  obj_as_points(location, allow_null = TRUE)
+  location <- obj_as_points(location, allow_null = TRUE)
 
   # convert to esri json if not missing
   if (!is.null(location)) {

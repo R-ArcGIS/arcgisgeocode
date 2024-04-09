@@ -137,5 +137,5 @@ suggest_places <- function(
   # TODO 0 rows are returned when there was an issue parsing
   # should there be a warning?
   res <- parse_suggestions(httr2::resp_body_string(resp))
-  structure(res, class = c("tbl", "data.frame"))
+  data_frame(res)
 }

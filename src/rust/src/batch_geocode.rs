@@ -237,10 +237,7 @@ pub fn parse_location_json(x: &str) -> Robj {
             )
             .into_robj()
         }
-        Err(e) => {
-            rprintln!("{:?}", e);
-            ().into_robj()
-        }
+        Err(_) => ().into_robj(),
     }
 }
 

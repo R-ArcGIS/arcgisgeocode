@@ -103,6 +103,7 @@ reverse_geocode <- function(
 
   # if locations is not an sfc object, we set to 4326
   # otherwise we validate output CRS
+  locations <- obj_as_points(locations, allow_null = TRUE)
   if (!rlang::inherits_all(locations, c("sfc_POINT", "sfc"))) {
     crs <- 4326
   } else if (is.na(crs)) {

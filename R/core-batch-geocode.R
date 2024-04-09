@@ -35,8 +35,8 @@ geocode_addresses <- function(
     location = NULL, # sfc_POINT
     search_extent = NULL,
     category = NULL, # Needs validation
-    crs = NULL, # validate
-    max_locations = NULL, # max 50
+    crs = NULL,
+    max_locations = NULL,
     for_storage = FALSE, # warn
     match_out_of_range = NULL,
     location_type = NULL,
@@ -48,8 +48,13 @@ geocode_addresses <- function(
     token = arc_token(),
     .progress = TRUE) {
   # check that token exists
-  obj_check_token(token)
+  # this actually isn't necessary for all geocoder services
+  # especially if it will be a private one.
+  # but I think its safe to assume people will be able to create a token
+  # to a private service? Well
+  # obj_check_token(token)
   check_geocoder(geocoder, call = rlang::caller_env())
+
 
   check_bool(.progress, allow_na = FALSE, allow_null = FALSE)
   check_for_storage(for_storage, token, call = rlang::current_env())
@@ -77,6 +82,9 @@ geocode_addresses <- function(
   check_string(preferred_label_values, allow_null = TRUE, allow_empty = FALSE)
   check_iso_3166(source_country, allow_null = TRUE, scalar = TRUE)
   check_iso_3166(lang_code, allow_null = TRUE, scalar = TRUE)
+
+  # if loations are provided, they can be a single location represented in different ways this will modify them
+  location <- obj_as_points(location, allow_null = TRUE)
 
   # outSR
   # handle outSR
@@ -112,7 +120,6 @@ geocode_addresses <- function(
   # the single line field can be found from geocoder$singleLineAddressField
   address_fields <- c("single_line", "address", "address2", "address3", "neighborhood", "city", "subregion", "region", "postal", "postal_ext", "country_code", "location")
 
-  #
   fn_args <- rlang::env_get_list(nms = address_fields)
   arg_lengths <- lengths(fn_args)
   n <- max(arg_lengths)
@@ -253,7 +260,6 @@ geocode_addresses <- function(
   # RcppSimdJson and _not_ the Rust based implementation
   use_custom_json_processing <- has_custom_fields(geocoder)
 
-
   # TODO Handle errors
   all_results <- lapply(all_resps, function(.resp) {
     string <- httr2::resp_body_string(.resp)
@@ -274,11 +280,21 @@ geocode_addresses <- function(
   # if errors occurred attach as an attribute
   if (n_errors > 0) {
     attr(results, "error_requests") <- all_reqs[errors]
+
+    # process resps and catch the errors
+    error_messages <- lapply(
+      all_resps[errors],
+      function(.x) catch_error(httr2::resp_body_string(.x), rlang::caller_call(2))
+    )
+
     # add a warning when n_errors > 0
     cli::cli_warn(c(
       "x" = "Issue{cli::qty(n_errors)}{?s} encountered when processing response{cli::qty(n_errors)}{?s} {cli::qty(n_errors)} {errors}",
       "i" = "access problem requests with {.code attr(result, \"error_requests\")}"
     ))
+
+    # for each error message signal the condition
+    for (cnd in error_messages) rlang::cnd_signal(cnd)
   }
 
   results
@@ -322,6 +338,7 @@ parse_custom_loc_json <- function(json, geocoder, n, call = rlang::caller_env())
   tbl_to_fill <- ptype_tbl(geocoder$candidateFields[, c("name", "type")], n = n, call = call)
   parse_custom_location_json_(json, tbl_to_fill)
 }
+
 # parse_custom_location_json <- function(x) {
 #   raw_res <- RcppSimdJson::fparse(x)
 #   attrs <- data.frame(raw_res$locations$attributes)

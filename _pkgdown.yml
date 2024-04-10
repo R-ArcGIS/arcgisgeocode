@@ -10,6 +10,7 @@ reference:
   - reverse_geocode
   - find_address_candidates
   - suggest_places
+  - storage
 
 - title: GeocodeServer objects
   contents:

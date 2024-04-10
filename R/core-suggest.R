@@ -61,6 +61,7 @@ suggest_places <- function(
     cli::cli_abort("{.arg {arg}} does not support  the {.path /suggest} endpoint")
   }
 
+  location <- obj_as_points(location, allow_null = TRUE, call = rlang::caller_env())
   # FIXME
   # Location should be able to be a length 2 numeric vector or an sfg POINT
   check_geocoder(geocoder, call = rlang::caller_env())
@@ -127,15 +128,25 @@ suggest_places <- function(
     b_req,
     text = text,
     location = loc_json,
+    category = category,
     maxSuggestions = max_suggestions,
     countryCode = country_code,
     preferredLabelValues = preferred_label_values
   )
 
   resp <- httr2::req_perform(req)
+  resp_string <- httr2::resp_body_string(resp)
 
-  # TODO 0 rows are returned when there was an issue parsing
-  # should there be a warning?
-  res <- parse_suggestions(httr2::resp_body_string(resp))
-  data_frame(res)
+  # capture the response
+  res <- data_frame(parse_suggestions(resp_string))
+
+  # if there are more than 0 rows, no error occured
+  if (nrow(res) > 0) {
+    return(res)
+  } else {
+    # if there are 0 rows, an error occurred, capture and signal it
+    # still return empty data frame
+    rlang::cnd_signal(catch_error(resp_string, error_call = rlang::caller_env()))
+    return(res)
+  }
 }

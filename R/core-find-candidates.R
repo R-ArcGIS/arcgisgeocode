@@ -29,6 +29,7 @@
 #' @param single_line a character vector of addresses to geocode. If provided
 #'  other `address` fields cannot be used. If `address` is not provided,
 #'  `single_line` must be.
+#' @param ... reserved for future use.
 #' @param address a character vector of the first part of a street address.
 #'  Typically used for the street name and house number. But can also be a place
 #'  or building name. If `single_line` is not provided, `address` must be.
@@ -66,6 +67,7 @@
 #' @export
 find_address_candidates <- function(
     single_line = NULL,
+    ...,
     address = NULL,
     address2 = NULL,
     address3 = NULL,
@@ -94,6 +96,12 @@ find_address_candidates <- function(
     token = arc_token(),
     .progress = TRUE) {
   check_geocoder(geocoder, call = rlang::caller_env())
+
+  if (!"geocode" %in% capabilities(geocoder)) {
+    arg <- rlang::caller_arg(geocoder)
+    cli::cli_abort("{.arg {arg}} does not support  the {.path /findAddressCandidates} endpoint")
+  }
+
   check_bool(.progress, allow_na = FALSE, allow_null = FALSE)
 
   # type checking for all character types
@@ -190,8 +198,7 @@ find_address_candidates <- function(
   if (!all(n_checks)) {
     cli::cli_abort(
       c(
-        "All arguments must be the same or length 1",
-        ">" = "Problems with: {names(non_null_vals)[!n_checks]}"
+        "All arguments must be the same length or scalar or length 1"
       )
     )
   }
@@ -258,29 +265,80 @@ find_address_candidates <- function(
     progress = .progress
   )
 
-  # TODO handle errors!!!
-  successes <- httr2::resps_successes(all_resps)
+  all_resps <- httr2::req_perform_parallel(
+    all_reqs,
+    on_error = "continue",
+    progress = .progress
+  )
 
-  all_results <- lapply(successes, function(.resp) {
+  # Before we can process the responses, we must know if
+  # the locator has custom fields. If so, we need to use
+  # RcppSimdJson and _not_ the Rust based implementation
+  use_custom_json_processing <- has_custom_fields(geocoder)
+
+  # TODO Handle errors
+  all_results <- lapply(all_resps, function(.resp) {
     string <- httr2::resp_body_string(.resp)
-    # string
     parse_candidate_res(string)
   })
 
-  # combine together
-  res <- rbind_results(all_results)
+  # combine all the results
+  results <- rbind_results(all_results)
 
-  # FIXME should the IDs be included as optional into `rbind_results()`?
-  n_ids <- vapply(all_results, nrow, integer(1))
+  # if any issues occured they would've happened here
+  errors <- attr(results, "null_elements")
+  n_errors <- length(errors)
+
+  # if errors occurred attach as an attribute
+  if (n_errors > 0) {
+    attr(results, "error_requests") <- all_reqs[errors]
+
+    # process resps and catch the errors
+    error_messages <- lapply(
+      all_resps[errors],
+      function(.x) catch_error(httr2::resp_body_string(.x), rlang::caller_call(2))
+    )
+
+    # add a warning when n_errors > 0
+    cli::cli_warn(c(
+      "x" = "Issue{cli::qty(n_errors)}{?s} encountered when processing response{cli::qty(n_errors)}{?s} {cli::qty(n_errors)} {errors}",
+      "i" = "access problem requests with {.code attr(result, \"error_requests\")}"
+    ))
+
+    # for each error message signal the condition
+    for (cnd in error_messages) rlang::cnd_signal(cnd)
+  }
+
+
+  # # TODO handle errors!!!
+  # successes <- httr2::resps_successes(all_resps)
+
+  # all_results <- lapply(successes, function(.resp) {
+  #   string <- httr2::resp_body_string(.resp)
+  #   # string
+  #   parse_candidate_res(string)
+  # })
+
+  # # combine together
+  # res <- rbind_results(all_results)
+
+  # # FIXME should the IDs be included as optional into `rbind_results()`?
+  n_ids <- vapply(all_results, function(.x) nrow(.x) %||% 0L, integer(1))
   ids <- rep.int(1:length(all_results), n_ids)
 
-  # cbind() is slow but not that bad?
-  cbind(input_id = ids, res)
+  # # cbind() is slow but not that bad?
+  res <- data_frame(cbind(input_id = ids, results))
+  attr(res, "error_requests") <- all_reqs[errors]
+  res
 }
 
 
 parse_candidate_res <- function(string) {
   res_list <- parse_candidate_json(string)
+
+  if (is.null(res_list)) {
+    return(NULL)
+  }
   res <- res_list[["attributes"]]
   res[["extents"]] <- res_list[["extents"]]
 

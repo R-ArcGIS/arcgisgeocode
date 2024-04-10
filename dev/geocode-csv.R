@@ -7,7 +7,7 @@ customer_addresses <- readr::read_csv(
 )
 
 # preview
-dplyr::glimpse(customer_addresses)
+# dplyr::glimpse(customer_addresses)
 
 # authorize
 set_arc_token(auth_user())

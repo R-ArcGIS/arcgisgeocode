@@ -127,6 +127,8 @@ obj_as_points <- function(
   } else if (is.numeric(x)) {
     if (abs(x[1]) > 180 || abs(x[[2]]) > 90) {
       abort_4326(arg, call)
+    } else if (length(x) > 4) {
+      cli::cli_abort("{arg} is {obj_type_friendly(x)} and cannot exceed 4 elements", call = call)
     }
     return(sf::st_sfc(sf::st_point(x), crs = 4326))
   } else if (rlang::inherits_all(x, c("sfc_POINT", "sfc"))) {

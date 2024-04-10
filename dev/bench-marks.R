@@ -11,7 +11,8 @@ addresses %$%
     address = address,
     city = city,
     region = state,
-    postal = zip
+    postal = zip,
+    batch_size = 10
   ) -> geocoded
 
 attr(geocoded, "error_messages")[[1]] |> 
@@ -29,6 +30,7 @@ warns <- attr(geocoded, "error_requests")[[1]] |>
     httr2::resp_body_string() |> 
     RcppSimdJson::fparse() |>
     arcgisutils:::report_errors() 
+  
 # system.time(
 #   addresses %$%
 #     geocode_addresses(

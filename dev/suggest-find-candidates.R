@@ -9,7 +9,7 @@ search_extent <- st_bbox(st_buffer(location, 10))
 # find suggestions from it
 suggestions <- suggest_places(
   "bellwood",
-  location,
+  c(-84.34, 33.74),
   search_extent = search_extent
 )
 

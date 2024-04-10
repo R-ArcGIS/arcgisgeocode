@@ -42,6 +42,7 @@
 #' reverse_geocode(x)
 #' @param locations an `sfc_POINT` object of the locations to be reverse geocoded.
 #' @param crs the CRS of the returned geometries. Passed to `sf::st_crs()`.
+#'   Ignored if `locations` is not an `sfc_POINT` object.
 #' @param ... unused.
 #' @param lang_code default `NULL`. An ISO 3166 country code.
 #'   See [`iso_3166_codes()`] for valid ISO codes. Optional.
@@ -73,6 +74,12 @@ reverse_geocode <- function(
   # TODO ask users to verify their `for_storage` use
   # This is super important and can lead to contractual violations
   check_geocoder(geocoder, call = rlang::caller_env())
+
+  if (!"reversegeocode" %in% capabilities(geocoder)) {
+    arg <- rlang::caller_arg(geocoder)
+    cli::cli_abort("{.arg {arg}} does not support  the {.path /reverseGeocode} endpoint")
+  }
+
   check_bool(for_storage)
 
   # Tokens are required for reverseGeocoding for storage
@@ -103,7 +110,6 @@ reverse_geocode <- function(
 
   # if locations is not an sfc object, we set to 4326
   # otherwise we validate output CRS
-  locations <- obj_as_points(locations, allow_null = TRUE)
   if (!rlang::inherits_all(locations, c("sfc_POINT", "sfc"))) {
     crs <- 4326
   } else if (is.na(crs)) {
@@ -214,9 +220,6 @@ reverse_geocode <- function(
 # These store so much metadata that will be needed.
 # What is the workflow?
 # arc_open("geocoder-url") or `geocoder("url"/"id")`
-
-
-
 # We can use rust to create the JSON from the points
 # Or do we want to have Rust do it _all_? I think that might be nice..
 # would need to inherit the arc_agent() and X-Esri-Authorization headerre

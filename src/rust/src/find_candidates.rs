@@ -306,6 +306,7 @@ pub fn parse_candidate_json(x: &str) -> Robj {
         }
         Err(e) => {
             rprintln!("{:?}", e);
+            rprintln!("{x}");
             ().into_robj()
         }
     }

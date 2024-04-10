@@ -29,7 +29,6 @@
 #' @param single_line a character vector of addresses to geocode. If provided
 #'  other `address` fields cannot be used. If `address` is not provided,
 #'  `single_line` must be.
-#' @param ... reserved for future use.
 #' @param address a character vector of the first part of a street address.
 #'  Typically used for the street name and house number. But can also be a place
 #'  or building name. If `single_line` is not provided, `address` must be.
@@ -67,7 +66,6 @@
 #' @export
 find_address_candidates <- function(
     single_line = NULL,
-    ...,
     address = NULL,
     address2 = NULL,
     address3 = NULL,
@@ -101,6 +99,9 @@ find_address_candidates <- function(
     arg <- rlang::caller_arg(geocoder)
     cli::cli_abort("{.arg {arg}} does not support  the {.path /findAddressCandidates} endpoint")
   }
+
+    # this also checks the token
+  check_for_storage(for_storage, token, call = rlang::current_env())
 
   check_bool(.progress, allow_na = FALSE, allow_null = FALSE)
 
@@ -139,9 +140,6 @@ find_address_candidates <- function(
     allow_null = TRUE,
     call = rlang::current_env()
   )
-
-  # this also checks the token
-  check_for_storage(for_storage, token, call = rlang::current_env())
 
   # check that either single_line or address are not-null
   # all non-null values should be a scalar or the same length

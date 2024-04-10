@@ -80,10 +80,7 @@ reverse_geocode <- function(
     cli::cli_abort("{.arg {arg}} does not support  the {.path /reverseGeocode} endpoint")
   }
 
-  check_bool(for_storage)
-
-  # Tokens are required for reverseGeocoding for storage
-  if (for_storage) obj_check_token(token)
+  check_for_storage(for_storage, token, call = rlang::caller_env())
 
   check_bool(.progress)
 

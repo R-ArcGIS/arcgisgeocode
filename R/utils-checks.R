@@ -11,7 +11,7 @@ check_for_storage <- function(
     obj_check_token(token, call = call)
   }
 
-  # TODO create message / warning for storage param
+  inform_for_storage(call = call)
 }
 
 match_location_type <- function(
@@ -94,15 +94,20 @@ check_extent <- function(
   }
 }
 
-inform_for_storage <- function(call = rlang::current_env()) {
-  # TODO have a global option check that will supress this message
-  cli::cli_inform(
-    c(
-      "!" = "{.arg for_storage} is set to {.code FALSE}, results cannot be persisted",
-      "i" = "see legal obligations at {.url https://esri.com}"
-    ),
-    .frequency = "once", .frequency_id = "for_storage"
-  )
+inform_for_storage <- function(call = rlang::caller_env()) {
+  .freq <- getOption("arcgisgeocode.storage", default = "once")
+
+  if (!identical(.freq, "never")) {
+    cli::cli_inform(
+      c(
+        "!" = "{.arg for_storage} is set to {.code FALSE}, results cannot be persisted.",
+        "*" = "See the {.href [official documentation](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-find-address-candidates.htm#ESRI_SECTION3_BBCB5704B46B4CDF8377749B873B1A7F)} for legal obligations or the {.help storage} help page.",
+        "i" = "suppress this message by setting {.code options(\"arcgisgeocode.storage\" = \"never\")}"
+      ),
+      .frequency = "once",
+      .frequency_id = "for_storage"
+    )
+  }
 }
 
 # This function will convert a number of different representations

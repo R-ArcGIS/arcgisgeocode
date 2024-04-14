@@ -100,7 +100,7 @@ find_address_candidates <- function(
     cli::cli_abort("{.arg {arg}} does not support  the {.path /findAddressCandidates} endpoint")
   }
 
-    # this also checks the token
+  # this also checks the token
   check_for_storage(for_storage, token, call = rlang::current_env())
 
   check_bool(.progress, allow_na = FALSE, allow_null = FALSE)
@@ -325,7 +325,7 @@ find_address_candidates <- function(
   ids <- rep.int(1:length(all_results), n_ids)
 
   # # cbind() is slow but not that bad?
-  res <- data_frame(cbind(input_id = ids, results))
+  res <- cbind(input_id = ids, results)
   attr(res, "error_requests") <- all_reqs[errors]
   res
 }

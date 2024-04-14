@@ -10,7 +10,7 @@ facing application."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/a
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">arcgisgeocode</a>
 
@@ -145,23 +145,99 @@ queries such as those made in a search bar.</p>
 <span class="r-in"><span>  <span class="va">suggestions</span><span class="op">$</span><span class="va">text</span>,</span></span>
 <span class="r-in"><span>  magic_key <span class="op">=</span> <span class="va">suggestions</span><span class="op">$</span><span class="va">magic_key</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A data frame: 7 × 61</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   input_id loc_name status score match_addr     long_label short_label addr_type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">*</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>        1 <span style="color: #BB0000;">NA</span>       M        100 Bellwood Coff… Bellwood … Bellwood C… POI      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>        2 <span style="color: #BB0000;">NA</span>       M        100 Bellwood, Atl… Bellwood,… Bellwood    Locality </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>        3 <span style="color: #BB0000;">NA</span>       M        100 Bellwood Chur… Bellwood … Bellwood C… POI      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>        4 <span style="color: #BB0000;">NA</span>       M        100 Bellwood Yard  Bellwood … Bellwood Y… POI      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>        5 <span style="color: #BB0000;">NA</span>       T        100 Bellwood, Ill… Bellwood,… Bellwood    Locality </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>        5 <span style="color: #BB0000;">NA</span>       T        100 Bellwood, Ill… Bellwood,… Bellwood    Locality </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span>        5 <span style="color: #BB0000;">NA</span>       T        100 Bellwood, Ill… Bellwood,… Bellwood    Locality </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 53 more variables: type_field &lt;chr&gt;, place_name &lt;chr&gt;, place_addr &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   phone &lt;chr&gt;, url &lt;chr&gt;, rank &lt;dbl&gt;, add_bldg &lt;chr&gt;, add_num &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   add_num_from &lt;chr&gt;, add_num_to &lt;chr&gt;, add_range &lt;chr&gt;, side &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   st_pre_dir &lt;chr&gt;, st_pre_type &lt;chr&gt;, st_name &lt;chr&gt;, st_type &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   st_dir &lt;chr&gt;, bldg_type &lt;chr&gt;, bldg_name &lt;chr&gt;, level_type &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   level_name &lt;chr&gt;, unit_type &lt;chr&gt;, unit_name &lt;chr&gt;, sub_addr &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   st_addr &lt;chr&gt;, block &lt;chr&gt;, sector &lt;chr&gt;, nbrhd &lt;chr&gt;, district &lt;chr&gt;, …</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 7 features and 60 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -84.34273 ymin: 33.74034 xmax: -84.34273 ymax: 33.74034</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   input_id loc_name status score                 match_addr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        1     &lt;NA&gt;      M   100            Bellwood Coffee</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        2     &lt;NA&gt;      M   100 Bellwood, Atlanta, Georgia</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        3     &lt;NA&gt;      M   100            Bellwood Church</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        4     &lt;NA&gt;      M   100              Bellwood Yard</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        5     &lt;NA&gt;      T   100         Bellwood, Illinois</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        5     &lt;NA&gt;      T   100         Bellwood, Illinois</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        5     &lt;NA&gt;      T   100         Bellwood, Illinois</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                       long_label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Bellwood Coffee, 1366 Glenwood Ave SE, Atlanta, GA, 30316, USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                     Bellwood, Atlanta, GA, USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                              Bellwood Church, Atlanta, GA, USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                Bellwood Yard, Atlanta, GA, USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                              Bellwood, IL, USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                              Bellwood, IL, USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                              Bellwood, IL, USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       short_label addr_type type_field      place_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Bellwood Coffee       POI     Snacks Bellwood Coffee</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        Bellwood  Locality       City        Bellwood</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Bellwood Church       POI     Church Bellwood Church</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   Bellwood Yard       POI   Building   Bellwood Yard</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        Bellwood  Locality       City        Bellwood</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        Bellwood  Locality       City        Bellwood</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        Bellwood  Locality       City        Bellwood</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                      place_addr phone  url  rank add_bldg</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1366 Glenwood Ave SE, Atlanta, Georgia, 30316  &lt;NA&gt; &lt;NA&gt; 19.00     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                              Atlanta, Georgia  &lt;NA&gt; &lt;NA&gt; 20.00     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                              Atlanta, Georgia  &lt;NA&gt; &lt;NA&gt; 24.00     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                              Atlanta, Georgia  &lt;NA&gt; &lt;NA&gt; 24.00     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                            Bellwood, Illinois  &lt;NA&gt; &lt;NA&gt; 10.50     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                            Bellwood, Illinois  &lt;NA&gt; &lt;NA&gt; 16.04     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                 Village of Bellwood, Illinois  &lt;NA&gt; &lt;NA&gt; 21.00     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   add_num add_num_from add_num_to add_range side st_pre_dir st_pre_type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    1366         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    st_name st_type st_dir bldg_type bldg_name level_type level_name unit_type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Glenwood     Ave     SE      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   unit_name sub_addr              st_addr block sector nbrhd district</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      &lt;NA&gt;     &lt;NA&gt; 1366 Glenwood Ave SE  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt; Bellwood</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  city metro_area     subregion   region region_abbr territory</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1             Atlanta       &lt;NA&gt; DeKalb County  Georgia          GA      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2             Atlanta       &lt;NA&gt; Fulton County  Georgia          GA      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3             Atlanta       &lt;NA&gt; Fulton County  Georgia          GA      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4             Atlanta       &lt;NA&gt; Fulton County  Georgia          GA      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5            Bellwood       &lt;NA&gt;   Cook County Illinois          IL      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6            Bellwood       &lt;NA&gt;   Cook County Illinois          IL      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7 Village of Bellwood       &lt;NA&gt;   Cook County Illinois          IL      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   zone postal postal_ext country    cntry_name lang_code distance         x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 &lt;NA&gt;  30316       &lt;NA&gt;     USA United States       ENG      0.0 -84.34273</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA United States       ENG      0.0 -84.41243</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA United States       ENG      0.0 -84.41521</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA United States       ENG      0.0 -84.41798</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA United States       ENG 956972.0 -87.87345</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA United States       ENG 957055.1 -87.88312</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA United States       ENG 957012.3 -87.87617</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          y display_x display_y      xmin      xmax     ymin     ymax ex_info</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 33.74034 -84.34273  33.74034 -84.34373 -84.34173 33.73934 33.74134    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 33.77455 -84.41243  33.77455 -84.42343 -84.40143 33.76355 33.78555    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 33.77288 -84.41521  33.77288 -84.42021 -84.41021 33.76788 33.77788    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 33.77927 -84.41798  33.77927 -84.42298 -84.41298 33.77427 33.78427    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 41.88325 -87.87345  41.88325 -87.88945 -87.85745 41.86725 41.89925    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 41.88142 -87.88312  41.88142 -87.90012 -87.86612 41.86442 41.89842    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7 41.88290 -87.87617  41.88290 -87.89317 -87.85917 41.86590 41.89990    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                    extents                   geometry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -84.34373, 33.73934, -84.34173, 33.74134 POINT (-84.34273 33.74034)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -84.42343, 33.76355, -84.40143, 33.78555 POINT (-84.41243 33.77455)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -84.42021, 33.76788, -84.41021, 33.77788 POINT (-84.41521 33.77288)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -84.42298, 33.77427, -84.41298, 33.78427 POINT (-84.41798 33.77927)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -87.88945, 41.86725, -87.85745, 41.89925 POINT (-87.87345 41.88325)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 -87.90012, 41.86442, -87.86612, 41.89842 POINT (-87.88312 41.88142)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7 -87.89317, 41.86590, -87.85917, 41.89990  POINT (-87.87617 41.8829)</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -173,7 +249,7 @@ queries such as those made in a search bar.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer></div>

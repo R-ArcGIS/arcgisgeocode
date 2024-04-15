@@ -62,33 +62,37 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of arcgisgeocode is to provide access to ArcGIS geocoding services from R. Enables address canddiate identification, batch geocoding, reverse geocoding, autocomplete suggestions.</p>
+<p>The goal of arcgisgeocode is to provide access to ArcGIS geocoding services from R. Enables address candidate identification, batch geocoding, reverse geocoding, and autocomplete suggestions.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>arcgisgeocode uses <a href="https://extendr.github.io/" class="external-link"><code>extendr</code></a> and requires Rust to be available to install the development version of arcgisgeocode. Follow the <a href="https://rustup.rs/" class="external-link">rustup instructions</a> to install Rust and verify your installation is compatible using <a href="https://extendr.github.io/rextendr/dev/#sitrep" class="external-link"><code>rextendr::rust_sitrep()</code></a>.</p>
-<p>If you do not have Rust installed, you can install a binary for Mac, Windows, or Ubuntu from r-universe.</p>
-<p>You can install the package like so:</p>
+<p>You can install a binary for Mac, Windows, or Ubuntu from r-universe like so:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install from R-universe</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"arcgisgeocode"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://r-arcgis.r-universe.dev"</span>, <span class="st">"https://cran.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="development-version">Development version<a class="anchor" aria-label="anchor" href="#development-version"></a>
+</h3>
+<p>arcgisgeocode uses <a href="https://extendr.github.io/" class="external-link"><code>extendr</code></a> and requires Rust to be available to install the development version of arcgisgeocode. Follow the <a href="https://rustup.rs/" class="external-link">rustup instructions</a> to install Rust and verify your installation is compatible using <a href="https://extendr.github.io/rextendr/dev/#sitrep" class="external-link"><code>rextendr::rust_sitrep()</code></a>. Then install the development version from GitHub:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install pak if not available</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># install development version of {arcgisgeocode}</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"r-arcgis/arcgisgeocode"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># install from R-universe</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"arcgisgeocode"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://r-arcgis.r-universe.dev"</span>, <span class="st">"https://cran.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"r-arcgis/arcgisgeocode"</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>By default, the public <a href="https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder" class="external-link">ArcGIS World Geocoder</a> will be used. The public face geocoding server provides public access to the <code>/findAddressCandidates</code>, <code>reverseGeocode</code>, and <code>/suggest</code> endpoints made available va the <code><a href="reference/find_address_candidates.html">find_address_candidates()</a></code>, <code><a href="reference/reverse_geocode.html">reverse_geocode()</a></code>, and <code><a href="reference/suggest_places.html">suggest_places()</a></code> functions respectively.</p>
-<p>The batch geocoding endpoint <code>/geocodeAddresses</code> is available via `geocode_addresses(). However, this requires the use of an authorization token and may consume credits.</p>
+<p>By default, the <a href="https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder" class="external-link">ArcGIS World Geocoder</a> will be used. This geocoding server provides public access to the <code>/findAddressCandidates</code>, <code>/reverseGeocode</code>, and <code>/suggest</code> endpoints made available via the <code><a href="reference/find_address_candidates.html">find_address_candidates()</a></code>, <code><a href="reference/reverse_geocode.html">reverse_geocode()</a></code>, and <code><a href="reference/suggest_places.html">suggest_places()</a></code> functions respectively.</p>
+<p>The batch geocoding endpoint <code>/geocodeAddresses</code> is available via <code><a href="reference/geocode_addresses.html">geocode_addresses()</a></code>. However, this requires the use of an authorization token and may consume credits.</p>
+<p>Refer to the ArcGIS World Geocoder <a href="https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm" class="external-link">official documentation</a> for additional information on use restrictions and licensing. For example, a valid token is required to <a href="#important-storing-results">store the results</a> of geocoding transactions.</p>
 <div class="section level3">
 <h3 id="reverse-geocoding">Reverse geocoding<a class="anchor" aria-label="anchor" href="#reverse-geocoding"></a>
 </h3>
 <p>Reverse geocoding takes a location and finds the associated address.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-arcgis/arcgisgeocode" class="external-link">arcgisgeocode</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># create a point</span></span>
@@ -96,30 +100,36 @@
 <span></span>
 <span><span class="co"># Find addresses from locations</span></span>
 <span><span class="fu"><a href="reference/reverse_geocode.html">reverse_geocode</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ! `for_storage` is set to `FALSE`, results cannot be persisted.</span></span>
+<span><span class="co">#&gt; • See the official documentation</span></span>
+<span><span class="co">#&gt;   (&lt;https://developers.arcgis.com/rest/geocode/api-reference/geocoding-find-address-candidates.htm#ESRI_SECTION3_BBCB5704B46B4CDF8377749B873B1A7F&gt;)</span></span>
+<span><span class="co">#&gt;   for legal obligations or the `?storage()` help page.</span></span>
+<span><span class="co">#&gt; ℹ suppress this message by setting `options("arcgisgeocode.storage" = "never")`</span></span>
+<span><span class="co">#&gt; This message is displayed once per session.</span></span>
 <span><span class="co">#&gt; Simple feature collection with 1 feature and 22 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: -117.172 ymin: 34.05204 xmax: -117.172 ymax: 34.05204</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">#&gt;                                     Match_addr</span></span>
+<span><span class="co">#&gt;                                     match_addr</span></span>
 <span><span class="co">#&gt; 1 600-620 Home Pl, Redlands, California, 92374</span></span>
-<span><span class="co">#&gt;                                   LongLabel      ShortLabel</span></span>
-<span><span class="co">#&gt; 1 600-620 Home Pl, Redlands, CA, 92374, USA 600-620 Home Pl</span></span>
-<span><span class="co">#&gt;       Addr_type Type PlaceName AddNum     Address Block Sector</span></span>
-<span><span class="co">#&gt; 1 StreetAddress                   608 608 Home Pl             </span></span>
-<span><span class="co">#&gt;     Neighborhood District     City MetroArea             Subregion</span></span>
-<span><span class="co">#&gt; 1 South Redlands          Redlands           San Bernardino County</span></span>
-<span><span class="co">#&gt;       Region RegionAbbr Territory Postal PostalExt     CntryName</span></span>
-<span><span class="co">#&gt; 1 California         CA            92374           United States</span></span>
-<span><span class="co">#&gt;   CountryCode                  geometry</span></span>
-<span><span class="co">#&gt; 1         USA POINT (-117.172 34.05204)</span></span></code></pre></div>
+<span><span class="co">#&gt;                                  long_label     short_label     addr_type</span></span>
+<span><span class="co">#&gt; 1 600-620 Home Pl, Redlands, CA, 92374, USA 600-620 Home Pl StreetAddress</span></span>
+<span><span class="co">#&gt;   type_field place_name add_num     address block sector   neighborhood</span></span>
+<span><span class="co">#&gt; 1                           608 608 Home Pl              South Redlands</span></span>
+<span><span class="co">#&gt;   district     city metro_area             subregion     region region_abbr</span></span>
+<span><span class="co">#&gt; 1          Redlands            San Bernardino County California          CA</span></span>
+<span><span class="co">#&gt;   territory postal postal_ext  country_name country_code</span></span>
+<span><span class="co">#&gt; 1            92374            United States          USA</span></span>
+<span><span class="co">#&gt;                    geometry</span></span>
+<span><span class="co">#&gt; 1 POINT (-117.172 34.05204)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="address-search">Address search<a class="anchor" aria-label="anchor" href="#address-search"></a>
 </h3>
 <p>The <code><a href="reference/find_address_candidates.html">find_address_candidates()</a></code> function returns geocoding candidate results. The function is vectorized over the input and will perform multiple requests in parallel. Each request geocodes one location at a time.</p>
 <p>One or more candidates are returned from the endpoint. You can limit the number of candidates using the <code>max_locations</code> argument (with a maximum of 50).</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Find addresses from address search</span></span>
 <span><span class="va">candidates</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/find_address_candidates.html">find_address_candidates</a></span><span class="op">(</span></span>
 <span>  address <span class="op">=</span> <span class="st">"esri"</span>,</span>
@@ -136,20 +146,20 @@
 <span><span class="co">#&gt; $ loc_name    &lt;chr&gt; "World", "World"</span></span>
 <span><span class="co">#&gt; $ status      &lt;chr&gt; "M", "M"</span></span>
 <span><span class="co">#&gt; $ score       &lt;dbl&gt; 100.00, 98.57</span></span>
-<span><span class="co">#&gt; $ match_addr  &lt;chr&gt; "Esri", "380 New York St, Redlands, California, 92…</span></span>
-<span><span class="co">#&gt; $ long_label  &lt;chr&gt; "Esri, 380 New York St, Redlands, CA, 92373, USA",…</span></span>
+<span><span class="co">#&gt; $ match_addr  &lt;chr&gt; "Esri", "380 New York St, Redlands, California, 92373"</span></span>
+<span><span class="co">#&gt; $ long_label  &lt;chr&gt; "Esri, 380 New York St, Redlands, CA, 92373, USA", "380 Ne…</span></span>
 <span><span class="co">#&gt; $ short_label &lt;chr&gt; "Esri", "380 New York St"</span></span>
 <span><span class="co">#&gt; $ addr_type   &lt;chr&gt; "POI", "PointAddress"</span></span>
 <span><span class="co">#&gt; $ type_field  &lt;chr&gt; "Business Facility", NA</span></span>
 <span><span class="co">#&gt; $ place_name  &lt;chr&gt; "Esri", NA</span></span>
-<span><span class="co">#&gt; $ geometry    &lt;POINT [°]&gt; POINT (-117.1957 34.05609), POINT (-117.1948 34.05…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ geometry    &lt;POINT [°]&gt; POINT (-117.1957 34.05609), POINT (-117.1948 34.05726)…</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="suggest-locations">Suggest locations<a class="anchor" aria-label="anchor" href="#suggest-locations"></a>
 </h3>
-<p>Geocoding services can also provide a location suggestion based on a search term and, optionally, a location or extent. The <code><a href="reference/suggest_places.html">suggest_places()</a></code> (<code>/suggest</code> endpoint) is intended to be used as part of a client facing application that provides autocomplete suggestions.</p>
+<p>Geocoding services can also provide a location suggestion based on a search term and, optionally, a location or extent. The <code><a href="reference/suggest_places.html">suggest_places()</a></code> function (<code>/suggest</code> endpoint) is intended to be used as part of a client-facing application that provides autocomplete suggestions.</p>
 <p>In this example we create a search extent around a single point and find suggestions based on the search term <code>"bellwood"</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># identify a search point as a simple feature column</span></span>
 <span><span class="va">location</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span></span>
 <span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">84.34</span>, <span class="fl">33.74</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -170,15 +180,15 @@
 <span></span>
 <span><span class="va">suggestions</span></span>
 <span><span class="co">#&gt; # A data frame: 5 × 3</span></span>
-<span><span class="co">#&gt;   text                                           magic_key is_collection</span></span>
-<span><span class="co">#&gt; * &lt;chr&gt;                                          &lt;chr&gt;     &lt;lgl&gt;        </span></span>
-<span><span class="co">#&gt; 1 Bellwood Coffee, 1366 Glenwood Ave SE, Atlant… dHA9MCN0… FALSE        </span></span>
-<span><span class="co">#&gt; 2 Bellwood, Atlanta, GA, USA                     dHA9MCN0… FALSE        </span></span>
-<span><span class="co">#&gt; 3 Bellwood Church, Atlanta, GA, USA              dHA9MCN0… FALSE        </span></span>
-<span><span class="co">#&gt; 4 Bellwood Yard, Atlanta, GA, USA                dHA9MCN0… FALSE        </span></span>
-<span><span class="co">#&gt; 5 Bellwood, IL, USA                              dHA9NCN0… FALSE</span></span></code></pre></div>
-<p>The result is intended to be provided to <code><a href="reference/find_address_candidates.html">find_address_candidates()</a></code> to complete the geocoding process. The columns <code>text</code> contains the address to geocode. The column <code>magic_key</code> is a special identifier that make it much faster to fetch results. Pass this into the argument <code>magic_key</code></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt;   text                                                   magic_key is_collection</span></span>
+<span><span class="co">#&gt; * &lt;chr&gt;                                                  &lt;chr&gt;     &lt;lgl&gt;        </span></span>
+<span><span class="co">#&gt; 1 Bellwood Coffee, 1366 Glenwood Ave SE, Atlanta, GA, 3… dHA9MCN0… FALSE        </span></span>
+<span><span class="co">#&gt; 2 Bellwood, Atlanta, GA, USA                             dHA9MCN0… FALSE        </span></span>
+<span><span class="co">#&gt; 3 Bellwood Church, Atlanta, GA, USA                      dHA9MCN0… FALSE        </span></span>
+<span><span class="co">#&gt; 4 Bellwood Yard, Atlanta, GA, USA                        dHA9MCN0… FALSE        </span></span>
+<span><span class="co">#&gt; 5 Bellwood, IL, USA                                      dHA9NCN0… FALSE</span></span></code></pre></div>
+<p>The result is intended to be provided to <code><a href="reference/find_address_candidates.html">find_address_candidates()</a></code> to complete the geocoding process. The column <code>text</code> contains the address to geocode. The column <code>magic_key</code> is a special identifier that makes it much faster to fetch results. Pass this into the argument <code>magic_key</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get address candidate information</span></span>
 <span><span class="co"># using the text and the magic key</span></span>
 <span><span class="fu"><a href="reference/find_address_candidates.html">find_address_candidates</a></span><span class="op">(</span></span>
@@ -188,7 +198,7 @@
 <span><span class="co">#&gt; Simple feature collection with 7 features and 60 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
-<span><span class="co">#&gt; Bounding box:  xmin: -84.34273 ymin: 33.74034 xmax: -84.34273 ymax: 33.74034</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: -87.88312 ymin: 33.74034 xmax: -84.34273 ymax: 41.88325</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">#&gt;   input_id loc_name status score                 match_addr</span></span>
 <span><span class="co">#&gt; 1        1     &lt;NA&gt;      M   100            Bellwood Coffee</span></span>
@@ -214,70 +224,62 @@
 <span><span class="co">#&gt; 5        Bellwood  Locality       City        Bellwood</span></span>
 <span><span class="co">#&gt; 6        Bellwood  Locality       City        Bellwood</span></span>
 <span><span class="co">#&gt; 7        Bellwood  Locality       City        Bellwood</span></span>
-<span><span class="co">#&gt;                                      place_addr phone  url  rank</span></span>
-<span><span class="co">#&gt; 1 1366 Glenwood Ave SE, Atlanta, Georgia, 30316  &lt;NA&gt; &lt;NA&gt; 19.00</span></span>
-<span><span class="co">#&gt; 2                              Atlanta, Georgia  &lt;NA&gt; &lt;NA&gt; 20.00</span></span>
-<span><span class="co">#&gt; 3                              Atlanta, Georgia  &lt;NA&gt; &lt;NA&gt; 24.00</span></span>
-<span><span class="co">#&gt; 4                              Atlanta, Georgia  &lt;NA&gt; &lt;NA&gt; 24.00</span></span>
-<span><span class="co">#&gt; 5                            Bellwood, Illinois  &lt;NA&gt; &lt;NA&gt; 10.50</span></span>
-<span><span class="co">#&gt; 6                            Bellwood, Illinois  &lt;NA&gt; &lt;NA&gt; 16.04</span></span>
-<span><span class="co">#&gt; 7                 Village of Bellwood, Illinois  &lt;NA&gt; &lt;NA&gt; 21.00</span></span>
-<span><span class="co">#&gt;   add_bldg add_num add_num_from add_num_to add_range side st_pre_dir</span></span>
-<span><span class="co">#&gt; 1     &lt;NA&gt;    1366         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2     &lt;NA&gt;    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 3     &lt;NA&gt;    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 4     &lt;NA&gt;    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 5     &lt;NA&gt;    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 6     &lt;NA&gt;    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 7     &lt;NA&gt;    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;   st_pre_type  st_name st_type st_dir bldg_type bldg_name level_type</span></span>
-<span><span class="co">#&gt; 1        &lt;NA&gt; Glenwood     Ave     SE      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2        &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 3        &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 4        &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 5        &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 6        &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 7        &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;   level_name unit_type unit_name sub_addr              st_addr block</span></span>
-<span><span class="co">#&gt; 1       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt; 1366 Glenwood Ave SE  &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 3       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 4       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 5       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 6       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 7       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;   sector nbrhd district                city metro_area     subregion</span></span>
-<span><span class="co">#&gt; 1   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;             Atlanta       &lt;NA&gt; DeKalb County</span></span>
-<span><span class="co">#&gt; 2   &lt;NA&gt;  &lt;NA&gt; Bellwood             Atlanta       &lt;NA&gt; Fulton County</span></span>
-<span><span class="co">#&gt; 3   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;             Atlanta       &lt;NA&gt; Fulton County</span></span>
-<span><span class="co">#&gt; 4   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;             Atlanta       &lt;NA&gt; Fulton County</span></span>
-<span><span class="co">#&gt; 5   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;            Bellwood       &lt;NA&gt;   Cook County</span></span>
-<span><span class="co">#&gt; 6   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;            Bellwood       &lt;NA&gt;   Cook County</span></span>
-<span><span class="co">#&gt; 7   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt; Village of Bellwood       &lt;NA&gt;   Cook County</span></span>
-<span><span class="co">#&gt;     region region_abbr territory zone postal postal_ext country</span></span>
-<span><span class="co">#&gt; 1  Georgia          GA      &lt;NA&gt; &lt;NA&gt;  30316       &lt;NA&gt;     USA</span></span>
-<span><span class="co">#&gt; 2  Georgia          GA      &lt;NA&gt; &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA</span></span>
-<span><span class="co">#&gt; 3  Georgia          GA      &lt;NA&gt; &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA</span></span>
-<span><span class="co">#&gt; 4  Georgia          GA      &lt;NA&gt; &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA</span></span>
-<span><span class="co">#&gt; 5 Illinois          IL      &lt;NA&gt; &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA</span></span>
-<span><span class="co">#&gt; 6 Illinois          IL      &lt;NA&gt; &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA</span></span>
-<span><span class="co">#&gt; 7 Illinois          IL      &lt;NA&gt; &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA</span></span>
-<span><span class="co">#&gt;      cntry_name lang_code distance         x        y display_x</span></span>
-<span><span class="co">#&gt; 1 United States       ENG      0.0 -84.34273 33.74034 -84.34273</span></span>
-<span><span class="co">#&gt; 2 United States       ENG      0.0 -84.41243 33.77455 -84.41243</span></span>
-<span><span class="co">#&gt; 3 United States       ENG      0.0 -84.41521 33.77288 -84.41521</span></span>
-<span><span class="co">#&gt; 4 United States       ENG      0.0 -84.41798 33.77927 -84.41798</span></span>
-<span><span class="co">#&gt; 5 United States       ENG 956972.0 -87.87345 41.88325 -87.87345</span></span>
-<span><span class="co">#&gt; 6 United States       ENG 957055.1 -87.88312 41.88142 -87.88312</span></span>
-<span><span class="co">#&gt; 7 United States       ENG 957012.3 -87.87617 41.88290 -87.87617</span></span>
-<span><span class="co">#&gt;   display_y      xmin      xmax     ymin     ymax ex_info</span></span>
-<span><span class="co">#&gt; 1  33.74034 -84.34373 -84.34173 33.73934 33.74134    &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2  33.77455 -84.42343 -84.40143 33.76355 33.78555    &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 3  33.77288 -84.42021 -84.41021 33.76788 33.77788    &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 4  33.77927 -84.42298 -84.41298 33.77427 33.78427    &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 5  41.88325 -87.88945 -87.85745 41.86725 41.89925    &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 6  41.88142 -87.90012 -87.86612 41.86442 41.89842    &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 7  41.88290 -87.89317 -87.85917 41.86590 41.89990    &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;                                      place_addr phone  url  rank add_bldg</span></span>
+<span><span class="co">#&gt; 1 1366 Glenwood Ave SE, Atlanta, Georgia, 30316  &lt;NA&gt; &lt;NA&gt; 19.00     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2                              Atlanta, Georgia  &lt;NA&gt; &lt;NA&gt; 20.00     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 3                              Atlanta, Georgia  &lt;NA&gt; &lt;NA&gt; 24.00     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 4                              Atlanta, Georgia  &lt;NA&gt; &lt;NA&gt; 24.00     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 5                            Bellwood, Illinois  &lt;NA&gt; &lt;NA&gt; 10.50     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 6                            Bellwood, Illinois  &lt;NA&gt; &lt;NA&gt; 16.04     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 7                 Village of Bellwood, Illinois  &lt;NA&gt; &lt;NA&gt; 21.00     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   add_num add_num_from add_num_to add_range side st_pre_dir st_pre_type</span></span>
+<span><span class="co">#&gt; 1    1366         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 3    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 4    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 5    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 6    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 7    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;    st_name st_type st_dir bldg_type bldg_name level_type level_name unit_type</span></span>
+<span><span class="co">#&gt; 1 Glenwood     Ave     SE      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 3     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 4     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 5     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 6     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 7     &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   unit_name sub_addr              st_addr block sector nbrhd district</span></span>
+<span><span class="co">#&gt; 1      &lt;NA&gt;     &lt;NA&gt; 1366 Glenwood Ave SE  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt; Bellwood</span></span>
+<span><span class="co">#&gt; 3      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 4      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 5      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 6      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 7      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;                  city metro_area     subregion   region region_abbr territory</span></span>
+<span><span class="co">#&gt; 1             Atlanta       &lt;NA&gt; DeKalb County  Georgia          GA      &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2             Atlanta       &lt;NA&gt; Fulton County  Georgia          GA      &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 3             Atlanta       &lt;NA&gt; Fulton County  Georgia          GA      &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 4             Atlanta       &lt;NA&gt; Fulton County  Georgia          GA      &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 5            Bellwood       &lt;NA&gt;   Cook County Illinois          IL      &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 6            Bellwood       &lt;NA&gt;   Cook County Illinois          IL      &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 7 Village of Bellwood       &lt;NA&gt;   Cook County Illinois          IL      &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   zone postal postal_ext country    cntry_name lang_code distance         x</span></span>
+<span><span class="co">#&gt; 1 &lt;NA&gt;  30316       &lt;NA&gt;     USA United States       ENG      0.0 -84.34273</span></span>
+<span><span class="co">#&gt; 2 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA United States       ENG      0.0 -84.41243</span></span>
+<span><span class="co">#&gt; 3 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA United States       ENG      0.0 -84.41521</span></span>
+<span><span class="co">#&gt; 4 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA United States       ENG      0.0 -84.41798</span></span>
+<span><span class="co">#&gt; 5 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA United States       ENG 956972.0 -87.87345</span></span>
+<span><span class="co">#&gt; 6 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA United States       ENG 957055.1 -87.88312</span></span>
+<span><span class="co">#&gt; 7 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA United States       ENG 957012.3 -87.87617</span></span>
+<span><span class="co">#&gt;          y display_x display_y      xmin      xmax     ymin     ymax ex_info</span></span>
+<span><span class="co">#&gt; 1 33.74034 -84.34273  33.74034 -84.34373 -84.34173 33.73934 33.74134    &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2 33.77455 -84.41243  33.77455 -84.42343 -84.40143 33.76355 33.78555    &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 3 33.77288 -84.41521  33.77288 -84.42021 -84.41021 33.76788 33.77788    &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 4 33.77927 -84.41798  33.77927 -84.42298 -84.41298 33.77427 33.78427    &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 5 41.88325 -87.87345  41.88325 -87.88945 -87.85745 41.86725 41.89925    &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 6 41.88142 -87.88312  41.88142 -87.90012 -87.86612 41.86442 41.89842    &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 7 41.88290 -87.87617  41.88290 -87.89317 -87.85917 41.86590 41.89990    &lt;NA&gt;</span></span>
 <span><span class="co">#&gt;                                    extents                   geometry</span></span>
 <span><span class="co">#&gt; 1 -84.34373, 33.73934, -84.34173, 33.74134 POINT (-84.34273 33.74034)</span></span>
 <span><span class="co">#&gt; 2 -84.42343, 33.76355, -84.40143, 33.78555 POINT (-84.41243 33.77455)</span></span>
@@ -298,9 +300,9 @@
 <div class="section level2">
 <h2 id="batch-geocoding">Batch geocoding<a class="anchor" aria-label="anchor" href="#batch-geocoding"></a>
 </h2>
-<p>Many addresses can be geocoded very fast using the <code><a href="reference/geocode_addresses.html">geocode_addresses()</a></code> function which calls the <code>/geocodeAddresses</code> endpoint. Note that this function requires an authorization token. <code><a href="reference/geocode_addresses.html">geocode_addresses()</a></code> sends the input addresses in chunks as parallel requests.</p>
+<p>Many addresses can be geocoded very quickly using the <code><a href="reference/geocode_addresses.html">geocode_addresses()</a></code> function which calls the <code>/geocodeAddresses</code> endpoint. Note that this function requires an authorization token. <code><a href="reference/geocode_addresses.html">geocode_addresses()</a></code> sends the input addresses in chunks as parallel requests.</p>
 <p>Batch geocoding requires a signed in user. Load the <a href="https://github.com/r-arcgis/arcgisutils" class="external-link"><code>{arcgisutils}</code></a> to authorize and set your token. This example uses the <a href="#id_%20https://datacatalog.urban.org/node/6158/revisions/14192/view" class="external-link">Geocoding Test Dataset</a> from the <a href="https://www.urban.org/" class="external-link">Urban Institute</a>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/R-ArcGIS/arcgisutils" class="external-link">arcgisutils</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-arcgis/arcgisgeocode" class="external-link">arcgisgeocode</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://r.esri.com/arcgisutils/reference/token.html" class="external-link">set_arc_token</a></span><span class="op">(</span><span class="fu"><a href="https://r.esri.com/arcgisutils/reference/auth.html" class="external-link">auth_user</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -310,7 +312,7 @@
 <span></span>
 <span><span class="va">to_geocode</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span><span class="va">fp</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 120 Columns: 8</span></span>
-<span><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Delimiter: ","</span></span>
 <span><span class="co">#&gt; chr (5): full_address, address, city, state, zip</span></span>
 <span><span class="co">#&gt; dbl (3): lat_true, lon_true, diff_level</span></span>
@@ -330,32 +332,32 @@
 <span></span>
 <span><span class="va">geocoded</span></span>
 <span><span class="co">#&gt; # A tibble: 120 × 59</span></span>
-<span><span class="co">#&gt;    loc_name status score match_addr     long_label short_label addr_type</span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;    </span></span>
-<span><span class="co">#&gt;  1 World    M      100   500 L'Enfant … 500 L'Enf… 500 L'Enfa… PointAdd…</span></span>
-<span><span class="co">#&gt;  2 World    M      100   200 K St NE, … 200 K St … 200 K St NE PointAdd…</span></span>
-<span><span class="co">#&gt;  3 World    M      100   500 L'Enfant … 500 L'Enf… 500 L'Enfa… PointAdd…</span></span>
-<span><span class="co">#&gt;  4 World    M      100   2197 Plumleig… 2197 Plum… 2197 Pluml… PointAdd…</span></span>
-<span><span class="co">#&gt;  5 World    U        0   &lt;NA&gt;           &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;     </span></span>
-<span><span class="co">#&gt;  6 World    M       97.9 2197 Plumleig… 2197 Plum… 2197 Pluml… PointAdd…</span></span>
-<span><span class="co">#&gt;  7 World    M      100   200 K St NE, … 200 K St … 200 K St NE PointAdd…</span></span>
-<span><span class="co">#&gt;  8 World    M       97.0 5034 Curtis S… 5034 Curt… 5034 Curti… PointAdd…</span></span>
-<span><span class="co">#&gt;  9 World    M       97.0 5034 Curtis S… 5034 Curt… 5034 Curti… PointAdd…</span></span>
-<span><span class="co">#&gt; 10 World    U        0   &lt;NA&gt;           &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;     </span></span>
+<span><span class="co">#&gt;    loc_name status score match_addr  long_label short_label addr_type type_field</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;     </span></span>
+<span><span class="co">#&gt;  1 World    M      100   500 L'Enfa… 500 L'Enf… 500 L'Enfa… PointAdd… &lt;NA&gt;      </span></span>
+<span><span class="co">#&gt;  2 World    M      100   200 K St N… 200 K St … 200 K St NE PointAdd… &lt;NA&gt;      </span></span>
+<span><span class="co">#&gt;  3 World    M      100   500 L'Enfa… 500 L'Enf… 500 L'Enfa… PointAdd… &lt;NA&gt;      </span></span>
+<span><span class="co">#&gt;  4 World    M      100   200 K St N… 200 K St … 200 K St NE PointAdd… &lt;NA&gt;      </span></span>
+<span><span class="co">#&gt;  5 World    M      100   2197 Pluml… 2197 Plum… 2197 Pluml… PointAdd… &lt;NA&gt;      </span></span>
+<span><span class="co">#&gt;  6 World    U        0   &lt;NA&gt;        &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;      &lt;NA&gt;      </span></span>
+<span><span class="co">#&gt;  7 World    M       97.9 2197 Pluml… 2197 Plum… 2197 Pluml… PointAdd… &lt;NA&gt;      </span></span>
+<span><span class="co">#&gt;  8 World    M       97.0 5034 Curti… 5034 Curt… 5034 Curti… PointAdd… &lt;NA&gt;      </span></span>
+<span><span class="co">#&gt;  9 World    M       97.0 5034 Curti… 5034 Curt… 5034 Curti… PointAdd… &lt;NA&gt;      </span></span>
+<span><span class="co">#&gt; 10 World    U        0   &lt;NA&gt;        &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;      &lt;NA&gt;      </span></span>
 <span><span class="co">#&gt; # ℹ 110 more rows</span></span>
-<span><span class="co">#&gt; # ℹ 52 more variables: type_field &lt;chr&gt;, place_name &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   place_addr &lt;chr&gt;, phone &lt;chr&gt;, url &lt;chr&gt;, rank &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   add_bldg &lt;chr&gt;, add_num &lt;chr&gt;, add_num_from &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; # ℹ 51 more variables: place_name &lt;chr&gt;, place_addr &lt;chr&gt;, phone &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   url &lt;chr&gt;, rank &lt;dbl&gt;, add_bldg &lt;chr&gt;, add_num &lt;chr&gt;, add_num_from &lt;chr&gt;,</span></span>
 <span><span class="co">#&gt; #   add_num_to &lt;chr&gt;, add_range &lt;chr&gt;, side &lt;chr&gt;, st_pre_dir &lt;chr&gt;,</span></span>
 <span><span class="co">#&gt; #   st_pre_type &lt;chr&gt;, st_name &lt;chr&gt;, st_type &lt;chr&gt;, st_dir &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   bldg_type &lt;chr&gt;, bldg_name &lt;chr&gt;, level_type &lt;chr&gt;, …</span></span></code></pre></div>
+<span><span class="co">#&gt; #   bldg_type &lt;chr&gt;, bldg_name &lt;chr&gt;, level_type &lt;chr&gt;, level_name &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   unit_type &lt;chr&gt;, unit_name &lt;chr&gt;, sub_addr &lt;chr&gt;, st_addr &lt;chr&gt;, …</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="using-other-locators">Using other locators<a class="anchor" aria-label="anchor" href="#using-other-locators"></a>
 </h2>
-<p><a href="https://github.com/r-arcgis/arcgisgeocode" class="external-link">arcgisgeocode</a> can be used with any other geocoding service. For example, custom locators hosted on ArcGIS Online or Enterprise can be used. For example, we can use the <a href="https://www.nconemap.gov/pages/addresses" class="external-link">AddressNC</a> geocoding service <a href="https://www.arcgis.com/home/item.html?id=247dfe30ec42476a96926ad9e35f725f" class="external-link">available on ArcGIS Online</a>.</p>
-<p>Create a new <code>GeocodeServer</code> object using <code><a href="reference/geocode_server.html">geocode_server()</a></code>. The geocoder can to passed into the <code>geocoder</code> argument to any of the geocoding functions.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p><a href="https://github.com/r-arcgis/arcgisgeocode" class="external-link">arcgisgeocode</a> can be used with other geocoding services, including custom locators hosted on ArcGIS Online or Enterprise. For example, we can use the <a href="https://www.nconemap.gov/pages/addresses" class="external-link">AddressNC</a> geocoding service <a href="https://www.arcgis.com/home/item.html?id=247dfe30ec42476a96926ad9e35f725f" class="external-link">available on ArcGIS Online</a>.</p>
+<p>Create a new <code>GeocodeServer</code> object using <code><a href="reference/geocode_server.html">geocode_server()</a></code>. This geocoder can be passed into the <code>geocoder</code> argument to any of the geocoding functions.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">address_nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/geocode_server.html">geocode_server</a></span><span class="op">(</span></span>
 <span>  <span class="st">"https://services.nconemap.gov/secure/rest/services/AddressNC/AddressNC_geocoder/GeocodeServer"</span>,</span>
 <span>  token <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -367,40 +369,35 @@
 <span>  geocoder <span class="op">=</span> <span class="va">address_nc</span>,</span>
 <span>  token <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in CPL_crs_from_input(x): GDAL Error 1: PROJ:</span></span>
-<span><span class="co">#&gt; proj_create_from_database: crs not found</span></span>
 <span><span class="co">#&gt; Simple feature collection with 2 features and 60 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: 943428.1 ymin: 631973.4 xmax: 948500.3 ymax: 681596.4</span></span>
-<span><span class="co">#&gt; CRS:           NA</span></span>
-<span><span class="co">#&gt;   input_id loc_name status score match_addr long_label short_label</span></span>
-<span><span class="co">#&gt; 1        1     &lt;NA&gt;      T    78  ASHEVILLE  ASHEVILLE   ASHEVILLE</span></span>
-<span><span class="co">#&gt; 2        1     &lt;NA&gt;      T    78  ASHEVILLE  ASHEVILLE   ASHEVILLE</span></span>
-<span><span class="co">#&gt;   addr_type type_field place_name place_addr phone  url rank add_bldg</span></span>
-<span><span class="co">#&gt; 1  Locality       City  ASHEVILLE  ASHEVILLE  &lt;NA&gt; &lt;NA&gt;   20     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2  Locality       City  ASHEVILLE  ASHEVILLE  &lt;NA&gt; &lt;NA&gt;   20     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;   add_num add_num_from add_num_to add_range side st_pre_dir st_pre_type</span></span>
-<span><span class="co">#&gt; 1    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;   st_name st_type st_dir bldg_type bldg_name level_type level_name</span></span>
-<span><span class="co">#&gt; 1    &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2    &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;   unit_type unit_name sub_addr st_addr block sector nbrhd district</span></span>
-<span><span class="co">#&gt; 1      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;        city metro_area subregion region region_abbr territory zone</span></span>
-<span><span class="co">#&gt; 1 ASHEVILLE       &lt;NA&gt;  BUNCOMBE   &lt;NA&gt;        &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2 ASHEVILLE       &lt;NA&gt; HENDERSON   &lt;NA&gt;        &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;   postal postal_ext country cntry_name lang_code distance        x</span></span>
-<span><span class="co">#&gt; 1   &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;        USA       ENG        0 943428.1</span></span>
-<span><span class="co">#&gt; 2   &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;        USA       ENG        0 948500.3</span></span>
-<span><span class="co">#&gt;          y display_x display_y       xmin      xmax       ymin</span></span>
-<span><span class="co">#&gt; 1 681596.4  943428.1  681596.4 -8530023.7 6181070.0 -6814694.2</span></span>
-<span><span class="co">#&gt; 2 631973.4  948500.3  631973.4   908369.6  988510.8   586446.6</span></span>
-<span><span class="co">#&gt;         ymax      ex_info                                extents</span></span>
-<span><span class="co">#&gt; 1 10142730.7 ROWAN COFFEE  -8530024, -6814694, 6181070, 10142731</span></span>
-<span><span class="co">#&gt; 2   677555.8 ROWAN COFFEE 908369.6, 586446.6, 988510.8, 677555.8</span></span>
+<span><span class="co">#&gt; Projected CRS: NAD_1983_StatePlane_North_Carolina_FIPS_3200_Feet</span></span>
+<span><span class="co">#&gt;   input_id loc_name status score match_addr long_label short_label addr_type</span></span>
+<span><span class="co">#&gt; 1        1     &lt;NA&gt;      T    78  ASHEVILLE  ASHEVILLE   ASHEVILLE  Locality</span></span>
+<span><span class="co">#&gt; 2        1     &lt;NA&gt;      T    78  ASHEVILLE  ASHEVILLE   ASHEVILLE  Locality</span></span>
+<span><span class="co">#&gt;   type_field place_name place_addr phone  url rank add_bldg add_num</span></span>
+<span><span class="co">#&gt; 1       City  ASHEVILLE  ASHEVILLE  &lt;NA&gt; &lt;NA&gt;   20     &lt;NA&gt;    &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2       City  ASHEVILLE  ASHEVILLE  &lt;NA&gt; &lt;NA&gt;   20     &lt;NA&gt;    &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   add_num_from add_num_to add_range side st_pre_dir st_pre_type st_name st_type</span></span>
+<span><span class="co">#&gt; 1         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   st_dir bldg_type bldg_name level_type level_name unit_type unit_name sub_addr</span></span>
+<span><span class="co">#&gt; 1   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   st_addr block sector nbrhd district      city metro_area subregion region</span></span>
+<span><span class="co">#&gt; 1    &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt; ASHEVILLE       &lt;NA&gt;  BUNCOMBE   &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2    &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt; ASHEVILLE       &lt;NA&gt; HENDERSON   &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   region_abbr territory zone postal postal_ext country cntry_name lang_code</span></span>
+<span><span class="co">#&gt; 1        &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;        USA       ENG</span></span>
+<span><span class="co">#&gt; 2        &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;        USA       ENG</span></span>
+<span><span class="co">#&gt;   distance        x        y display_x display_y       xmin      xmax</span></span>
+<span><span class="co">#&gt; 1        0 943428.1 681596.4  943428.1  681596.4 -8530023.7 6181070.0</span></span>
+<span><span class="co">#&gt; 2        0 948500.3 631973.4  948500.3  631973.4   908369.6  988510.8</span></span>
+<span><span class="co">#&gt;         ymin       ymax      ex_info                                extents</span></span>
+<span><span class="co">#&gt; 1 -6814694.2 10142730.7 ROWAN COFFEE  -8530024, -6814694, 6181070, 10142731</span></span>
+<span><span class="co">#&gt; 2   586446.6   677555.8 ROWAN COFFEE 908369.6, 586446.6, 988510.8, 677555.8</span></span>
 <span><span class="co">#&gt;                    geometry</span></span>
 <span><span class="co">#&gt; 1 POINT (943428.1 681596.4)</span></span>
 <span><span class="co">#&gt; 2 POINT (948500.3 631973.4)</span></span></code></pre></div>

@@ -21,15 +21,20 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of arcgisgeocode is to provide access to ArcGIS geocoding services from R. Enables address canddiate identification, batch geocoding, reverse geocoding, autocomplete suggestions. 
+The goal of arcgisgeocode is to provide access to ArcGIS geocoding services from R. Enables address candidate identification, batch geocoding, reverse geocoding, and autocomplete suggestions. 
 
 ## Installation
 
-arcgisgeocode uses [`extendr`](https://extendr.github.io/) and requires Rust to be available to install the development version of arcgisgeocode. Follow the  [rustup instructions](https://rustup.rs/) to install Rust and verify your installation is compatible using [`rextendr::rust_sitrep()`](https://extendr.github.io/rextendr/dev/#sitrep).
+You can install a binary for Mac, Windows, or Ubuntu from r-universe like so: 
 
-If you do not have Rust installed, you can install a binary for Mac, Windows, or Ubuntu from r-universe.
+``` r
+# install from R-universe
+install.packages("arcgisgeocode", repos = c("https://r-arcgis.r-universe.dev", "https://cran.r-project.org"))
+```
 
-You can install the package like so: 
+### Development version
+
+arcgisgeocode uses [`extendr`](https://extendr.github.io/) and requires Rust to be available to install the development version of arcgisgeocode. Follow the  [rustup instructions](https://rustup.rs/) to install Rust and verify your installation is compatible using [`rextendr::rust_sitrep()`](https://extendr.github.io/rextendr/dev/#sitrep). Then install the development version from GitHub:
 
 ``` r
 # install pak if not available
@@ -37,16 +42,15 @@ if (!requireNamespace("pak")) install.packages("pak")
 
 # install development version of {arcgisgeocode}
 pak::pak("r-arcgis/arcgisgeocode")
-
-# install from R-universe
-install.packages("arcgisgeocode", repos = c("https://r-arcgis.r-universe.dev", "https://cran.r-project.org"))
 ```
 
 ## Usage
 
-By default, the public [ArcGIS World Geocoder](https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder) will be used. The public face geocoding server provides public access to the `/findAddressCandidates`, `reverseGeocode`, and `/suggest` endpoints made available va the `find_address_candidates()`, `reverse_geocode()`, and `suggest_places()` functions respectively. 
+By default, the [ArcGIS World Geocoder](https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder) will be used. This geocoding server provides public access to the `/findAddressCandidates`, `/reverseGeocode`, and `/suggest` endpoints made available via the `find_address_candidates()`, `reverse_geocode()`, and `suggest_places()` functions respectively. 
 
-The batch geocoding endpoint `/geocodeAddresses` is available via `geocode_addresses(). However, this requires the use of an authorization token and may consume credits. 
+The batch geocoding endpoint `/geocodeAddresses` is available via `geocode_addresses()`. However, this requires the use of an authorization token and may consume credits. 
+
+Refer to the ArcGIS World Geocoder [official documentation](https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm) for additional information on use restrictions and licensing. For example, a valid token is required to [store the results](#important-storing-results) of geocoding transactions.
 
 ### Reverse geocoding
 
@@ -87,7 +91,7 @@ dplyr::glimpse(candidates[,1:10])
 
 ### Suggest locations 
 
-Geocoding services can also provide a location suggestion based on a search term and, optionally, a location or extent. The `suggest_places()` (`/suggest` endpoint) is intended to be used as part of a client facing application that provides autocomplete suggestions. 
+Geocoding services can also provide a location suggestion based on a search term and, optionally, a location or extent. The `suggest_places()` function (`/suggest` endpoint) is intended to be used as part of a client-facing application that provides autocomplete suggestions. 
 
 In this example we create a search extent around a single point and find suggestions based on the search term `"bellwood"`. 
 
@@ -113,7 +117,7 @@ suggestions <- suggest_places(
 suggestions
 ```
 
-The result is intended to be provided to `find_address_candidates()` to complete the geocoding process. The columns `text` contains the address to geocode. The column `magic_key` is a special identifier that make it much faster to fetch results. Pass this into the argument `magic_key`
+The result is intended to be provided to `find_address_candidates()` to complete the geocoding process. The column `text` contains the address to geocode. The column `magic_key` is a special identifier that makes it much faster to fetch results. Pass this into the argument `magic_key`.
 
 ```{r}
 # get address candidate information
@@ -132,7 +136,7 @@ To learn more about free and paid geocoding operations refer to the [storage par
 
 ## Batch geocoding
 
-Many addresses can be geocoded very fast using the `geocode_addresses()` function which calls the `/geocodeAddresses` endpoint. Note that this function requires an authorization token. `geocode_addresses()` sends the input addresses in chunks as parallel requests. 
+Many addresses can be geocoded very quickly using the `geocode_addresses()` function which calls the `/geocodeAddresses` endpoint. Note that this function requires an authorization token. `geocode_addresses()` sends the input addresses in chunks as parallel requests. 
 
 Batch geocoding requires a signed in user. Load the [`{arcgisutils}`](https://github.com/r-arcgis/arcgisutils) to authorize and set your token. This example uses the [Geocoding Test Dataset](# https://datacatalog.urban.org/node/6158/revisions/14192/view) from the [Urban Institute](https://www.urban.org/).
 
@@ -161,9 +165,9 @@ geocoded
 
 ## Using other locators 
 
-`{arcgisgeocode}` can be used with any other geocoding service. For example, custom locators hosted on ArcGIS Online or Enterprise can be used. For example, we can use the [AddressNC](https://www.nconemap.gov/pages/addresses) geocoding service [available on ArcGIS Online](https://www.arcgis.com/home/item.html?id=247dfe30ec42476a96926ad9e35f725f).
+`{arcgisgeocode}` can be used with other geocoding services, including custom locators hosted on ArcGIS Online or Enterprise. For example, we can use the [AddressNC](https://www.nconemap.gov/pages/addresses) geocoding service [available on ArcGIS Online](https://www.arcgis.com/home/item.html?id=247dfe30ec42476a96926ad9e35f725f).
 
-Create a new `GeocodeServer` object using `geocode_server()`. The geocoder can to passed into the `geocoder` argument to any of the geocoding functions. 
+Create a new `GeocodeServer` object using `geocode_server()`. This geocoder can be passed into the `geocoder` argument to any of the geocoding functions. 
 
 ```{r}
 address_nc <- geocode_server(

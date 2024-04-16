@@ -58,6 +58,7 @@ Reverse geocoding takes a location and finds the associated address.
 
 ```{r, include = FALSE}
 library(pillar)
+options("arcgisgeocode.storage" = "never")
 ```
 
 ```{r}

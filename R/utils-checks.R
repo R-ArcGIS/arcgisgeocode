@@ -9,9 +9,8 @@ check_for_storage <- function(
   # Tokens are required for reverseGeocoding for storage
   if (for_storage) {
     obj_check_token(token, call = call)
+    inform_for_storage(call = call)
   }
-
-  inform_for_storage(call = call)
 }
 
 match_location_type <- function(

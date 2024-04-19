@@ -214,6 +214,7 @@ geocode_addresses <- function(
       create_records,
       # subset the data frame
       !!!to_partition[start:end, , drop = FALSE],
+      object_id = start:end,
       sr = in_sr,
       # FIXME n is used to populate objectid field in json
       # when chunked there will be duplicates. does this matter????
@@ -302,7 +303,7 @@ geocode_addresses <- function(
     for (cnd in error_messages) rlang::cnd_signal(cnd)
   }
 
-  results
+  sort_asap(results, "result_id")
 }
 
 parse_locations_res <- function(
@@ -376,4 +377,28 @@ chunk_indices <- function(n, m) {
   chunk_ends <- seq_len(n_chunks) * m
   chunk_ends[n_chunks] <- n
   list(start = chunk_starts, end = chunk_ends)
+}
+
+
+#' Might want to migrate to arcgisutils as well
+#' Sort a data.frame by a column as fast as possible
+#' this is required for arcgisgeocode because the results
+#' will not always be in the order they were provided. In fact,
+#' they almost never will be.
+#' @noRd
+#' @keywords internal
+sort_asap <- function(.df, .col) {
+  if (rlang::is_installed("data.table")) {
+    # sort in place w/ data.table
+    data.table::setorderv(.df, .col)
+    # use dplyr if no data.table
+  } else if (rlang::is_installed("dplyr")) {
+    dplyr::arrange(.df, !!rlang::sym(.col))
+    # use sort_by() R 4.4+
+  } else if (package_version("4.4") >= getRversion()) {
+    .df <- sort_by(.df, .df[[.col]])
+  } else {
+    .df <- .df[base::order(.df[[.col]]), ]
+  }
+  .df
 }

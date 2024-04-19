@@ -13,7 +13,7 @@ NULL
 
 as_esri_point_json <- function(x, sr) .Call(wrap__as_esri_point_json, x, sr)
 
-create_records <- function(single_line, address, address2, address3, neighborhood, city, subregion, region, postal, postal_ext, country_code, location, sr, n) .Call(wrap__create_records, single_line, address, address2, address3, neighborhood, city, subregion, region, postal, postal_ext, country_code, location, sr, n)
+create_records <- function(object_id, single_line, address, address2, address3, neighborhood, city, subregion, region, postal, postal_ext, country_code, location, sr, n) .Call(wrap__create_records, object_id, single_line, address, address2, address3, neighborhood, city, subregion, region, postal, postal_ext, country_code, location, sr, n)
 
 parse_location_json <- function(x) .Call(wrap__parse_location_json, x)
 

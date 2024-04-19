@@ -52,8 +52,10 @@ pub struct Records {
     records: Vec<Record>,
 }
 
+// TODO have an argument for object ID
 #[extendr]
 pub fn create_records(
+    object_id: Integers,
     single_line: Nullable<Strings>,
     address: Nullable<Strings>,
     address2: Nullable<Strings>,
@@ -179,8 +181,9 @@ pub fn create_records(
             Null => None,
         };
 
+        let oid = object_id[i].inner();
         let record = Address {
-            objectid: (i as i32) + 1_i32,
+            objectid: oid,
             single_line: single,
             address: addr,
             address2: addr2,

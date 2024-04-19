@@ -27,6 +27,9 @@ pub struct Candidate {
 #[derive(Debug, Clone, Serialize, Deserialize, IntoDataFrameRow)]
 #[serde(rename_all = "camelCase")]
 pub struct Attributes {
+    #[serde(rename = "ResultID")]
+    pub result_id: Option<i32>,
+
     #[serde(rename = "Loc_name")]
     pub loc_name: Option<String>,
 

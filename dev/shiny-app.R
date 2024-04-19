@@ -1,9 +1,10 @@
+library(htmltools)
 library(shiny)
 library(bslib)
 library(leaflet)
 devtools::load_all()
 
-ui <- page_sidebar(
+ui <- div(
   card(
     card_header("A leaflet map"),
     leafletOutput("map", width = "100%", height = "100%"),

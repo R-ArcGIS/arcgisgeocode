@@ -47,15 +47,8 @@ server <- function(input, output, session) {
         location = bnds
       )
 
-      # render the suggestions on the map
-      # output$suggests <- reactable::renderReactable(
-      #   reactable(
-      #     dplyr::select(places, Suggestions = text),
-      #     class = "list-group"
-      #   )
-      # )
       output$suggests <- renderUI({
-        make_suggestion_list(suggestions)
+        make_suggestion_list(places)
       })
 
       if (nrow(places) > 0) {
@@ -97,9 +90,7 @@ server <- function(input, output, session) {
   })
 }
 
-shinyApp(ui, server)
-
-
+# helper function
 make_suggestion_list <- function(suggestions) {
   ul <- tag("ul", c("class" = "list-group"))
   lis <- lapply(suggestions$text, \(.x) {
@@ -111,3 +102,6 @@ make_suggestion_list <- function(suggestions) {
 
   tagSetChildren(ul, lis)
 }
+
+
+shinyApp(ui, server)

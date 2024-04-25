@@ -10,9 +10,10 @@ ui <- page_sidebar(
   sidebar = sidebar(
     textInput(
       "search_value",
-      label = "Use /suggest endpoint",
+      label = "Search",
     ),
-    gt::gt_output(outputId = "suggestions")
+    gt::gt_output(outputId = "suggestions"),
+    uiOutput("dropdown")
   )
 )
 
@@ -48,6 +49,13 @@ server <- function(input, output, session) {
         location = bnds
       )
 
+      output$dropdown <- shiny::renderUI({
+        shiny.semantic::search_selection_choices(
+          "dropdown",
+          places$text,
+          multiple = FALSE
+        )
+      })
       # render the suggestions on the map
       output$suggestions <- gt::render_gt({
         gt::gt(dplyr::select(places, Suggestions = text))

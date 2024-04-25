@@ -388,7 +388,13 @@ chunk_indices <- function(n, m) {
 #' they almost never will be.
 #' @noRd
 #' @keywords internal
-sort_asap <- function(.df, .col) {
+sort_asap <- function(.df, .col, call = rlang::caller_env()) {
+  check_data_frame(.df)
+
+  if (nrow(.df) == 0) {
+    return(.df)
+  }
+
   if (rlang::is_installed("data.table")) {
     # sort in place w/ data.table
     data.table::setorderv(.df, .col)

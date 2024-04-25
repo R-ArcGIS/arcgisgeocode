@@ -74,12 +74,6 @@ x <- sf::st_sfc(sf::st_point(c(-117.172, 34.052)), crs = 4326)
 
 # Find addresses from locations
 reverse_geocode(x)
-#> ! `for_storage` is set to `FALSE`, results cannot be persisted.
-#> • See the official documentation
-#>   (<https://developers.arcgis.com/rest/geocode/api-reference/geocoding-find-address-candidates.htm#ESRI_SECTION3_BBCB5704B46B4CDF8377749B873B1A7F>)
-#>   for legal obligations or the `?storage()` help page.
-#> ℹ suppress this message by setting `options("arcgisgeocode.storage" = "never")`
-#> This message is displayed once per session.
 #> Simple feature collection with 1 feature and 22 fields
 #> Geometry type: POINT
 #> Dimension:     XY

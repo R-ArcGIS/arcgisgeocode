@@ -92,11 +92,11 @@ server <- function(input, output, session) {
 
 # helper function
 make_suggestion_list <- function(suggestions) {
-  ul <- tag("ul", c("class" = "list-group"))
+  ul <- tag("ul", c("class" = "list-group shadow-lg"))
   lis <- lapply(suggestions$text, \(.x) {
     htmltools::tag(
       "li",
-      c("class" = "list-group-item list-group-item-action", .x)
+      c("class" = "list-group-item list-group-item-action border-light text-sm", .x)
     )
   })
 

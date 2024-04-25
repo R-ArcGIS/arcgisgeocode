@@ -43,19 +43,13 @@ server <- function(input, output, session) {
     # get extent bounds
     bnds <- bounds()
 
+    # as long as search text and bounds aren't null
     if (nzchar(txt) && !is.null(bnds)) {
       places <- suggest_places(
         search_text(),
         location = bnds
       )
 
-      output$dropdown <- shiny::renderUI({
-        shiny.semantic::search_selection_choices(
-          "dropdown",
-          places$text,
-          multiple = FALSE
-        )
-      })
       # render the suggestions on the map
       output$suggestions <- gt::render_gt({
         gt::gt(dplyr::select(places, Suggestions = text))
@@ -70,16 +64,16 @@ server <- function(input, output, session) {
           for_storage = FALSE
         )
 
+        # update map
         leafletProxy("map", data = sf::st_geometry(search_results)) |>
           clearMarkers() |>
           addMarkers()
       }
     }
 
-
+    # clear the gt table 
     if (!nzchar(txt)) {
-      output$suggestions <- gt::render_gt({
-      })
+      output$suggestions <- gt::render_gt({})
 
       leafletProxy("map") |>
         clearMarkers()

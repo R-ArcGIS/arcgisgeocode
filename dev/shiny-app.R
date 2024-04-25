@@ -1,17 +1,19 @@
-library(htmltools)
 library(shiny)
 library(bslib)
 library(leaflet)
-devtools::load_all()
+library(arcgisgeocode)
 
-ui <- div(
+ui <- page_sidebar(
   card(
-    card_header("A leaflet map"),
     leafletOutput("map", width = "100%", height = "100%"),
   ),
   sidebar = sidebar(
-    textInput("search_value", label = "Search..."),
-  ),
+    textInput(
+      "search_value",
+      label = "Use /suggest endpoint",
+    ),
+    gt::gt_output(outputId = "suggestions")
+  )
 )
 
 server <- function(input, output, session) {
@@ -34,7 +36,10 @@ server <- function(input, output, session) {
   })
 
   observeEvent(search_text(), {
+    # extract search text
     txt <- search_text()
+
+    # get extent bounds
     bnds <- bounds()
 
     if (nzchar(txt) && !is.null(bnds)) {
@@ -42,6 +47,11 @@ server <- function(input, output, session) {
         search_text(),
         location = bnds
       )
+
+      # render the suggestions on the map
+      output$suggestions <- gt::render_gt({
+        gt::gt(dplyr::select(places, Suggestions = text))
+      })
 
       if (nrow(places) > 0) {
         # then pass the suggestions to find_address_candidates
@@ -52,11 +62,19 @@ server <- function(input, output, session) {
           for_storage = FALSE
         )
 
-
         leafletProxy("map", data = sf::st_geometry(search_results)) |>
           clearMarkers() |>
           addMarkers()
       }
+    }
+
+
+    if (!nzchar(txt)) {
+      output$suggestions <- gt::render_gt({
+      })
+
+      leafletProxy("map") |>
+        clearMarkers()
     }
   })
 
@@ -65,7 +83,9 @@ server <- function(input, output, session) {
     # won't need to change dynamically (at least, not unless the
     # entire map is being torn down and recreated).
     leaflet() |>
-      addTiles()
+      # use esri canvas
+      addProviderTiles(providers$Esri.WorldGrayCanvas) |>
+      setView(lat = 42.3601, lng = -71.0589, zoom = 14)
   })
 }
 

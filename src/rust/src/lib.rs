@@ -36,7 +36,8 @@ fn sfc_point_to_esri_point(pnts: List, sr: SpatialReference) -> Vec<Option<EsriP
     let esri_pnts = pnts
         .into_iter()
         .map(|(_, pi)| {
-            let crds = Doubles::try_from(pi).unwrap();
+            // TODO if None, return None, unwrap here is unsafe
+            let crds: Doubles = Doubles::try_from(pi).unwrap();
 
             if crds.len() < 2 {
                 None

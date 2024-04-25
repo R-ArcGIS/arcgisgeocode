@@ -1,0 +1,3 @@
+expression,min,median,itr/sec,mem_alloc,gc/sec,n_itr,n_gc,total_time
+"tidygeocoder::geo(addresses, method = ""arcgis"")",16.5m,16.5m,0.0010079042700814767,169MB,0.10079042700814766,1,100,16.5m
+arcgeocoder::arc_geo(addresses),21.1m,21.1m,7.909762914354787e-4,169MB,0.016610502120145053,1,21,21.1m

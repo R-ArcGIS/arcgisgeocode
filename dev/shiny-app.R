@@ -1,6 +1,7 @@
 library(shiny)
 library(bslib)
 library(leaflet)
+library(htmltools)
 library(arcgisgeocode)
 
 ui <- page_sidebar(
@@ -12,20 +13,16 @@ ui <- page_sidebar(
       "search_value",
       label = "Search",
     ),
-    gt::gt_output(outputId = "suggestions"),
-    uiOutput("dropdown")
+    uiOutput("suggests")
   )
 )
 
 server <- function(input, output, session) {
   # This reactive expression represents the palette function,
   # which changes as the user makes selections in UI.
-
   bounds <- reactive({
-    # bnds <- input$map_bounds
     loc <- input$map_center
     if (
-      # !is.null(bnds)
       !is.null(loc)
     ) {
       c(loc[[1]], loc[[2]])
@@ -51,8 +48,14 @@ server <- function(input, output, session) {
       )
 
       # render the suggestions on the map
-      output$suggestions <- gt::render_gt({
-        gt::gt(dplyr::select(places, Suggestions = text))
+      # output$suggests <- reactable::renderReactable(
+      #   reactable(
+      #     dplyr::select(places, Suggestions = text),
+      #     class = "list-group"
+      #   )
+      # )
+      output$suggests <- renderUI({
+        make_suggestion_list(suggestions)
       })
 
       if (nrow(places) > 0) {
@@ -65,15 +68,18 @@ server <- function(input, output, session) {
         )
 
         # update map
-        leafletProxy("map", data = sf::st_geometry(search_results)) |>
+        leafletProxy(
+          "map",
+          data = sf::st_geometry(search_results)
+        ) |>
           clearMarkers() |>
           addMarkers()
       }
     }
 
-    # clear the gt table 
+    # clear the gt table
     if (!nzchar(txt)) {
-      output$suggestions <- gt::render_gt({})
+      output$suggests <- NULL
 
       leafletProxy("map") |>
         clearMarkers()
@@ -92,3 +98,16 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
+
+
+make_suggestion_list <- function(suggestions) {
+  ul <- tag("ul", c("class" = "list-group"))
+  lis <- lapply(suggestions$text, \(.x) {
+    htmltools::tag(
+      "li",
+      c("class" = "list-group-item list-group-item-action", .x)
+    )
+  })
+
+  tagSetChildren(ul, lis)
+}

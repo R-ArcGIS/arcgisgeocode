@@ -1,29 +1,42 @@
-library(arcgis)
+library(arcgisutils)
 library(arcgisgeocode)
 
 # read in the dataset
 boston_restaurants <- readr::read_csv(
-  "boston-yelp-restaurants.csv"
+  "~/downloads/boston-yelp-restaurants.csv"
 )
 
-# preview the addresses
-boston_restaurants$restaurant_address
+# extract the addresses
+addresses <- boston_restaurants$restaurant_address
+head(addresses) # preview them
 
-# authorize to AGOL
+# authorize to AGOL using arcgisutils
 set_arc_token(auth_user())
 
-# start a timer
-tictoc::tic()
+# time both geocoding capabilities
+r_arcgis_bm <- bench::mark(
+  "R-ArcGIS Bulk Address" = geocode_addresses(addresses),
+  "R-ArcGIS Single Address" = find_address_candidates(addresses, max_locations = 1),
+  iterations = 1,
+  check = FALSE
+)
+readr::write_csv(r_arcgis_bm[, 1:9], "dev/arcgisgeocode-yelp-timing.csv")
 
-# geocode the addresses
-yelp_geocoded <- geocode_addresses(
-  single_line = boston_restaurants$restaurant_address,
+
+# Community Packages -----------------------------------------------------
+
+# read in the dataset
+boston_restaurants <- readr::read_csv(
+  "~/downloads/boston-yelp-restaurants.csv"
 )
 
-# end the timer
-tictoc::toc()
+addresses <- boston_restaurants$restaurant_address
 
-# preview the results
-dplyr::glimpse(yelp_geocoded)
+bm <- bench::mark(
+  tidygeocoder::geo(addresses, method = "arcgis"),
+  arcgeocoder::arc_geo(addresses),
+  check = FALSE,
+  iterations = 1
+)
 
-plot(yelp_geocoded$geometry)
+readr::write_csv(bm[, 1:9], "dev/yelp-timing.csv")

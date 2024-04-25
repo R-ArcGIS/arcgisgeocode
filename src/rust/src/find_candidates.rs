@@ -268,6 +268,10 @@ pub fn parse_candidate_json(x: &str) -> Robj {
     match parsed {
         Ok(p) => {
             let n = p.candidates.len();
+
+            if n == 0 {
+                return ().into_robj();
+            }
             let mut extent_res = List::new(n);
             let mut location_res = List::new(n);
 

@@ -327,6 +327,7 @@ find_address_candidates <- function(
   # # cbind() is slow but not that bad?
   res <- cbind(input_id = ids, results)
   attr(res, "error_requests") <- all_reqs[errors]
+  attr(res, "error_ids") <- errors
   res
 }
 

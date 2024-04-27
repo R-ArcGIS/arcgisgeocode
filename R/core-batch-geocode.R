@@ -286,7 +286,7 @@ geocode_addresses <- function(
   # if errors occurred attach as an attribute
   if (n_errors > 0) {
     attr(results, "error_requests") <- all_reqs[errors]
-    attr(res, "error_ids") <- errors
+    attr(results, "error_ids") <- errors
 
     # process resps and catch the errors
     error_messages <- lapply(

@@ -147,6 +147,9 @@ find_address_candidates <- function(
   # It could be actually really easy to capture all of the arguments
   # except .progress, token, and geocoder to turn it into a data.frame
   # iterate through the rows and create the requests
+
+  # NOTE when debugging inline
+  # fml_nms <- rlang::fn_fmls_names(find_address_candidates)
   fml_nms <- rlang::fn_fmls_names()
 
   # get all values passed in

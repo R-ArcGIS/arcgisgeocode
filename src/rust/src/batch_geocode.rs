@@ -1,4 +1,4 @@
-use crate::find_candidates::Attributes;
+use crate::find_candidates::Attributes as GeocodeAttrs;
 use crate::{as_sfg, parse_sr};
 use extendr_api::prelude::*;
 use serde::{Deserialize, Serialize};
@@ -18,7 +18,7 @@ pub struct Location {
     pub address: Option<String>,
     pub location: Option<EsriPoint>,
     pub score: f64,
-    pub attributes: Attributes,
+    pub attributes: GeocodeAttrs,
 }
 
 #[skip_serializing_none]
@@ -225,6 +225,13 @@ pub fn parse_location_json(x: &str) -> Robj {
                 .map(|(i, pi)| {
                     if let Some(loc) = pi.location {
                         let _ = location_res.set_elt(i, as_sfg(loc));
+                    } else {
+                        let empty_point = Doubles::from_values([Rfloat::na(), Rfloat::na()])
+                            .into_robj()
+                            .set_class(&["XY", "POINT", "sfg"])
+                            .unwrap();
+
+                        let _ = location_res.set_elt(i, empty_point);
                     }
                     pi.attributes
                 })

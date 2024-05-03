@@ -72,8 +72,7 @@ suggest_places <- function(
   # searchExtent
   check_extent(
     search_extent,
-    arg = rlang::caller_arg(search_extent),
-    call = rlang::current_env()
+    arg = rlang::caller_arg(search_extent)
   )
 
 
@@ -94,8 +93,7 @@ suggest_places <- function(
     max_suggestions,
     min = 1,
     max = 15,
-    allow_null = TRUE,
-    call = rlang::current_env()
+    allow_null = TRUE
   )
 
   check_iso_3166(country_code, scalar = TRUE)

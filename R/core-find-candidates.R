@@ -101,7 +101,7 @@ find_address_candidates <- function(
   }
 
   # this also checks the token
-  check_for_storage(for_storage, token, call = rlang::current_env())
+  check_for_storage(for_storage, token, call = rlang::caller_env())
 
   check_bool(.progress, allow_na = FALSE, allow_null = FALSE)
 
@@ -138,7 +138,7 @@ find_address_candidates <- function(
     min = 1,
     max = 50,
     allow_null = TRUE,
-    call = rlang::current_env()
+    call = rlang::caller_env()
   )
 
   # check that either single_line or address are not-null
@@ -159,7 +159,7 @@ find_address_candidates <- function(
   null_args <- vapply(all_args, is.null, logical(1))
 
   # these arguments are scalars and shold not be handled in a vectorized manner
-  to_exclude <- c("crs", ".progress", "token", "geocoder", "for_storage")
+  to_exclude <- c("crs", ".progress", "token", "geocoder", "for_storage", "search_extent")
   to_include <- !names(all_args) %in% to_exclude
 
   # fetches all non-null arguments. These will be turned into a dataframe
@@ -211,7 +211,10 @@ find_address_candidates <- function(
 
   # handle extent
   # only 1 extent per function call, this will not be vectorized
-  check_extent(search_extent, arg = rlang::caller_arg(search_extent), call = call)
+  check_extent(
+    search_extent,
+    arg = rlang::caller_arg(search_extent)
+  )
 
   if (!is.null(search_extent)) {
     extent_crs <- validate_crs(

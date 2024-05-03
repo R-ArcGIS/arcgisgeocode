@@ -62,7 +62,7 @@ geocode_addresses <- function(
 
 
   check_bool(.progress, allow_na = FALSE, allow_null = FALSE)
-  check_for_storage(for_storage, token, call = rlang::current_env())
+  check_for_storage(for_storage, token)
 
   # type checking for all character types
   # they can be either NULL or not. When not, they cannot have NA values
@@ -100,14 +100,12 @@ geocode_addresses <- function(
   # searchExtent
   check_extent(
     search_extent,
-    arg = rlang::caller_arg(search_extent),
-    call = rlang::current_env()
+    arg = rlang::caller_arg(search_extent)
   )
 
   if (!is.null(search_extent)) {
     extent_crs <- validate_crs(
-      sf::st_crs(search_extent),
-      call = rlang::current_env()
+      sf::st_crs(search_extent)
     )[[1]]
 
     extent_json_raw <- c(
@@ -271,8 +269,7 @@ geocode_addresses <- function(
     string <- httr2::resp_body_string(.resp)
     parse_locations_res(
       string,
-      use_custom_json_processing,
-      call = rlang::current_env()
+      use_custom_json_processing
     )
   })
 

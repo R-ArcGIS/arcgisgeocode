@@ -83,7 +83,7 @@ check_extent <- function(
     extent,
     allow_null = TRUE,
     arg = rlang::caller_arg(extent),
-    call = rlang::caller_env()) {
+    call = rlang::caller_call()) {
   if (is.null(extent)) {
     return(invisible(NULL))
   }
@@ -115,7 +115,7 @@ obj_as_points <- function(
     x,
     allow_null = TRUE,
     arg = rlang::caller_arg(x),
-    call = rlang::current_env()) {
+    call = rlang::caller_env()) {
   if (is.null(x) && allow_null) {
     return(NULL)
   } else if (rlang::inherits_any(x, "POINT")) {

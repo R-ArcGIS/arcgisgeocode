@@ -92,9 +92,10 @@
 <h3 id="reverse-geocoding">Reverse geocoding<a class="anchor" aria-label="anchor" href="#reverse-geocoding"></a>
 </h3>
 <p>Reverse geocoding takes a location and finds the associated address.</p>
-<div class=".callout-tip">
+<blockquote>
+<p>[!TIP]</p>
 <p>A token <em>is not required</em> to use this function.</p>
-</div>
+</blockquote>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-arcgis/arcgisgeocode" class="external-link">arcgisgeocode</a></span><span class="op">)</span></span>
 <span></span>
@@ -134,9 +135,10 @@
 </h3>
 <p>The <code><a href="reference/find_address_candidates.html">find_address_candidates()</a></code> function returns geocoding candidate results. The function is vectorized over the input and will perform multiple requests in parallel. Each request geocodes one location at a time.</p>
 <p>One or more candidates are returned from the endpoint. You can limit the number of candidates using the <code>max_locations</code> argument (with a maximum of 50).</p>
-<div class=".callout-tip">
+<blockquote>
+<p>[!TIP]</p>
 <p>A token <em>is not required</em> to use this function.</p>
-</div>
+</blockquote>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Find addresses from address search</span></span>
 <span><span class="va">candidates</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/find_address_candidates.html">find_address_candidates</a></span><span class="op">(</span></span>
@@ -167,9 +169,10 @@
 </h3>
 <p>Geocoding services can also provide a location suggestion based on a search term and, optionally, a location or extent. The <code><a href="reference/suggest_places.html">suggest_places()</a></code> function (<code>/suggest</code> endpoint) is intended to be used as part of a client-facing application that provides autocomplete suggestions.</p>
 <p>In this example we create a search extent around a single point and find suggestions based on the search term <code>"bellwood"</code>.</p>
-<div class=".callout-tip">
+<blockquote>
+<p>[!TIP]</p>
 <p>A token <em>is not required</em> to use this function.</p>
-</div>
+</blockquote>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># identify a search point as a simple feature column</span></span>
 <span><span class="va">location</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span></span>
@@ -235,9 +238,10 @@
 </h2>
 <p>Many addresses can be geocoded very quickly using the <code><a href="reference/geocode_addresses.html">geocode_addresses()</a></code> function which calls the <code>/geocodeAddresses</code> endpoint. Note that this function requires an authorization token. <code><a href="reference/geocode_addresses.html">geocode_addresses()</a></code> sends the input addresses in chunks as parallel requests.</p>
 <p>Batch geocoding requires a signed in user. Load the <a href="https://github.com/r-arcgis/arcgisutils" class="external-link"><code>{arcgisutils}</code></a> to authorize and set your token. This example uses the <a href="#id_%20https://datacatalog.urban.org/node/6158/revisions/14192/view" class="external-link">Geocoding Test Dataset</a> from the <a href="https://www.urban.org/" class="external-link">Urban Institute</a>.</p>
-<div class=".callout-tip">
+<blockquote>
+<p>[!TIP]</p>
 <p>A token <em>is required</em> to use this function with the World Geocoding Service. It may not be necessary if you are using a private ArcGIS Enterprise service.</p>
-</div>
+</blockquote>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/R-ArcGIS/arcgisutils" class="external-link">arcgisutils</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-arcgis/arcgisgeocode" class="external-link">arcgisgeocode</a></span><span class="op">)</span></span>

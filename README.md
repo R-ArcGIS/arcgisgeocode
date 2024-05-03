@@ -74,11 +74,9 @@ results](#important-storing-results) of geocoding transactions.
 
 Reverse geocoding takes a location and finds the associated address.
 
-<div class=".callout-tip">
-
-A token *is not required* to use this function.
-
-</div>
+> [!TIP]
+>
+> A token *is not required* to use this function.
 
 ``` r
 library(arcgisgeocode)
@@ -126,11 +124,9 @@ One or more candidates are returned from the endpoint. You can limit the
 number of candidates using the `max_locations` argument (with a maximum
 of 50).
 
-<div class=".callout-tip">
-
-A token *is not required* to use this function.
-
-</div>
+> [!TIP]
+>
+> A token *is not required* to use this function.
 
 ``` r
 # Find addresses from address search
@@ -169,11 +165,9 @@ suggestions.
 In this example we create a search extent around a single point and find
 suggestions based on the search term `"bellwood"`.
 
-<div class=".callout-tip">
-
-A token *is not required* to use this function.
-
-</div>
+> [!TIP]
+>
+> A token *is not required* to use this function.
 
 ``` r
 # identify a search point as a simple feature column
@@ -259,13 +253,11 @@ and set your token. This example uses the [Geocoding Test
 Dataset](#%20https://datacatalog.urban.org/node/6158/revisions/14192/view)
 from the [Urban Institute](https://www.urban.org/).
 
-<div class=".callout-tip">
-
-A token *is required* to use this function with the World Geocoding
-Service. It may not be necessary if you are using a private ArcGIS
-Enterprise service.
-
-</div>
+> [!TIP]
+>
+> A token *is required* to use this function with the World Geocoding
+> Service. It may not be necessary if you are using a private ArcGIS
+> Enterprise service.
 
 ``` r
 library(arcgisutils)

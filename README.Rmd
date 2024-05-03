@@ -63,7 +63,7 @@ Refer to the ArcGIS World Geocoder [official documentation](https://developers.a
 
 Reverse geocoding takes a location and finds the associated address. 
 
-::: .callout-tip
+::: callout-tip
 A token _is not required_ to use this function.
 :::
 
@@ -88,7 +88,7 @@ The `find_address_candidates()` function returns geocoding candidate results. Th
 
 One or more candidates are returned from the endpoint. You can limit the number of candidates using the `max_locations` argument (with a maximum of 50).
 
-::: .callout-tip
+::: callout-tip
 A token _is not required_ to use this function.
 :::
 
@@ -111,7 +111,7 @@ Geocoding services can also provide a location suggestion based on a search term
 
 In this example we create a search extent around a single point and find suggestions based on the search term `"bellwood"`. 
 
-::: .callout-tip
+::: callout-tip
 A token _is not required_ to use this function.
 :::
 
@@ -162,7 +162,7 @@ Many addresses can be geocoded very quickly using the `geocode_addresses()` func
 
 Batch geocoding requires a signed in user. Load the [`{arcgisutils}`](https://github.com/r-arcgis/arcgisutils) to authorize and set your token. This example uses the [Geocoding Test Dataset](# https://datacatalog.urban.org/node/6158/revisions/14192/view) from the [Urban Institute](https://www.urban.org/).
 
-::: .callout-tip
+::: callout-tip
 A token _is required_ to use this function with the World Geocoding Service. It may not be necessary if you are using a private ArcGIS Enterprise service. 
 :::
 

@@ -8,29 +8,33 @@
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN
-status](https://www.r-pkg.org/badges/version/arcgisgeocode)](https://CRAN.R-project.org/package=arcgisgeocode)
+status](https://www.r-pkg.org/badges/version/arcgisgeocode.png)](https://CRAN.R-project.org/package=arcgisgeocode)
 [![R-CMD-check](https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of arcgisgeocode is to provide access to ArcGIS geocoding
-services from R. Enables address candidate identification, batch
-geocoding, reverse geocoding, and autocomplete suggestions.
+arcgisgeocode provides access to ArcGIS geocoding services from R. It
+supports address candidate identification, batch geocoding, reverse
+geocoding, and autocomplete suggestions.
 
 ## Installation
 
-You can install a binary for Mac, Windows, or Ubuntu from r-universe
-like so:
+Install the package from CRAN
+
+``` r
+# install from CRAN 
+install.packages("arcgisgeocode")
+```
+
+You can also install the development version from r-universe as a binary
+for Mac, Windows, or Ubuntu from r-universe like so:
 
 ``` r
 # install from R-universe
-install.packages("arcgisgeocode", repos = c("https://r-arcgis.r-universe.dev", "https://cran.r-project.org"))
+install.packages("arcgisgeocode", repos = "https://r-arcgis.r-universe.dev")
 ```
 
-### Development version
-
-arcgisgeocode uses [`extendr`](https://extendr.github.io/) and requires
-Rust to be available to install the development version of
-arcgisgeocode. Follow the [rustup instructions](https://rustup.rs/) to
+Or you can install the package from source which requires Rust to be
+available. Follow the [rustup instructions](https://rustup.rs/) to
 install Rust and verify your installation is compatible using
 [`rextendr::rust_sitrep()`](https://extendr.github.io/rextendr/dev/#sitrep).
 Then install the development version from GitHub:
@@ -48,13 +52,17 @@ pak::pak("r-arcgis/arcgisgeocode")
 By default, the [ArcGIS World
 Geocoder](https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder)
 will be used. This geocoding server provides public access to the
-`/findAddressCandidates`, `/reverseGeocode`, and `/suggest` endpoints
-made available via the `find_address_candidates()`, `reverse_geocode()`,
-and `suggest_places()` functions respectively.
+[`/findAddressCandidates`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-find-address-candidates.htm),
+[`/reverseGeocode`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-reverse-geocode.htm),
+and
+[`/suggest`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-suggest.htm)
+endpoints made available via the `find_address_candidates()`,
+`reverse_geocode()`, and `suggest_places()` functions respectively.
 
-The batch geocoding endpoint `/geocodeAddresses` is available via
-`geocode_addresses()`. However, this requires the use of an
-authorization token and may consume credits.
+The batch geocoding endpoint
+[`/geocodeAddresses`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-geocode-addresses.htm)
+is available via `geocode_addresses()`. However, this requires the use
+of an authorization token and may consume credits.
 
 Refer to the ArcGIS World Geocoder [official
 documentation](https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm)
@@ -66,31 +74,45 @@ results](#important-storing-results) of geocoding transactions.
 
 Reverse geocoding takes a location and finds the associated address.
 
+<div class=".callout-tip">
+
+A token *is not required* to use this function.
+
+</div>
+
 ``` r
 library(arcgisgeocode)
 
-# create a point
-x <- sf::st_sfc(sf::st_point(c(-117.172, 34.052)), crs = 4326)
-
 # Find addresses from locations
-reverse_geocode(x)
-#> Simple feature collection with 1 feature and 22 fields
-#> Geometry type: POINT
-#> Dimension:     XY
-#> Bounding box:  xmin: -117.172 ymin: 34.05204 xmax: -117.172 ymax: 34.05204
-#> Geodetic CRS:  WGS 84
-#>                                     match_addr
-#> 1 600-620 Home Pl, Redlands, California, 92374
-#>                                  long_label     short_label     addr_type
-#> 1 600-620 Home Pl, Redlands, CA, 92374, USA 600-620 Home Pl StreetAddress
-#>   type_field place_name add_num     address block sector   neighborhood
-#> 1                           608 608 Home Pl              South Redlands
-#>   district     city metro_area             subregion     region region_abbr
-#> 1          Redlands            San Bernardino County California          CA
-#>   territory postal postal_ext  country_name country_code
-#> 1            92374            United States          USA
-#>                    geometry
-#> 1 POINT (-117.172 34.05204)
+rev_res <- reverse_geocode(c(-117.172, 34.052))
+
+# preview results
+dplyr::glimpse(rev_res)
+#> Rows: 1
+#> Columns: 23
+#> $ match_addr   <chr> "600-620 Home Pl, Redlands, California, 92374"
+#> $ long_label   <chr> "600-620 Home Pl, Redlands, CA, 92374, USA"
+#> $ short_label  <chr> "600-620 Home Pl"
+#> $ addr_type    <chr> "StreetAddress"
+#> $ type_field   <chr> ""
+#> $ place_name   <chr> ""
+#> $ add_num      <chr> "608"
+#> $ address      <chr> "608 Home Pl"
+#> $ block        <chr> ""
+#> $ sector       <chr> ""
+#> $ neighborhood <chr> "South Redlands"
+#> $ district     <chr> ""
+#> $ city         <chr> "Redlands"
+#> $ metro_area   <chr> ""
+#> $ subregion    <chr> "San Bernardino County"
+#> $ region       <chr> "California"
+#> $ region_abbr  <chr> "CA"
+#> $ territory    <chr> ""
+#> $ postal       <chr> "92374"
+#> $ postal_ext   <chr> ""
+#> $ country_name <chr> "United States"
+#> $ country_code <chr> "USA"
+#> $ geometry     <POINT [°]> POINT (-117.172 34.05204)
 ```
 
 ### Address search
@@ -104,6 +126,12 @@ One or more candidates are returned from the endpoint. You can limit the
 number of candidates using the `max_locations` argument (with a maximum
 of 50).
 
+<div class=".callout-tip">
+
+A token *is not required* to use this function.
+
+</div>
+
 ``` r
 # Find addresses from address search
 candidates <- find_address_candidates(
@@ -114,10 +142,11 @@ candidates <- find_address_candidates(
   max_locations = 2
 )
 
-dplyr::glimpse(candidates[,1:10])
+dplyr::glimpse(candidates[, 1:10])
 #> Rows: 2
 #> Columns: 11
 #> $ input_id    <int> 1, 1
+#> $ result_id   <int> NA, NA
 #> $ loc_name    <chr> "World", "World"
 #> $ status      <chr> "M", "M"
 #> $ score       <dbl> 100.00, 98.57
@@ -126,7 +155,6 @@ dplyr::glimpse(candidates[,1:10])
 #> $ short_label <chr> "Esri", "380 New York St"
 #> $ addr_type   <chr> "POI", "PointAddress"
 #> $ type_field  <chr> "Business Facility", NA
-#> $ place_name  <chr> "Esri", NA
 #> $ geometry    <POINT [°]> POINT (-117.1957 34.05609), POINT (-117.1948 34.05726)…
 ```
 
@@ -141,14 +169,20 @@ suggestions.
 In this example we create a search extent around a single point and find
 suggestions based on the search term `"bellwood"`.
 
+<div class=".callout-tip">
+
+A token *is not required* to use this function.
+
+</div>
+
 ``` r
 # identify a search point as a simple feature column
 location <- sf::st_sfc(
   sf::st_point(c(-84.34, 33.74)),
-   crs = 4326
+  crs = 4326
 )
 
-# buffer and create a bbox object 
+# buffer and create a bbox object to search within the extent
 search_extent <- sf::st_bbox(
   sf::st_buffer(location, 10)
 )
@@ -179,103 +213,25 @@ much faster to fetch results. Pass this into the argument `magic_key`.
 ``` r
 # get address candidate information
 # using the text and the magic key
-find_address_candidates(
+res <- find_address_candidates(
   suggestions$text,
   magic_key = suggestions$magic_key
 )
-#> Simple feature collection with 7 features and 60 fields
-#> Geometry type: POINT
-#> Dimension:     XY
-#> Bounding box:  xmin: -87.88312 ymin: 33.74034 xmax: -84.34273 ymax: 41.88325
-#> Geodetic CRS:  WGS 84
-#>   input_id loc_name status score                 match_addr
-#> 1        1     <NA>      M   100            Bellwood Coffee
-#> 2        2     <NA>      M   100 Bellwood, Atlanta, Georgia
-#> 3        3     <NA>      M   100            Bellwood Church
-#> 4        4     <NA>      M   100              Bellwood Yard
-#> 5        5     <NA>      T   100         Bellwood, Illinois
-#> 6        5     <NA>      T   100         Bellwood, Illinois
-#> 7        5     <NA>      T   100         Bellwood, Illinois
-#>                                                       long_label
-#> 1 Bellwood Coffee, 1366 Glenwood Ave SE, Atlanta, GA, 30316, USA
-#> 2                                     Bellwood, Atlanta, GA, USA
-#> 3                              Bellwood Church, Atlanta, GA, USA
-#> 4                                Bellwood Yard, Atlanta, GA, USA
-#> 5                                              Bellwood, IL, USA
-#> 6                                              Bellwood, IL, USA
-#> 7                                              Bellwood, IL, USA
-#>       short_label addr_type type_field      place_name
-#> 1 Bellwood Coffee       POI     Snacks Bellwood Coffee
-#> 2        Bellwood  Locality       City        Bellwood
-#> 3 Bellwood Church       POI     Church Bellwood Church
-#> 4   Bellwood Yard       POI   Building   Bellwood Yard
-#> 5        Bellwood  Locality       City        Bellwood
-#> 6        Bellwood  Locality       City        Bellwood
-#> 7        Bellwood  Locality       City        Bellwood
-#>                                      place_addr phone  url  rank add_bldg
-#> 1 1366 Glenwood Ave SE, Atlanta, Georgia, 30316  <NA> <NA> 19.00     <NA>
-#> 2                              Atlanta, Georgia  <NA> <NA> 20.00     <NA>
-#> 3                              Atlanta, Georgia  <NA> <NA> 24.00     <NA>
-#> 4                              Atlanta, Georgia  <NA> <NA> 24.00     <NA>
-#> 5                            Bellwood, Illinois  <NA> <NA> 10.50     <NA>
-#> 6                            Bellwood, Illinois  <NA> <NA> 16.04     <NA>
-#> 7                 Village of Bellwood, Illinois  <NA> <NA> 21.00     <NA>
-#>   add_num add_num_from add_num_to add_range side st_pre_dir st_pre_type
-#> 1    1366         <NA>       <NA>      <NA> <NA>       <NA>        <NA>
-#> 2    <NA>         <NA>       <NA>      <NA> <NA>       <NA>        <NA>
-#> 3    <NA>         <NA>       <NA>      <NA> <NA>       <NA>        <NA>
-#> 4    <NA>         <NA>       <NA>      <NA> <NA>       <NA>        <NA>
-#> 5    <NA>         <NA>       <NA>      <NA> <NA>       <NA>        <NA>
-#> 6    <NA>         <NA>       <NA>      <NA> <NA>       <NA>        <NA>
-#> 7    <NA>         <NA>       <NA>      <NA> <NA>       <NA>        <NA>
-#>    st_name st_type st_dir bldg_type bldg_name level_type level_name unit_type
-#> 1 Glenwood     Ave     SE      <NA>      <NA>       <NA>       <NA>      <NA>
-#> 2     <NA>    <NA>   <NA>      <NA>      <NA>       <NA>       <NA>      <NA>
-#> 3     <NA>    <NA>   <NA>      <NA>      <NA>       <NA>       <NA>      <NA>
-#> 4     <NA>    <NA>   <NA>      <NA>      <NA>       <NA>       <NA>      <NA>
-#> 5     <NA>    <NA>   <NA>      <NA>      <NA>       <NA>       <NA>      <NA>
-#> 6     <NA>    <NA>   <NA>      <NA>      <NA>       <NA>       <NA>      <NA>
-#> 7     <NA>    <NA>   <NA>      <NA>      <NA>       <NA>       <NA>      <NA>
-#>   unit_name sub_addr              st_addr block sector nbrhd district
-#> 1      <NA>     <NA> 1366 Glenwood Ave SE  <NA>   <NA>  <NA>     <NA>
-#> 2      <NA>     <NA>                 <NA>  <NA>   <NA>  <NA> Bellwood
-#> 3      <NA>     <NA>                 <NA>  <NA>   <NA>  <NA>     <NA>
-#> 4      <NA>     <NA>                 <NA>  <NA>   <NA>  <NA>     <NA>
-#> 5      <NA>     <NA>                 <NA>  <NA>   <NA>  <NA>     <NA>
-#> 6      <NA>     <NA>                 <NA>  <NA>   <NA>  <NA>     <NA>
-#> 7      <NA>     <NA>                 <NA>  <NA>   <NA>  <NA>     <NA>
-#>                  city metro_area     subregion   region region_abbr territory
-#> 1             Atlanta       <NA> DeKalb County  Georgia          GA      <NA>
-#> 2             Atlanta       <NA> Fulton County  Georgia          GA      <NA>
-#> 3             Atlanta       <NA> Fulton County  Georgia          GA      <NA>
-#> 4             Atlanta       <NA> Fulton County  Georgia          GA      <NA>
-#> 5            Bellwood       <NA>   Cook County Illinois          IL      <NA>
-#> 6            Bellwood       <NA>   Cook County Illinois          IL      <NA>
-#> 7 Village of Bellwood       <NA>   Cook County Illinois          IL      <NA>
-#>   zone postal postal_ext country    cntry_name lang_code distance         x
-#> 1 <NA>  30316       <NA>     USA United States       ENG      0.0 -84.34273
-#> 2 <NA>   <NA>       <NA>     USA United States       ENG      0.0 -84.41243
-#> 3 <NA>   <NA>       <NA>     USA United States       ENG      0.0 -84.41521
-#> 4 <NA>   <NA>       <NA>     USA United States       ENG      0.0 -84.41798
-#> 5 <NA>   <NA>       <NA>     USA United States       ENG 956972.0 -87.87345
-#> 6 <NA>   <NA>       <NA>     USA United States       ENG 957055.1 -87.88312
-#> 7 <NA>   <NA>       <NA>     USA United States       ENG 957012.3 -87.87617
-#>          y display_x display_y      xmin      xmax     ymin     ymax ex_info
-#> 1 33.74034 -84.34273  33.74034 -84.34373 -84.34173 33.73934 33.74134    <NA>
-#> 2 33.77455 -84.41243  33.77455 -84.42343 -84.40143 33.76355 33.78555    <NA>
-#> 3 33.77288 -84.41521  33.77288 -84.42021 -84.41021 33.76788 33.77788    <NA>
-#> 4 33.77927 -84.41798  33.77927 -84.42298 -84.41298 33.77427 33.78427    <NA>
-#> 5 41.88325 -87.87345  41.88325 -87.88945 -87.85745 41.86725 41.89925    <NA>
-#> 6 41.88142 -87.88312  41.88142 -87.90012 -87.86612 41.86442 41.89842    <NA>
-#> 7 41.88290 -87.87617  41.88290 -87.89317 -87.85917 41.86590 41.89990    <NA>
-#>                                    extents                   geometry
-#> 1 -84.34373, 33.73934, -84.34173, 33.74134 POINT (-84.34273 33.74034)
-#> 2 -84.42343, 33.76355, -84.40143, 33.78555 POINT (-84.41243 33.77455)
-#> 3 -84.42021, 33.76788, -84.41021, 33.77788 POINT (-84.41521 33.77288)
-#> 4 -84.42298, 33.77427, -84.41298, 33.78427 POINT (-84.41798 33.77927)
-#> 5 -87.88945, 41.86725, -87.85745, 41.89925 POINT (-87.87345 41.88325)
-#> 6 -87.90012, 41.86442, -87.86612, 41.89842 POINT (-87.88312 41.88142)
-#> 7 -87.89317, 41.86590, -87.85917, 41.89990  POINT (-87.87617 41.8829)
+
+dplyr::glimpse(res[, 1:10])
+#> Rows: 7
+#> Columns: 11
+#> $ input_id    <int> 1, 2, 3, 4, 5, 5, 5
+#> $ result_id   <int> NA, NA, NA, NA, NA, NA, NA
+#> $ loc_name    <chr> NA, NA, NA, NA, NA, NA, NA
+#> $ status      <chr> "M", "M", "M", "M", "T", "T", "T"
+#> $ score       <dbl> 100, 100, 100, 100, 100, 100, 100
+#> $ match_addr  <chr> "Bellwood Coffee", "Bellwood, Atlanta, Georgia", "Bellwood…
+#> $ long_label  <chr> "Bellwood Coffee, 1366 Glenwood Ave SE, Atlanta, GA, 30316…
+#> $ short_label <chr> "Bellwood Coffee", "Bellwood", "Bellwood Church", "Bellwoo…
+#> $ addr_type   <chr> "POI", "Locality", "POI", "POI", "Locality", "Locality", "…
+#> $ type_field  <chr> "Snacks", "City", "Church", "Building", "City", "City", "C…
+#> $ geometry    <POINT [°]> POINT (-84.34273 33.74034), POINT (-84.41243 33.77455), PO…
 ```
 
 ## *Important*: Storing results
@@ -303,23 +259,24 @@ and set your token. This example uses the [Geocoding Test
 Dataset](#%20https://datacatalog.urban.org/node/6158/revisions/14192/view)
 from the [Urban Institute](https://www.urban.org/).
 
+<div class=".callout-tip">
+
+A token *is required* to use this function with the World Geocoding
+Service. It may not be necessary if you are using a private ArcGIS
+Enterprise service.
+
+</div>
+
 ``` r
 library(arcgisutils)
 library(arcgisgeocode)
+
 set_arc_token(auth_user())
 
-# Example dataset from the Urban Institute 
+# Example dataset from the Urban Institute
 fp <- "https://urban-data-catalog.s3.amazonaws.com/drupal-root-live/2020/02/25/geocoding_test_data.csv"
 
-to_geocode <- readr::read_csv(fp)
-#> Rows: 120 Columns: 8
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr (5): full_address, address, city, state, zip
-#> dbl (3): lat_true, lon_true, diff_level
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+to_geocode <- readr::read_csv(fp, readr::locale(encoding = "latin1"))
 
 geocoded <- to_geocode |>
   dplyr::reframe(
@@ -331,27 +288,7 @@ geocoded <- to_geocode |>
     )
   )
 
-geocoded
-#> # A tibble: 120 × 59
-#>    loc_name status score match_addr  long_label short_label addr_type type_field
-#>    <chr>    <chr>  <dbl> <chr>       <chr>      <chr>       <chr>     <chr>     
-#>  1 World    M      100   500 L'Enfa… 500 L'Enf… 500 L'Enfa… PointAdd… <NA>      
-#>  2 World    M      100   200 K St N… 200 K St … 200 K St NE PointAdd… <NA>      
-#>  3 World    M      100   500 L'Enfa… 500 L'Enf… 500 L'Enfa… PointAdd… <NA>      
-#>  4 World    M      100   200 K St N… 200 K St … 200 K St NE PointAdd… <NA>      
-#>  5 World    M      100   2197 Pluml… 2197 Plum… 2197 Pluml… PointAdd… <NA>      
-#>  6 World    U        0   <NA>        <NA>       <NA>        <NA>      <NA>      
-#>  7 World    M       97.9 2197 Pluml… 2197 Plum… 2197 Pluml… PointAdd… <NA>      
-#>  8 World    M       97.0 5034 Curti… 5034 Curt… 5034 Curti… PointAdd… <NA>      
-#>  9 World    M       97.0 5034 Curti… 5034 Curt… 5034 Curti… PointAdd… <NA>      
-#> 10 World    U        0   <NA>        <NA>       <NA>        <NA>      <NA>      
-#> # ℹ 110 more rows
-#> # ℹ 51 more variables: place_name <chr>, place_addr <chr>, phone <chr>,
-#> #   url <chr>, rank <dbl>, add_bldg <chr>, add_num <chr>, add_num_from <chr>,
-#> #   add_num_to <chr>, add_range <chr>, side <chr>, st_pre_dir <chr>,
-#> #   st_pre_type <chr>, st_name <chr>, st_type <chr>, st_dir <chr>,
-#> #   bldg_type <chr>, bldg_name <chr>, level_type <chr>, level_name <chr>,
-#> #   unit_type <chr>, unit_name <chr>, sub_addr <chr>, st_addr <chr>, …
+dplyr::glimpse(res[, 1:10])
 ```
 
 ## Using other locators
@@ -372,42 +309,24 @@ address_nc <- geocode_server(
   token = NULL
 )
 
-find_address_candidates(
+res <- find_address_candidates(
   address = "rowan coffee",
   city = "asheville",
-  geocoder = address_nc,
-  token = NULL
+  geocoder = address_nc
 )
-#> Simple feature collection with 2 features and 60 fields
-#> Geometry type: POINT
-#> Dimension:     XY
-#> Bounding box:  xmin: 943428.1 ymin: 631973.4 xmax: 948500.3 ymax: 681596.4
-#> Projected CRS: NAD_1983_StatePlane_North_Carolina_FIPS_3200_Feet
-#>   input_id loc_name status score match_addr long_label short_label addr_type
-#> 1        1     <NA>      T    78  ASHEVILLE  ASHEVILLE   ASHEVILLE  Locality
-#> 2        1     <NA>      T    78  ASHEVILLE  ASHEVILLE   ASHEVILLE  Locality
-#>   type_field place_name place_addr phone  url rank add_bldg add_num
-#> 1       City  ASHEVILLE  ASHEVILLE  <NA> <NA>   20     <NA>    <NA>
-#> 2       City  ASHEVILLE  ASHEVILLE  <NA> <NA>   20     <NA>    <NA>
-#>   add_num_from add_num_to add_range side st_pre_dir st_pre_type st_name st_type
-#> 1         <NA>       <NA>      <NA> <NA>       <NA>        <NA>    <NA>    <NA>
-#> 2         <NA>       <NA>      <NA> <NA>       <NA>        <NA>    <NA>    <NA>
-#>   st_dir bldg_type bldg_name level_type level_name unit_type unit_name sub_addr
-#> 1   <NA>      <NA>      <NA>       <NA>       <NA>      <NA>      <NA>     <NA>
-#> 2   <NA>      <NA>      <NA>       <NA>       <NA>      <NA>      <NA>     <NA>
-#>   st_addr block sector nbrhd district      city metro_area subregion region
-#> 1    <NA>  <NA>   <NA>  <NA>     <NA> ASHEVILLE       <NA>  BUNCOMBE   <NA>
-#> 2    <NA>  <NA>   <NA>  <NA>     <NA> ASHEVILLE       <NA> HENDERSON   <NA>
-#>   region_abbr territory zone postal postal_ext country cntry_name lang_code
-#> 1        <NA>      <NA> <NA>   <NA>       <NA>    <NA>        USA       ENG
-#> 2        <NA>      <NA> <NA>   <NA>       <NA>    <NA>        USA       ENG
-#>   distance        x        y display_x display_y       xmin      xmax
-#> 1        0 943428.1 681596.4  943428.1  681596.4 -8530023.7 6181070.0
-#> 2        0 948500.3 631973.4  948500.3  631973.4   908369.6  988510.8
-#>         ymin       ymax      ex_info                                extents
-#> 1 -6814694.2 10142730.7 ROWAN COFFEE  -8530024, -6814694, 6181070, 10142731
-#> 2   586446.6   677555.8 ROWAN COFFEE 908369.6, 586446.6, 988510.8, 677555.8
-#>                    geometry
-#> 1 POINT (943428.1 681596.4)
-#> 2 POINT (948500.3 631973.4)
+
+dplyr::glimpse(res[, 1:10])
+#> Rows: 2
+#> Columns: 11
+#> $ input_id    <int> 1, 1
+#> $ result_id   <int> NA, NA
+#> $ loc_name    <chr> NA, NA
+#> $ status      <chr> "T", "T"
+#> $ score       <dbl> 78, 78
+#> $ match_addr  <chr> "ASHEVILLE", "ASHEVILLE"
+#> $ long_label  <chr> "ASHEVILLE", "ASHEVILLE"
+#> $ short_label <chr> "ASHEVILLE", "ASHEVILLE"
+#> $ addr_type   <chr> "Locality", "Locality"
+#> $ type_field  <chr> "City", "City"
+#> $ geometry    <POINT [US_survey_foot]> POINT (943428.1 681596.4), POINT (948500.3 631973.4)…
 ```

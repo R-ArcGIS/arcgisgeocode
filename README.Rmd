@@ -1,5 +1,6 @@
 ---
 output: github_document
+format: gfm
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -11,6 +12,7 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+library(jsonify)
 ```
 
 # arcgisgeocode
@@ -21,20 +23,25 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of arcgisgeocode is to provide access to ArcGIS geocoding services from R. Enables address candidate identification, batch geocoding, reverse geocoding, and autocomplete suggestions. 
+arcgisgeocode provides access to ArcGIS geocoding services from R. It supports address candidate identification, batch geocoding, reverse geocoding, and autocomplete suggestions. 
 
 ## Installation
 
-You can install a binary for Mac, Windows, or Ubuntu from r-universe like so: 
+Install the package from CRAN
+
+``` r
+# install from CRAN 
+install.packages("arcgisgeocode")
+```
+
+You can also install the development version from r-universe as a binary for Mac, Windows, or Ubuntu from r-universe like so: 
 
 ``` r
 # install from R-universe
-install.packages("arcgisgeocode", repos = c("https://r-arcgis.r-universe.dev", "https://cran.r-project.org"))
+install.packages("arcgisgeocode", repos = "https://r-arcgis.r-universe.dev")
 ```
 
-### Development version
-
-arcgisgeocode uses [`extendr`](https://extendr.github.io/) and requires Rust to be available to install the development version of arcgisgeocode. Follow the  [rustup instructions](https://rustup.rs/) to install Rust and verify your installation is compatible using [`rextendr::rust_sitrep()`](https://extendr.github.io/rextendr/dev/#sitrep). Then install the development version from GitHub:
+Or you can install the package from source which requires Rust to be available. Follow the  [rustup instructions](https://rustup.rs/) to install Rust and verify your installation is compatible using [`rextendr::rust_sitrep()`](https://extendr.github.io/rextendr/dev/#sitrep). Then install the development version from GitHub:
 
 ``` r
 # install pak if not available
@@ -46,15 +53,19 @@ pak::pak("r-arcgis/arcgisgeocode")
 
 ## Usage
 
-By default, the [ArcGIS World Geocoder](https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder) will be used. This geocoding server provides public access to the `/findAddressCandidates`, `/reverseGeocode`, and `/suggest` endpoints made available via the `find_address_candidates()`, `reverse_geocode()`, and `suggest_places()` functions respectively. 
+By default, the [ArcGIS World Geocoder](https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder) will be used. This geocoding server provides public access to the [`/findAddressCandidates`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-find-address-candidates.htm), [`/reverseGeocode`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-reverse-geocode.htm), and [`/suggest`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-suggest.htm) endpoints made available via the `find_address_candidates()`, `reverse_geocode()`, and `suggest_places()` functions respectively. 
 
-The batch geocoding endpoint `/geocodeAddresses` is available via `geocode_addresses()`. However, this requires the use of an authorization token and may consume credits. 
+The batch geocoding endpoint [`/geocodeAddresses`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-geocode-addresses.htm) is available via `geocode_addresses()`. However, this requires the use of an authorization token and may consume credits. 
 
 Refer to the ArcGIS World Geocoder [official documentation](https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm) for additional information on use restrictions and licensing. For example, a valid token is required to [store the results](#important-storing-results) of geocoding transactions.
 
 ### Reverse geocoding
 
 Reverse geocoding takes a location and finds the associated address. 
+
+::: .callout-tip
+A token _is not required_ to use this function.
+:::
 
 ```{r, include = FALSE}
 library(pillar)
@@ -64,11 +75,11 @@ options("arcgisgeocode.storage" = "never")
 ```{r}
 library(arcgisgeocode)
 
-# create a point
-x <- sf::st_sfc(sf::st_point(c(-117.172, 34.052)), crs = 4326)
-
 # Find addresses from locations
-reverse_geocode(x)
+rev_res <- reverse_geocode(c(-117.172, 34.052))
+
+# preview results
+dplyr::glimpse(rev_res)
 ```
 
 ### Address search
@@ -76,6 +87,10 @@ reverse_geocode(x)
 The `find_address_candidates()` function returns geocoding candidate results. The function is vectorized over the input and will perform multiple requests in parallel. Each request geocodes one location at a time. 
 
 One or more candidates are returned from the endpoint. You can limit the number of candidates using the `max_locations` argument (with a maximum of 50).
+
+::: .callout-tip
+A token _is not required_ to use this function.
+:::
 
 ```{r}
 # Find addresses from address search
@@ -87,7 +102,7 @@ candidates <- find_address_candidates(
   max_locations = 2
 )
 
-dplyr::glimpse(candidates[,1:10])
+dplyr::glimpse(candidates[, 1:10])
 ```
 
 ### Suggest locations 
@@ -96,14 +111,18 @@ Geocoding services can also provide a location suggestion based on a search term
 
 In this example we create a search extent around a single point and find suggestions based on the search term `"bellwood"`. 
 
+::: .callout-tip
+A token _is not required_ to use this function.
+:::
+
 ```{r}
 # identify a search point as a simple feature column
 location <- sf::st_sfc(
   sf::st_point(c(-84.34, 33.74)),
-   crs = 4326
+  crs = 4326
 )
 
-# buffer and create a bbox object 
+# buffer and create a bbox object to search within the extent
 search_extent <- sf::st_bbox(
   sf::st_buffer(location, 10)
 )
@@ -123,10 +142,12 @@ The result is intended to be provided to `find_address_candidates()` to complete
 ```{r}
 # get address candidate information
 # using the text and the magic key
-find_address_candidates(
+res <- find_address_candidates(
   suggestions$text,
   magic_key = suggestions$magic_key
 )
+
+dplyr::glimpse(res[, 1:10])
 ```
 
 ## *Important*: Storing results
@@ -141,15 +162,20 @@ Many addresses can be geocoded very quickly using the `geocode_addresses()` func
 
 Batch geocoding requires a signed in user. Load the [`{arcgisutils}`](https://github.com/r-arcgis/arcgisutils) to authorize and set your token. This example uses the [Geocoding Test Dataset](# https://datacatalog.urban.org/node/6158/revisions/14192/view) from the [Urban Institute](https://www.urban.org/).
 
-```{r}
+::: .callout-tip
+A token _is required_ to use this function with the World Geocoding Service. It may not be necessary if you are using a private ArcGIS Enterprise service. 
+:::
+
+```{r, eval = FALSE}
 library(arcgisutils)
 library(arcgisgeocode)
+
 set_arc_token(auth_user())
 
-# Example dataset from the Urban Institute 
+# Example dataset from the Urban Institute
 fp <- "https://urban-data-catalog.s3.amazonaws.com/drupal-root-live/2020/02/25/geocoding_test_data.csv"
 
-to_geocode <- readr::read_csv(fp)
+to_geocode <- readr::read_csv(fp, readr::locale(encoding = "latin1"))
 
 geocoded <- to_geocode |>
   dplyr::reframe(
@@ -161,7 +187,7 @@ geocoded <- to_geocode |>
     )
   )
 
-geocoded
+dplyr::glimpse(res[, 1:10])
 ```
 
 ## Using other locators 
@@ -176,10 +202,11 @@ address_nc <- geocode_server(
   token = NULL
 )
 
-find_address_candidates(
+res <- find_address_candidates(
   address = "rowan coffee",
   city = "asheville",
-  geocoder = address_nc,
-  token = NULL
+  geocoder = address_nc
 )
+
+dplyr::glimpse(res[, 1:10])
 ```

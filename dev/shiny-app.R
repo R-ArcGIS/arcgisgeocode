@@ -4,6 +4,7 @@ library(leaflet)
 library(htmltools)
 library(arcgisgeocode)
 
+# Define the UI layout using {bslib}
 ui <- page_sidebar(
   card(
     leafletOutput("map", width = "100%", height = "100%"),
@@ -18,8 +19,7 @@ ui <- page_sidebar(
 )
 
 server <- function(input, output, session) {
-  # This reactive expression represents the palette function,
-  # which changes as the user makes selections in UI.
+  # this reactively gets the center of the map thats in screen
   bounds <- reactive({
     loc <- input$map_center
     if (
@@ -29,15 +29,17 @@ server <- function(input, output, session) {
     }
   })
 
+  # extract the search text
   search_text <- reactive({
     input$search_value
   })
 
+  # whenever the search text changes
   observeEvent(search_text(), {
     # extract search text
     txt <- search_text()
 
-    # get extent bounds
+    # get map center
     bnds <- bounds()
 
     # as long as search text and bounds aren't null
@@ -47,6 +49,7 @@ server <- function(input, output, session) {
         location = bnds
       )
 
+      # add the suggestions as a fake-drop down
       output$suggests <- renderUI({
         make_suggestion_list(places)
       })
@@ -60,7 +63,7 @@ server <- function(input, output, session) {
           for_storage = FALSE
         )
 
-        # update map
+        # update map with new markers
         leafletProxy(
           "map",
           data = sf::st_geometry(search_results)
@@ -74,15 +77,13 @@ server <- function(input, output, session) {
     if (!nzchar(txt)) {
       output$suggests <- NULL
 
+      # remove the markers
       leafletProxy("map") |>
         clearMarkers()
     }
   })
 
   output$map <- renderLeaflet({
-    # Use leaflet() here, and only include aspects of the map that
-    # won't need to change dynamically (at least, not unless the
-    # entire map is being torn down and recreated).
     leaflet() |>
       # use esri canvas
       addProviderTiles(providers$Esri.WorldGrayCanvas) |>

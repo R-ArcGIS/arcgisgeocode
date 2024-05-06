@@ -292,7 +292,8 @@ pub fn parse_candidate_json(x: &str) -> Robj {
                     let extent = Doubles::from_values([xmin, ymin, xmax, ymax])
                         .into_robj()
                         .set_attrib("names", ["xmin", "ymin", "xmax", "ymax"])
-                        .unwrap();
+                        .unwrap()
+                        .to_owned();
 
                     let _ = extent_res.set_elt(i, extent);
 

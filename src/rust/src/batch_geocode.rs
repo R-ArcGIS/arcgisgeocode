@@ -229,7 +229,8 @@ pub fn parse_location_json(x: &str) -> Robj {
                         let empty_point = Doubles::from_values([Rfloat::na(), Rfloat::na()])
                             .into_robj()
                             .set_class(&["XY", "POINT", "sfg"])
-                            .unwrap();
+                            .unwrap()
+                            .to_owned();
 
                         let _ = location_res.set_elt(i, empty_point);
                     }

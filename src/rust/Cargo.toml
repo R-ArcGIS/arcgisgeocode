@@ -10,10 +10,11 @@ name = 'arcgisgeocode'
 
 [dependencies]
 extendr-api = { version = '0.6.0', features = ["serde"] }
-# reqwest = { version = "0.11.26", features = ["json"] }
 rust_iso3166 = "0.1.12"
 serde = "1.0.197"
 serde_esri = { git = "https://github.com/JosiahParry/serde_esri", version = "0.1.0" }
 serde_json = "1.0.114"
 serde_with = { version = "3.7.0", features = ["json"] }
-# tokio = { version = "1.36.0", features = ["rt-multi-thread", "macros"] }
+
+[patch.crates-io]
+extendr-api = { git = "https://github.com/extendr/extendr" }

@@ -143,6 +143,7 @@ fn as_sfg(x: EsriPoint) -> Robj {
         .into_robj()
         .set_class(&["XY", "POINT", "sfg"])
         .unwrap()
+        .to_owned()
 }
 
 #[extendr]

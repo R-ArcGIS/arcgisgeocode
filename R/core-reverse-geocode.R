@@ -1,7 +1,3 @@
-# loation_type
-# Specifies whether the output geometry of PointAddress and Subaddress matches should be the rooftop point or street entrance location. Valid values are rooftop and street. The default value is rooftop.
-
-
 #' Reverse Geocode Locations
 #'
 #' Determines the address for a given point.
@@ -37,9 +33,8 @@
 #' using Rust and returned as an sf object.
 #'
 #' @examples
-#' x <- sf::st_sfc(sf::st_point(c(-117.172, 34.052)), crs = 4326)
 #' # Find addresses from locations
-#' reverse_geocode(x)
+#' reverse_geocode(c(-117.172, 34.052))
 #' @param locations an `sfc_POINT` object of the locations to be reverse geocoded.
 #' @param crs the CRS of the returned geometries. Passed to `sf::st_crs()`.
 #'   Ignored if `locations` is not an `sfc_POINT` object.
@@ -59,6 +54,7 @@
 #' @param .progress default `TRUE`. Whether a progress bar should be provided.
 #' @inheritParams arcgisutils::arc_base_req
 #' @export
+#' @return An sf object.
 reverse_geocode <- function(
     locations,
     crs = sf::st_crs(locations),

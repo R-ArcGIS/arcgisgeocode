@@ -12,3 +12,4 @@
 ^pkgdown$
 ^tests/testdata$
 ^README\.*$
+^src/rust/vendor$

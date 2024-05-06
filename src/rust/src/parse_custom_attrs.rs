@@ -112,16 +112,19 @@ fn parse_custom_location_json_(x: &str, to_fill: List) -> Robj {
                                 .into_robj()
                                 .set_class(&["XY", "POINT", "sfg"])
                                 .unwrap()
+                                .to_owned()
                         }
                         None => Doubles::from_values([Rfloat::na(), Rfloat::na()])
                             .into_robj()
                             .set_class(&["XY", "POINT", "sfg"])
-                            .unwrap(),
+                            .unwrap()
+                            .to_owned(),
                     },
                     None => Doubles::from_values([Rfloat::na(), Rfloat::na()])
                         .into_robj()
                         .set_class(&["XY", "POINT", "sfg"])
-                        .unwrap(),
+                        .unwrap()
+                        .to_owned(),
                 }
             })
             .collect::<List>();

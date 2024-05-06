@@ -49,6 +49,9 @@ or related function}
 
 \item{.progress}{default \code{TRUE}. Whether a progress bar should be provided.}
 }
+\value{
+An sf object.
+}
 \description{
 Determines the address for a given point.
 }
@@ -87,7 +90,6 @@ using Rust and returned as an sf object.
 }
 }
 \examples{
-x <- sf::st_sfc(sf::st_point(c(-117.172, 34.052)), crs = 4326)
 # Find addresses from locations
-reverse_geocode(x)
+reverse_geocode(c(-117.172, 34.052))
 }

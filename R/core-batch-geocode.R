@@ -20,6 +20,21 @@
 #' @inheritParams find_address_candidates
 #' @inheritParams arc_base_token
 #' @export
+#' @examples
+#' # Example dataset from the Urban Institute
+#' \dontrun{
+#' fp <- paste0(
+#'   "https://urban-data-catalog.s3.amazonaws.com/",
+#'   "drupal-root-live/2020/02/25/geocoding_test_data.csv"
+#' )
+#' to_geocode <- read.csv(fp)
+#' geocode_addresses(
+#'   address = to_geocode$address,
+#'   city = to_geocode$city,
+#'   region = to_geocode$state,
+#'   postal = to_geocode$zip
+#' )
+#' }
 geocode_addresses <- function(
     single_line = NULL,
     address = NULL,

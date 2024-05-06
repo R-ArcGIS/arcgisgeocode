@@ -192,7 +192,7 @@ checksum = "5443807d6dff69373d433ab9ef5378ad8df50ca6298caf15de6e52e24aaf54d5"
 [[package]]
 name = "extendr-api"
 version = "0.6.0"
-source = "git+https://github.com/extendr/extendr#0cfed6a2f5c1181e82b551cb8dff407df523e5e2"
+source = "git+https://github.com/extendr/extendr#c215039b37b3efc6e7c1f6c2f5842c7ade52fbbe"
 dependencies = [
  "extendr-macros",
  "libR-sys",
@@ -204,7 +204,7 @@ dependencies = [
 [[package]]
 name = "extendr-macros"
 version = "0.6.0"
-source = "git+https://github.com/extendr/extendr#0cfed6a2f5c1181e82b551cb8dff407df523e5e2"
+source = "git+https://github.com/extendr/extendr#c215039b37b3efc6e7c1f6c2f5842c7ade52fbbe"
 dependencies = [
  "proc-macro2",
  "quote",

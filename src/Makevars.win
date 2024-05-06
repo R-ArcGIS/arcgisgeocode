@@ -3,7 +3,7 @@ TARGET = $(subst 64,x86_64,$(subst 32,i686,$(WIN)))-pc-windows-gnu
 TARGET_DIR = ./rust/target
 LIBDIR = $(TARGET_DIR)/$(TARGET)/release
 STATLIB = $(LIBDIR)/libarcgisgeocode.a
-PKG_LIBS = -L$(LIBDIR) -larcgisgeocode -lws2_32 -ladvapi32 -luserenv -lbcrypt -lntdll -lssl
+PKG_LIBS = -L$(LIBDIR) -larcgisgeocode -lws2_32 -ladvapi32 -luserenv -lbcrypt -lntdll -lssl -lcrypto 
 CRAN_FLAGS=-j 2 --offline
 
 all: C_clean

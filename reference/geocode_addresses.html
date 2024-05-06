@@ -222,6 +222,24 @@ using Rust and returned as an sf object.</p>
 <p>Utilizes the <a href="https://developers.arcgis.com/rest/geocode/api-reference/geocoding-geocode-addresses.htm" class="external-link"><code>/geocodeAddresses</code></a> endpoint.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example dataset from the Urban Institute</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">fp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"https://urban-data-catalog.s3.amazonaws.com/"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"drupal-root-live/2020/02/25/geocoding_test_data.csv"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">to_geocode</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">fp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">geocode_addresses</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  address <span class="op">=</span> <span class="va">to_geocode</span><span class="op">$</span><span class="va">address</span>,</span></span>
+<span class="r-in"><span>  city <span class="op">=</span> <span class="va">to_geocode</span><span class="op">$</span><span class="va">city</span>,</span></span>
+<span class="r-in"><span>  region <span class="op">=</span> <span class="va">to_geocode</span><span class="op">$</span><span class="va">state</span>,</span></span>
+<span class="r-in"><span>  postal <span class="op">=</span> <span class="va">to_geocode</span><span class="op">$</span><span class="va">zip</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

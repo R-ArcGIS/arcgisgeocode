@@ -13,3 +13,4 @@
 ^tests/testdata$
 ^README\.*$
 ^src/rust/vendor$
+^\./src/\.cargo$

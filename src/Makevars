@@ -22,6 +22,7 @@ $(STATLIB):
 		export PATH="$(PATH):$(HOME)/.cargo/bin" && \
 		cargo build $(CRAN_FLAGS) --lib --release --manifest-path=./rust/Cargo.toml --target-dir $(TARGET_DIR); \
 		rm -Rf $(CARGOTMP) && \
+		rm -Rf $(VENDOR_DIR) && \
 		rm -Rf $(LIBDIR)/build; \
 	else \
 		export PATH="$(PATH):$(HOME)/.cargo/bin" && \
@@ -29,7 +30,7 @@ $(STATLIB):
 	fi
 
 C_clean:
-	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS)
+	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) $(TARGET_DIR) $(VENDOR_DIR)
 
 clean:
-		rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) rust/target
+		rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) $(TARGET_DIR) $(VENDOR_DIR)

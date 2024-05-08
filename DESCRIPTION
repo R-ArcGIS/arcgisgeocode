@@ -34,7 +34,7 @@ Encoding: UTF-8
 Language: en
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
-SystemRequirements: Cargo (Rust's package manager), rustc
+SystemRequirements: Cargo (Rust's package manager), rustc, OpenSSL
 Depends: 
     R (>= 2.10)
 LazyData: true

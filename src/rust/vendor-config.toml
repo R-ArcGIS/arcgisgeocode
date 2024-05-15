@@ -1,12 +1,8 @@
 [source.crates-io]
 replace-with = "vendored-sources"
 
-[source."git+https://github.com/JosiahParry/serde_esri"]
-git = "https://github.com/JosiahParry/serde_esri"
-replace-with = "vendored-sources"
-
-[source."git+https://github.com/extendr/extendr"]
-git = "https://github.com/extendr/extendr"
+[source."git+https://github.com/josiahparry/serde_esri"]
+git = "https://github.com/josiahparry/serde_esri"
 replace-with = "vendored-sources"
 
 [source.vendored-sources]

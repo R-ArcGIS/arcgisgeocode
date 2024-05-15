@@ -9,11 +9,13 @@ crate-type = ['staticlib']
 name = 'arcgisgeocode'
 
 [dependencies]
-extendr-api = { git = "https://github.com/extendr/extendr", features = [
-    "serde",
-] }
-rust_iso3166 = "0.1.12"
-serde = "1.0.197"
-serde_esri = { git = "https://github.com/JosiahParry/serde_esri", version = "0.1.0" }
-serde_json = "1.0.114"
-serde_with = { version = "3.7.0", features = ["json"] }
+extendr-api = { version = "0.6.0", features = ["serde"] }
+# rust_iso3166 = "0.1.12"
+serde = "*"
+serde_esri = { git = "https://github.com/josiahparry/serde_esri" }
+serde_json = "*"
+serde_with = { version = "*" }
+
+[profile.release]
+lto = true
+codegen-units = 1

@@ -21,16 +21,14 @@ $(STATLIB):
 		export CARGO_HOME=$(CARGOTMP); \
 		export PATH="$(PATH):$(HOME)/.cargo/bin" && \
 		cargo build $(CRAN_FLAGS) --lib --release --manifest-path=./rust/Cargo.toml --target-dir $(TARGET_DIR); \
-		rm -Rf $(CARGOTMP) && \
-		rm -Rf $(VENDOR_DIR) && \
-		rm -Rf $(LIBDIR)/build; \
+			rm -Rf $(CARGOTMP) $(VENDOR_DIR) $(LIBDIR)/build; \
 	else \
 		export PATH="$(PATH):$(HOME)/.cargo/bin" && \
 		cargo build --lib --release --manifest-path=./rust/Cargo.toml --target-dir $(TARGET_DIR); \
 	fi
 
 C_clean:
-	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) $(TARGET_DIR) $(VENDOR_DIR)
+	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) 
 
 clean:
 		rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) $(TARGET_DIR) $(VENDOR_DIR)

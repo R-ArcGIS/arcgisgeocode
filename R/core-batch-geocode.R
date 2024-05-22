@@ -195,17 +195,20 @@ geocode_addresses <- function(
   # check the batch size and ensure it conforms
   max_batch_size <- geocoder[["locatorProperties"]][["MaxBatchSize"]]
 
+  # this is the suggested batch size
   suggested_batch_size <- geocoder[["locatorProperties"]][["SuggestedBatchSize"]]
 
+  # set batch_size if null
   if (is.null(batch_size)) {
-    # batch_size <- 150L
-    batch_size <- suggested_batch_size %||% 150L
+    # split the difference between max and suggested if not provided
+    # this gives us balanced number
+    batch_size <- mean(c(suggested_batch_size, max_batch_size))
   } else if (batch_size > max_batch_size) {
     cli::cli_warn(c(
       "{.arg batch_size} exceeds maximum supported by service: {max_batch_size}",
-      "!" = "using suggested batch size of {suggested_batch_size}"
+      "!" = "using batch size of {suggested_batch_size}"
     ))
-
+    # if batch_size is bigger than max use max
     batch_size <- suggested_batch_size
   }
 
@@ -271,7 +274,9 @@ geocode_addresses <- function(
   all_resps <- httr2::req_perform_parallel(
     all_reqs,
     on_error = "continue",
-    progress = .progress
+    progress = .progress,
+    # per Geocoding team request, reduce connection threads
+    pool = curl::new_pool(host_con = 3)
   )
 
   # Before we can process the responses, we must know if
@@ -357,16 +362,6 @@ parse_custom_loc_json <- function(json, geocoder, n, call = rlang::caller_env())
   tbl_to_fill <- ptype_tbl(geocoder$candidateFields[, c("name", "type")], n = n, call = call)
   parse_custom_location_json_(json, tbl_to_fill)
 }
-
-# parse_custom_location_json <- function(x) {
-#   raw_res <- RcppSimdJson::fparse(x)
-#   attrs <- data.frame(raw_res$locations$attributes)
-#   list(
-#     attributes = attrs,
-#     locations = custom_locs_as_sfc_point(raw_res$locations$location),
-#     sr = raw_res$spatialReference
-#   )
-# }
 
 custom_locs_as_sfc_point <- function(x) {
   lapply(x, function(.x) {

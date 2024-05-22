@@ -15,7 +15,7 @@ Description: A very fast and robust interface to ArcGIS 'Geocoding
     <https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm>.
 License: Apache License (>= 2)
 URL: https://github.com/r-arcgis/arcgisgeocode,
-    https://r.esri.com/arcgisgeocode
+    https://r.esri.com/arcgisgeocode/
 Imports: 
     arcgisutils (>= 0.3.0),
     cli,

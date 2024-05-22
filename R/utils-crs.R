@@ -6,7 +6,7 @@
 #' recognized as an Esri WKID.
 #'
 #' @details
-#' Esri WKIDs were identified from the [`{arcgeocoder}`](https://cran.r-project.org/web/packages/arcgeocoder/index.html) package from
+#' Esri WKIDs were identified from the [`{arcgeocoder}`](https://cran.r-project.org/package=arcgeocoder) package from
 #' [\@dieghernan](https://github.com/dieghernan).
 #'
 #' @param wkid an integer scalar

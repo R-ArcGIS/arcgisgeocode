@@ -1,21 +1,23 @@
 Package: arcgisgeocode
-Title: A Robust Interface to ArcGIS Geocode Services
-Version: 0.0.0.9006
+Title: A Robust Interface to ArcGIS 'Geocoding Services'
+Version: 0.1.0
 Authors@R: 
     person("Josiah", "Parry", , "josiah.parry@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9910-865X"))
-Description: A very fast and robust interface to 'ArcGIS Geocode
-    Services.' Provides capabilities to reverse geocode, find address
-    candidates, search autosuggestion, and batch geocoding. The public
-    'ArcGIS World Geocoder' is accessible for free use via 'arcgisgeocode'
-    for all services except batch geocoding.  'arcgisgeocode' also
-    integrates with 'arcgisutils' to provide access to custom locators or
-    'ArcGIS World Geocoder's hosted on 'ArcGIS Enterprise'.
+Description: A very fast and robust interface to ArcGIS 'Geocoding
+    Services'. Provides capabilities for reverse geocoding, finding
+    address candidates, character-by-character search autosuggestion, and
+    batch geocoding. The public 'ArcGIS World Geocoder' is accessible for
+    free use via 'arcgisgeocode' for all services except batch geocoding.
+    'arcgisgeocode' also integrates with 'arcgisutils' to provide access
+    to custom locators or private 'ArcGIS World Geocoder' hosted on
+    'ArcGIS Enterprise'. Learn more in the 'Geocode service' API reference
+    <https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm>.
 License: Apache License (>= 2)
 URL: https://github.com/r-arcgis/arcgisgeocode,
     https://r.esri.com/arcgisgeocode
 Imports: 
-    arcgisutils (>= 0.2.0.9000),
+    arcgisutils (>= 0.3.0),
     cli,
     curl,
     httr2 (>= 1.0.0),
@@ -27,15 +29,13 @@ Suggests:
     data.table,
     dplyr,
     testthat (>= 3.0.0)
-Remotes:
-    R-ArcGIS/arcgisutils
 Config/rextendr/version: 0.3.1.9000
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
-SystemRequirements: Cargo (Rust's package manager), rustc, OpenSSL
+SystemRequirements: Cargo (Rust's package manager), rustc
 Depends: 
     R (>= 2.10)
 LazyData: true

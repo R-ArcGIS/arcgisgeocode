@@ -8,6 +8,7 @@ utils::globalVariables(c("world_geocoder", "esri_wkids"))
 #' [`reverse_geocode()`], and [`suggest_places()`] can be used without an
 #' authorization token. The [`geocode_addresses()`] funciton requires an
 #' authorization token to be used for batch geocoding.
+#' @returns an object of class `GeocodeServer`
 "world_geocoder"
 
 
@@ -17,4 +18,5 @@ utils::globalVariables(c("world_geocoder", "esri_wkids"))
 #' spatial references.
 #' Esri WKIDs were identified from the [`{arcgeocoder}`](https://cran.r-project.org/web/packages/arcgeocoder/index.html) package from
 #' [@dieghernan](https://github.com/dieghernan).
+#' @returns a numeric vector of well-known IDs
 "esri_wkids"

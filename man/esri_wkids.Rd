@@ -10,6 +10,9 @@ An object of class \code{integer} of length 2886.
 \usage{
 esri_wkids
 }
+\value{
+a numeric vector of well-known IDs
+}
 \description{
 An integer vector containing the WKIDs of Esri authority
 spatial references.

@@ -20,6 +20,7 @@
 #' @inheritParams find_address_candidates
 #' @inheritParams arc_base_token
 #' @export
+#' @return an `sf` object
 #' @examples
 #' # Example dataset from the Urban Institute
 #' \dontrun{

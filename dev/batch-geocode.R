@@ -40,3 +40,8 @@ bm <- bench::mark(
 )
 
 readr::write_csv(bm[, 1:9], "dev/yelp-timing.csv")
+
+
+tictoc::tic()
+geo_res <- geocode_addresses(addresses)
+(timing <- tictoc::toc())

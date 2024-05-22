@@ -10,6 +10,9 @@ An object of class \code{GeocodeServer} (inherits from \code{list}) of length 12
 \usage{
 world_geocoder
 }
+\value{
+an object of class \code{GeocodeServer}
+}
 \description{
 The \href{https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder}{ArcGIS World Geocoder}
 is made publicly available for some uses. The \code{world_geocoder} object is used

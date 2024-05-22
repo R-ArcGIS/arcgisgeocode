@@ -114,6 +114,9 @@ or related function}
 
 \item{.progress}{default \code{TRUE}. Whether a progress bar should be provided.}
 }
+\value{
+an \code{sf} object
+}
 \description{
 Gecocode a vector of addresses in batches.
 }

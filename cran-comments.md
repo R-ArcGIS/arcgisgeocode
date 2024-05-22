@@ -29,3 +29,7 @@ R-hub runners:
 ArcGIS is a brand name and not the name of a specific software. 
 
 The phrase 'Geocoding service' refers to a spefic API which can be considered software. This is quoted in the DESCRIPTION file. Additionally, 'ArcGIS World Geocoder' and 'ArcGIS Enterprise' are products and software offering which is why they are quoted.
+
+## Use of \dontrun
+
+The use of dontrun is to ensure that the geocoding services are not called as they often require a user credential. And we do not want automatic testing to burden the public service.

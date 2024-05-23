@@ -16,7 +16,7 @@ a numeric vector of well-known IDs
 \description{
 An integer vector containing the WKIDs of Esri authority
 spatial references.
-Esri WKIDs were identified from the \href{https://cran.r-project.org/web/packages/arcgeocoder/index.html}{\code{{arcgeocoder}}} package from
+Esri WKIDs were identified from the \href{https://cran.r-project.org/package=arcgeocoder}{\code{{arcgeocoder}}} package from
 \href{https://github.com/dieghernan}{@dieghernan}.
 }
 \keyword{datasets}

@@ -290,7 +290,9 @@ geocode_addresses <- function(
     string <- httr2::resp_body_string(.resp)
     parse_locations_res(
       string,
-      use_custom_json_processing
+      use_custom_json_processing,
+      n,
+      geocoder
     )
   })
 
@@ -400,6 +402,11 @@ sort_asap <- function(.df, .col, call = rlang::caller_env()) {
   check_data_frame(.df)
 
   if (nrow(.df) == 0) {
+    return(.df)
+  }
+
+  if (is.null(.df[[.col]])) {
+    cli::cli_warn("Column {.val result_id} is not present. Results may be out of order.")
     return(.df)
   }
 

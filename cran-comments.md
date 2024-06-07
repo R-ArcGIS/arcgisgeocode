@@ -10,7 +10,7 @@ This package vendors **Rust dependencies** resulting in a 13mb .xz file. Final i
 
 GitHub Actions:
 
-- {os: macos-latest,   r: 'release'}
+- {os: macos-latest,   r: 'release'} 
 - {os: windows-latest, r: 'release'}
 - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
 - {os: ubuntu-latest,   r: 'release'}
@@ -33,3 +33,7 @@ The phrase 'Geocoding service' refers to a spefic API which can be considered so
 ## Use of \dontrun
 
 The use of dontrun is to ensure that the geocoding services are not called as they often require a user credential. And we do not want automatic testing to burden the public service.
+
+## Resubmission
+
+The CRAN url has been transitioned to use the canonical form package=pkgname

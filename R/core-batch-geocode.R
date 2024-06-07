@@ -324,7 +324,13 @@ geocode_addresses <- function(
     for (cnd in error_messages) rlang::cnd_signal(cnd)
   }
 
-  sort_asap(results, "result_id")
+  sort_col <- if (use_custom_json_processing) {
+    "ResultID"
+  } else {
+    "result_id"
+  }
+
+  sort_asap(results, sort_col)
 }
 
 parse_locations_res <- function(
@@ -362,7 +368,14 @@ parse_locations_res <- function(
 #' @keywords internal
 #' @noRd
 parse_custom_loc_json <- function(json, geocoder, n, call = rlang::caller_env()) {
-  tbl_to_fill <- ptype_tbl(geocoder$candidateFields[, c("name", "type")], n = n, call = call)
+  tbl_to_fill <- ptype_tbl(
+    rbind(
+      c("ResultID", "esriFieldTypeInteger"),
+      geocoder$candidateFields[, c("name", "type")]
+    ),
+    n = n,
+    call = call
+  )
   parse_custom_location_json_(json, tbl_to_fill)
 }
 
@@ -405,8 +418,9 @@ sort_asap <- function(.df, .col, call = rlang::caller_env()) {
     return(.df)
   }
 
+  # check to see if `.col` exists
   if (is.null(.df[[.col]])) {
-    cli::cli_warn("Column {.val result_id} is not present. Results may be out of order.")
+    cli::cli_warn("Column {.val {.col}} is not present. Results may be out of order.")
     return(.df)
   }
 

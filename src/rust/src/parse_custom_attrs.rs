@@ -58,8 +58,15 @@ fn parse_custom_location_json_(x: &str, to_fill: List) -> Robj {
     let mut to_fill = to_fill;
 
     let mut res: Value = from_str(x).unwrap();
+
     let res = res.as_object_mut();
+
     let locs = res.filter(|xi| xi.contains_key("locations"));
+
+    if locs.is_none() {
+        return ().into_robj();
+    }
+    // rprintln!("Did we find locations?: {:?}", locs.is_some());
 
     // create bindings to set from inside the scope of the iterator
     let mut res_locs = ().into_robj();

@@ -14,7 +14,6 @@ server <- function(input, output, session) {
   # This reactive expression represents the palette function,
   # which changes as the user makes selections in UI.
 
-
   observeEvent(input$map_click, {
     # get the click location
     click <- input$map_click

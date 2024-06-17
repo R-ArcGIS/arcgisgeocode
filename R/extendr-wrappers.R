@@ -6,6 +6,7 @@
 # This file was created with the following call:
 #   .Call("wrap__make_arcgisgeocode_wrappers", use_symbols = TRUE, package_name = "arcgisgeocode")
 
+#' @docType package
 #' @usage NULL
 #' @useDynLib arcgisgeocode, .registration = TRUE
 NULL

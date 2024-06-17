@@ -203,7 +203,7 @@ geocode_addresses <- function(
   if (is.null(batch_size)) {
     # split the difference between max and suggested if not provided
     # this gives us balanced number
-    batch_size <- mean(c(suggested_batch_size, max_batch_size))
+    batch_size <- floor(mean(c(suggested_batch_size, max_batch_size)))
   } else if (batch_size > max_batch_size) {
     cli::cli_warn(c(
       "{.arg batch_size} exceeds maximum supported by service: {max_batch_size}",
@@ -285,17 +285,25 @@ geocode_addresses <- function(
   # RcppSimdJson and _not_ the Rust based implementation
   use_custom_json_processing <- has_custom_fields(geocoder)
 
-  # TODO Handle errors
-  all_results <- lapply(all_resps, function(.resp) {
+  # pre-allocate the result list
+  all_results <- vector(mode = "list", n_chunks)
+
+  # browser()
+  for (i in seq_len(n_chunks)) {
+    .resp <- all_resps[[i]]
     string <- httr2::resp_body_string(.resp)
-    parse_locations_res(
+    start <- indices[["start"]][i]
+    end <- indices[["end"]][i]
+    n <- (end - start) + 1
+    all_results[[i]] <- parse_locations_res(
       string,
       use_custom_json_processing,
       n,
       geocoder
     )
-  })
+  }
 
+  # browser()
   # combine all the results
   results <- rbind_results(all_results)
 

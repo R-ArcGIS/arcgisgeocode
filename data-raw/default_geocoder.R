@@ -16,4 +16,4 @@ world_geocoder <- structure(
   class = c("GeocodeServer", "list")
 )
 
-usethis::use_data(world_geocoder, overwrite = TRUE)
+usethis::use_data(world_geocoder, overwrite = TRUE, internal = TRUE)

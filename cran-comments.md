@@ -2,9 +2,10 @@
 
 This package vendors **Rust dependencies** resulting in a 13mb .xz file. Final installation size is 1.3mb
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 0 note
 
-* This is a new release.
+ - Addresses CRAN error for MacOS old rel https://www.r-project.org/nosvn/R.check/r-oldrel-macos-x86_64/arcgisgeocode-00check.html
+
 
 ## tarball size
 
@@ -32,6 +33,3 @@ The phrase 'Geocoding service' refers to a spefic API which can be considered so
 
 The use of dontrun is to ensure that the geocoding services are not called as they often require a user credential. And we do not want automatic testing to burden the public service.
 
-## Resubmission
-
-The CRAN url has been transitioned to use the canonical form package=pkgname

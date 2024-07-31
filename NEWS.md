@@ -1,3 +1,7 @@
+# arcgisgeocode 0.2.1 
+
+- Address CRAN error on MacOS oldrel
+
 # arcgisgeocode 0.2.0
 
 - The minimum version of R supported is R `4.2` 

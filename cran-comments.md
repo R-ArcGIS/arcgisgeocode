@@ -6,6 +6,11 @@ This package vendors **Rust dependencies** resulting in a 13mb .xz file. Final i
 
 * This is a new release.
 
+## tarball size
+
+This R package vendors its Rust dependencies. As such, the vendor.tar.xz file is fairly large. 
+After compilation and installation, the R package is only 1.3mb on Mac. 
+
 ## Testing Environments
 
 GitHub Actions:
@@ -16,13 +21,6 @@ GitHub Actions:
 - {os: ubuntu-latest,   r: 'release'}
 - {os: ubuntu-latest,   r: 'oldrel-1'}
 - {os: ubuntu-latest,   r: 'oldrel-2'}
-- {os: ubuntu-latest,   r: 'oldrel-3'}
-
-R-hub runners: 
-
-- MacOS Arm64 (r-devel) https://github.com/R-ArcGIS/arcgisgeocode/actions/runs/9194388518/
-- Linux (r-devel) https://github.com/R-ArcGIS/arcgisgeocode/actions/runs/9194388518/
-- Windows (r-devel) https://github.com/R-ArcGIS/arcgisgeocode/actions/runs/9194388518/
 
 ## Software Naming
 

@@ -162,7 +162,7 @@ geocode_addresses <- function(
 
   if (!is.null(single_line)) {
     too_long <- nchar(single_line) > 200
-    if (any(too_long)) {
+    if (any(too_long, na.rm = TRUE)) {
       ids <- which(too_long)
       cli::cli_abort(
         c(

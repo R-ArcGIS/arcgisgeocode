@@ -13,7 +13,7 @@
 #' @keywords internal
 #' @noRd
 parse_wkid <- function(wkid) {
-  is_esri_srid <- any(wkid == esri_wkids)
+  is_esri_srid <- any(wkid == arcgisgeocode::esri_wkids)
   if (is_esri_srid) {
     sf::st_crs(paste("ESRI", wkid, sep = ":"))
   } else {

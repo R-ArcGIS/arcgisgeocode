@@ -1,12 +1,3 @@
-# Make world_geocoder and esri_wkids available on load
-.onLoad <- function(lib, pkg) {
-  utils::data(
-    list = c("world_geocoder", "esri_wkids"),
-    package = pkg,
-    envir = parent.env(environment())
-  )
-}
-
 #' ArcGIS World Geocoder
 #'
 #' The [ArcGIS World Geocoder](https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder)

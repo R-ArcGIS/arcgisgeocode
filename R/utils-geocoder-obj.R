@@ -68,5 +68,12 @@ capabilities <- function(geocoder) {
 #' @keywords internal
 #' @noRd
 has_custom_fields <- function(x) {
-  length(setdiff(x$candidateFields$name, world_geocoder$candidateFields$name)) > 0
+  fields <- length(
+    setdiff(
+      x$candidateFields$name,
+      arcgisgeocode::world_geocoder$candidateFields$name
+    )
+  )
+
+  fields > 0
 }

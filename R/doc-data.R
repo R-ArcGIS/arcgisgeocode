@@ -1,4 +1,3 @@
-utils::globalVariables(c("world_geocoder", "esri_wkids"))
 #' ArcGIS World Geocoder
 #'
 #' The [ArcGIS World Geocoder](https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder)

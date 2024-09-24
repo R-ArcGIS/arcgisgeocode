@@ -136,77 +136,10 @@ queries such as those made in a search bar.</p>
 <span class="r-in"><span>  <span class="va">suggestions</span><span class="op">$</span><span class="va">text</span>,</span></span>
 <span class="r-in"><span>  magic_key <span class="op">=</span> <span class="va">suggestions</span><span class="op">$</span><span class="va">magic_key</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 5 features and 61 fields</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -84.34272 ymin: 33.74034 xmax: -84.34272 ymax: 33.74034</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   input_id result_id loc_name status score                 match_addr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        1        NA     &lt;NA&gt;      M   100            Bellwood Coffee</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        2        NA     &lt;NA&gt;      M   100             Bellwood Homes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        3        NA     &lt;NA&gt;      M   100 Bellwood, Atlanta, Georgia</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        4        NA     &lt;NA&gt;      M   100            Bellwood Coffee</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        5        NA     &lt;NA&gt;      M   100            Bellwood Church</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                       long_label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Bellwood Coffee, 1366 Glenwood Ave SE, Atlanta, GA, 30316, USA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   Bellwood Homes, 736 Jefferson St NW, Atlanta, GA, 30318, USA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                     Bellwood, Atlanta, GA, USA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Bellwood Coffee, 1776 Peachtree St NW, Atlanta, GA, 30309, USA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                              Bellwood Church, Atlanta, GA, USA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       short_label addr_type              type_field      place_name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Bellwood Coffee       POI                  Snacks Bellwood Coffee</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  Bellwood Homes       POI Other Shops and Service  Bellwood Homes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        Bellwood  Locality                    City        Bellwood</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Bellwood Coffee       POI                  Snacks Bellwood Coffee</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Bellwood Church       POI                  Church Bellwood Church</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                      place_addr          phone  url rank</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1366 Glenwood Ave SE, Atlanta, Georgia, 30316           &lt;NA&gt; &lt;NA&gt;   19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  736 Jefferson St NW, Atlanta, Georgia, 30318 (404) 977-5801 &lt;NA&gt;   19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                              Atlanta, Georgia           &lt;NA&gt; &lt;NA&gt;   20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 1776 Peachtree St NW, Atlanta, Georgia, 30309           &lt;NA&gt; &lt;NA&gt;   19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                              Atlanta, Georgia           &lt;NA&gt; &lt;NA&gt;   24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   add_bldg add_num add_num_from add_num_to add_range side st_pre_dir</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     &lt;NA&gt;    1366         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     &lt;NA&gt;     736         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     &lt;NA&gt;    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     &lt;NA&gt;    1776         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5     &lt;NA&gt;    &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   st_pre_type   st_name st_type st_dir bldg_type bldg_name level_type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        &lt;NA&gt;  Glenwood     Ave     SE      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        &lt;NA&gt; Jefferson      St     NW      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        &lt;NA&gt;      &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        &lt;NA&gt; Peachtree      St     NW      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        &lt;NA&gt;      &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   level_name unit_type unit_name sub_addr              st_addr block sector</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt; 1366 Glenwood Ave SE  &lt;NA&gt;   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;  736 Jefferson St NW  &lt;NA&gt;   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt; 1776 Peachtree St NW  &lt;NA&gt;   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;                 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   nbrhd district    city metro_area     subregion  region region_abbr territory</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  &lt;NA&gt;     &lt;NA&gt; Atlanta       &lt;NA&gt; DeKalb County Georgia          GA      &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  &lt;NA&gt;     &lt;NA&gt; Atlanta       &lt;NA&gt; Fulton County Georgia          GA      &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  &lt;NA&gt; Bellwood Atlanta       &lt;NA&gt; Fulton County Georgia          GA      &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  &lt;NA&gt;     &lt;NA&gt; Atlanta       &lt;NA&gt; Fulton County Georgia          GA      &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  &lt;NA&gt;     &lt;NA&gt; Atlanta       &lt;NA&gt; Fulton County Georgia          GA      &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   zone postal postal_ext country    cntry_name lang_code distance         x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 &lt;NA&gt;  30316       &lt;NA&gt;     USA United States       ENG        0 -84.34272</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 &lt;NA&gt;  30318       &lt;NA&gt;     USA United States       ENG        0 -84.41127</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA United States       ENG        0 -84.41243</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 &lt;NA&gt;  30309       &lt;NA&gt;     USA United States       ENG        0 -84.39418</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;     USA United States       ENG        0 -84.41521</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          y display_x display_y      xmin      xmax     ymin     ymax ex_info</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 33.74034 -84.34272  33.74034 -84.34372 -84.34172 33.73935 33.74135    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 33.77591 -84.41127  33.77591 -84.41227 -84.41027 33.77491 33.77691    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 33.77455 -84.41243  33.77455 -84.42343 -84.40143 33.76355 33.78555    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 33.80282 -84.39418  33.80282 -84.39518 -84.39318 33.80182 33.80382    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 33.77288 -84.41521  33.77288 -84.42021 -84.41021 33.76788 33.77788    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                    extents                   geometry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -84.34372, 33.73935, -84.34172, 33.74135 POINT (-84.34272 33.74034)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -84.41227, 33.77491, -84.41027, 33.77691 POINT (-84.41127 33.77591)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -84.42343, 33.76355, -84.40143, 33.78555 POINT (-84.41243 33.77455)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -84.39518, 33.80182, -84.39318, 33.80382 POINT (-84.39418 33.80282)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -84.42021, 33.76788, -84.41021, 33.77788 POINT (-84.41521 33.77288)</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #BB0000;">✖</span> Issues encountered when processing responses 1, 2, 3, 4, and 5</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> access problem requests with `attr(result, "error_requests")`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] input_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;0 rows&gt; (or 0-length row.names)</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -218,7 +151,7 @@ queries such as those made in a search bar.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>

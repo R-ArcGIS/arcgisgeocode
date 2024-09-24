@@ -209,6 +209,19 @@ pub fn create_records(
     serde_json::to_string(&recs).unwrap()
 }
 
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+struct ErrorCode {
+    code: i32,
+    extended_code: Option<i32>,
+    message: Option<String>,
+    details: Option<Vec<String>>
+}
+#[derive(Debug, Clone, Deserialize, Serialize)]
+struct ErrorMsg {
+    error: ErrorCode
+}
+
 #[extendr]
 pub fn parse_location_json(x: &str) -> Robj {
     let parsed = serde_json::from_str::<GeocodeAdddressesResults>(x);
@@ -248,7 +261,19 @@ pub fn parse_location_json(x: &str) -> Robj {
             )
             .into_robj()
         }
-        Err(_) => ().into_robj(),
+        Err(_) => {
+            match serde_json::from_str::<ErrorMsg>(x) {
+                Ok(e) => {
+                    let err = e.error;
+                    let fmt = format!("Error occured parsing response:\n{}: {} {}", err.code, err.message.unwrap_or("".into()), err.details.unwrap_or(vec![]).join(" "));
+                    eprintln!("{fmt}");
+                }
+                Err(e) => {
+                    eprintln!("Error occured parsing : {:?}", e.to_string());
+                }
+            }
+            ().into_robj()
+        },
     }
 }
 

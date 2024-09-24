@@ -9,15 +9,12 @@ crate-type = ['staticlib']
 name = 'arcgisgeocode'
 
 [dependencies]
-extendr-api = { version = "0.7.0", features = ["serde"] }
+extendr-api = { version = "0.7", features = ["serde"] }
 rust_iso3166 = "0.1.12"
 serde = "*"
 serde_esri = { git = "https://github.com/josiahparry/serde_esri" }
 serde_json = "*"
 serde_with = { version = "*" }
-
-[patch.crates-io]
-libR-sys = { git = "https://github.com/extendr/libR-sys", rev = "976c56d396175f8d09548b0a1f0a77fc393018f2" }
 
 [profile.release]
 lto = true

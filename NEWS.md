@@ -1,5 +1,9 @@
 # arcgisgeocode (development version)
 
+- Bumps version of extendr-api to address CRAN checks 
+- Bumps version of httr2 due to regression [#34](https://github.com/R-ArcGIS/arcgisgeocode/issues/34)
+- Bug fixes with unexported objects and NA handling by [@elipousson] [#37](https://github.com/R-ArcGIS/arcgisgeocode/pull/37)
+
 # arcgisgeocode 0.2.1 
 
 - Address CRAN error on MacOS oldrel

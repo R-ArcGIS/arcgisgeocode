@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">arcgisgeocode</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -222,8 +222,6 @@ using Rust and returned as an sf object.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">candidates_from_single</span> <span class="op">&lt;-</span> <span class="fu">find_address_candidates</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  single_line <span class="op">=</span> <span class="st">"Bellwood Coffee, 1366 Glenwood Ave SE, Atlanta, GA, 30316, USA"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #BB0000;">✖</span> Issue encountered when processing response 1</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> access problem requests with `attr(result, "error_requests")`</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">candidates_from_parts</span> <span class="op">&lt;-</span> <span class="fu">find_address_candidates</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  address <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Bellwood Coffee"</span>, <span class="st">"Joe's coffeehouse"</span><span class="op">)</span>,</span></span>
@@ -233,56 +231,81 @@ using Rust and returned as an sf object.</p>
 <span class="r-in"><span>  postal <span class="op">=</span> <span class="st">"30316"</span>,</span></span>
 <span class="r-in"><span>  country_code <span class="op">=</span> <span class="st">"USA"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #BB0000;">✖</span> Issues encountered when processing responses 1 and 2</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> access problem requests with `attr(result, "error_requests")`</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">candidates_from_parts</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 'data.frame':	0 obs. of  1 variable:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ input_id: int </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "error_requests")=List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ :List of 7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ url     : chr "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=json"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ method  : NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ headers : list()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ body    :List of 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ data        :List of 7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. ..$ address    : 'AsIs' chr "Bellwood%20Coffee"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. ..$ address2   : 'AsIs' chr "1366%20Glenwood%20Ave%20SE"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. ..$ city       : 'AsIs' chr "Atlanta"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. ..$ region     : 'AsIs' chr "GA"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. ..$ postal     : 'AsIs' chr "30316"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. ..$ countryCode: 'AsIs' chr "USA"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. ..$ outFields  : 'AsIs' chr "%2A"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ type        : chr "form"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ content_type: chr "application/x-www-form-urlencoded"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ params      : list()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ fields  : list()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ options :List of 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ useragent: chr "arcgisutils v0.3.0"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ policies: list()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "class")= chr "httr2_request"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ :List of 7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ url     : chr "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=json"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ method  : NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ headers : list()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ body    :List of 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ data        :List of 7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. ..$ address    : 'AsIs' chr "Joe%27s%20coffeehouse"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. ..$ address2   : 'AsIs' chr "510%20Flat%20Shoals%20Ave"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. ..$ city       : 'AsIs' chr "Atlanta"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. ..$ region     : 'AsIs' chr "GA"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. ..$ postal     : 'AsIs' chr "30316"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. ..$ countryCode: 'AsIs' chr "USA"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. ..$ outFields  : 'AsIs' chr "%2A"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ type        : chr "form"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ content_type: chr "application/x-www-form-urlencoded"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ params      : list()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ fields  : list()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ options :List of 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ useragent: chr "arcgisutils v0.3.0"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ policies: list()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "class")= chr "httr2_request"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "error_ids")= int [1:2] 1 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Classes ‘sf’ and 'data.frame':	3 obs. of  62 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ input_id    : int  1 1 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ result_id   : int  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ loc_name    : chr  "World" "World" "World"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ status      : chr  "M" "M" "M"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ score       : num  100 96.9 96.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ match_addr  : chr  "Bellwood Coffee" "1366 Glenwood Ave SE, Atlanta, Georgia, 30316" "510 Flat Shoals Ave SE, Atlanta, Georgia, 30316"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ long_label  : chr  "Bellwood Coffee, 1366 Glenwood Ave SE, Atlanta, GA, 30316, USA" "1366 Glenwood Ave SE, Atlanta, GA, 30316, USA" "510 Flat Shoals Ave SE, Atlanta, GA, 30316, USA"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ short_label : chr  "Bellwood Coffee" "1366 Glenwood Ave SE" "510 Flat Shoals Ave SE"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ addr_type   : chr  "POI" "StreetAddress" "PointAddress"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ type_field  : chr  "Snacks" NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ place_name  : chr  "Bellwood Coffee" NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ place_addr  : chr  "1366 Glenwood Ave SE, Atlanta, Georgia, 30316" "1366 Glenwood Ave SE, Atlanta, Georgia, 30316" "510 Flat Shoals Ave SE, Atlanta, Georgia, 30316"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ phone       : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ url         : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ rank        : num  19 20 20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ add_bldg    : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ add_num     : chr  "1366" "1366" "510"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ add_num_from: chr  NA "1360" NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ add_num_to  : chr  NA "1368" NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ add_range   : chr  NA "1360-1368" NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ side        : chr  NA "L" NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ st_pre_dir  : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ st_pre_type : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ st_name     : chr  "Glenwood" "Glenwood" "Flat Shoals"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ st_type     : chr  "Ave" "Ave" "Ave"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ st_dir      : chr  "SE" "SE" "SE"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ bldg_type   : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ bldg_name   : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ level_type  : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ level_name  : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ unit_type   : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ unit_name   : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ sub_addr    : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ st_addr     : chr  "1366 Glenwood Ave SE" "1366 Glenwood Ave SE" "510 Flat Shoals Ave SE"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ block       : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ sector      : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ nbrhd       : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ district    : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ city        : chr  "Atlanta" "Atlanta" "Atlanta"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ metro_area  : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ subregion   : chr  "DeKalb County" "DeKalb County" "DeKalb County"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ region      : chr  "Georgia" "Georgia" "Georgia"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ region_abbr : chr  "GA" "GA" "GA"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ territory   : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ zone        : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ postal      : chr  "30316" "30316" "30316"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ postal_ext  : chr  NA "2051" "2044"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ country     : chr  "USA" "USA" "USA"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ cntry_name  : chr  "United States" "United States" "United States"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ lang_code   : chr  "ENG" "ENG" "ENG"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ distance    : num  0 0 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ x           : num  -84.3 -84.3 -84.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ y           : num  33.7 33.7 33.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ display_x   : num  -84.3 -84.3 -84.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ display_y   : num  33.7 33.7 33.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ xmin        : num  -84.3 -84.3 -84.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ xmax        : num  -84.3 -84.3 -84.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ ymin        : num  33.7 33.7 33.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ ymax        : num  33.7 33.7 33.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ ex_info     : chr  NA "BELLWOOD COFFEE" "JOE S COFFEEHOUSE"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ extents     :List of 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : Named num  -84.3 33.7 -84.3 33.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:4] "xmin" "ymin" "xmax" "ymax"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : Named num  -84.3 33.7 -84.3 33.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:4] "xmin" "ymin" "xmax" "ymax"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : Named num  -84.3 33.7 -84.3 33.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:4] "xmin" "ymin" "xmax" "ymax"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ geometry    :sfc_POINT of length 3; first list element:  'XY' num  -84.3 33.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "sf_column")= chr "geometry"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "names")= chr [1:61] "input_id" "result_id" "loc_name" "status" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "error_requests")= list()</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

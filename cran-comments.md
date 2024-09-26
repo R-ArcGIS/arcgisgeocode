@@ -1,16 +1,15 @@
 ## R CMD check results
 
-This package vendors **Rust dependencies** resulting in a 13mb .xz file. Final installation size is 1.3mb
-
 0 errors | 0 warnings | 0 note
 
- - Addresses CRAN error for MacOS old rel https://www.r-project.org/nosvn/R.check/r-oldrel-macos-x86_64/arcgisgeocode-00check.html
+
+This is a new release to address failing CRAN checks. 
 
 
 ## tarball size
 
-This R package vendors its Rust dependencies. As such, the vendor.tar.xz file is fairly large. 
-After compilation and installation, the R package is only 1.3mb on Mac. 
+This package vendors **Rust dependencies** resulting in a 13mb .xz file. Final installation size is 1.3mb
+
 
 ## Testing Environments
 

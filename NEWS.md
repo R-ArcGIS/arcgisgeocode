@@ -1,4 +1,4 @@
-# arcgisgeocode (development version)
+# arcgisgeocode 0.2.2
 
 - Bumps version of extendr-api to address CRAN checks 
 - Bumps version of httr2 due to regression [#34](https://github.com/R-ArcGIS/arcgisgeocode/issues/34)

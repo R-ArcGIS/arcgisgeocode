@@ -1,6 +1,6 @@
 Package: arcgisgeocode
 Title: A Robust Interface to ArcGIS 'Geocoding Services'
-Version: 0.2.1.9000
+Version: 0.2.2
 Authors@R: 
     person("Josiah", "Parry", , "josiah.parry@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9910-865X"))

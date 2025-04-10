@@ -1,10 +1,8 @@
+This is a maintenance release to ensure that the package passes checks on R-devel.
+
 ## R CMD check results
 
 0 errors | 0 warnings | 0 note
-
-
-This is a new release to address failing CRAN checks. 
-
 
 ## tarball size
 

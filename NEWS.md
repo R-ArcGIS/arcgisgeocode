@@ -1,3 +1,7 @@
+# arcgisgeocode 0.2.3
+
+- Bumps version of extendr-api to address CRAN checks.
+
 # arcgisgeocode 0.2.2
 
 - Bumps version of extendr-api to address CRAN checks 

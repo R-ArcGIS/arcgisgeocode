@@ -1,6 +1,6 @@
 Package: arcgisgeocode
 Title: A Robust Interface to ArcGIS 'Geocoding Services'
-Version: 0.2.2
+Version: 0.2.3
 Authors@R: 
     person("Josiah", "Parry", , "josiah.parry@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9910-865X"))
@@ -15,26 +15,26 @@ Description: A very fast and robust interface to ArcGIS 'Geocoding
     <https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm>.
 License: Apache License (>= 2)
 URL: https://github.com/r-arcgis/arcgisgeocode,
-    https://r.esri.com/arcgisgeocode/
+    https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode
 Imports: 
     arcgisutils (>= 0.3.0),
     cli,
     curl,
     httr2 (>= 1.0.5),
     jsonify,
-    RcppSimdJson,
+    RcppSimdJson (>= 0.1.13),
     rlang (>= 1.1.0),
     sf
 Suggests: 
     data.table,
     dplyr,
     testthat (>= 3.0.0)
-Config/rextendr/version: 0.3.1.9000
+Config/rextendr/version: 0.3.1.9001
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 SystemRequirements: Cargo (Rust's package manager), rustc >= 1.67
 Depends: 
     R (>= 4.2)

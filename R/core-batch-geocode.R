@@ -277,7 +277,7 @@ geocode_addresses <- function(
     on_error = "continue",
     progress = .progress,
     # per Geocoding team request, reduce connection threads
-    pool = curl::new_pool(host_con = 3)
+    max_active = 3
   )
 
   # Before we can process the responses, we must know if

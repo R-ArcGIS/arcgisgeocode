@@ -20,7 +20,7 @@ Imports:
     arcgisutils (>= 0.3.0),
     cli,
     curl,
-    httr2 (>= 1.0.5),
+    httr2 (>= 1.1.1),
     jsonify,
     RcppSimdJson (>= 0.1.13),
     rlang (>= 1.1.0),

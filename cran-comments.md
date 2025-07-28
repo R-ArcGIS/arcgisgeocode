@@ -1,4 +1,4 @@
-This is a maintenance release to ensure that the package passes checks on R-devel.
+This is a maintenance release to address breaking changes with httr2.
 
 ## R CMD check results
 
@@ -28,5 +28,5 @@ The phrase 'Geocoding service' refers to a spefic API which can be considered so
 
 ## Use of \dontrun
 
-The use of dontrun is to ensure that the geocoding services are not called as they often require a user credential. And we do not want automatic testing to burden the public service.
+The use of dontrun is to ensure that the geocoding services are not called as they often require a user credential and we do not want automatic testing to burden the public service.
 

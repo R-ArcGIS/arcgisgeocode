@@ -1,3 +1,8 @@
+# arcgisgeocode 0.3.0
+
+- Adds new fields `bldg_comp`, `struct_type`, `struct_det` to output to address newly added fields in the world geocoding service
+- Bumps version of httr2 due to breaking change [#40](https://github.com/R-ArcGIS/arcgisgeocode/pull/40/)
+
 # arcgisgeocode 0.2.3
 
 - Bumps version of extendr-api to address CRAN checks.

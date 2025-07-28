@@ -249,6 +249,21 @@ pub struct Attributes {
     #[serde(rename = "ExInfo")]
     #[serde_as(as = "NoneAsEmptyString")]
     pub ex_info: Option<String>,
+
+    // added july 2025
+    #[serde(rename = "BldgComp")]
+    #[serde_as(as = "NoneAsEmptyString")]
+    pub bldg_comp: Option<String>,
+
+    // added December 2024
+    // https://developers.arcgis.com/rest/geocode/service-output/#structype-serviceoutput-fields
+    #[serde(rename = "StrucType")]
+    #[serde_as(as = "NoneAsEmptyString")]
+    pub struc_type: Option<String>,
+
+    #[serde(rename = "StrucDet")]
+    #[serde_as(as = "NoneAsEmptyString")]
+    pub struc_det: Option<String>,
 }
 
 #[serde_as]

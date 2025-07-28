@@ -12,7 +12,7 @@ A very fast and robust interface to ArcGIS 'Geocoding Services'. Provides capabi
 Useful links:
 \itemize{
   \item \url{https://github.com/r-arcgis/arcgisgeocode}
-  \item \url{https://r.esri.com/arcgisgeocode/}
+  \item \url{https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode}
 }
 
 }

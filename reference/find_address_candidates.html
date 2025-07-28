@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">arcgisgeocode</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -232,7 +232,7 @@ using Rust and returned as an sf object.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">candidates_from_parts</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Classes ‘sf’ and 'data.frame':	3 obs. of  62 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Classes ‘sf’ and 'data.frame':	3 obs. of  65 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ input_id    : int  1 1 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ result_id   : int  NA NA NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ loc_name    : chr  "World" "World" "World"</span>
@@ -293,6 +293,9 @@ using Rust and returned as an sf object.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ ymin        : num  33.7 33.7 33.7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ ymax        : num  33.7 33.7 33.7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ ex_info     : chr  NA "BELLWOOD COFFEE" "JOE S COFFEEHOUSE"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ bldg_comp   : chr  NA NA NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ struc_type  : chr  "Commercial" NA "Commercial"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ struc_det   : chr  NA NA "Retail"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ extents     :List of 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : Named num  -84.3 33.7 -84.3 33.7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:4] "xmin" "ymin" "xmax" "ymax"</span>
@@ -303,7 +306,7 @@ using Rust and returned as an sf object.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ geometry    :sfc_POINT of length 3; first list element:  'XY' num  -84.3 33.7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "sf_column")= chr "geometry"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "names")= chr [1:61] "input_id" "result_id" "loc_name" "status" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "names")= chr [1:64] "input_id" "result_id" "loc_name" "status" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "error_requests")= list()</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
@@ -317,7 +320,7 @@ using Rust and returned as an sf object.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

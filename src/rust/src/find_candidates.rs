@@ -24,8 +24,9 @@ pub struct Candidate {
 }
 
 #[serde_as]
-#[derive(Debug, Clone, Serialize, Deserialize, IntoDataFrameRow)]
+#[derive(Debug, Clone, Serialize, Deserialize, IntoDataFrameRow, Default)]
 #[serde(rename_all = "camelCase")]
+#[serde(default)]
 pub struct Attributes {
     #[serde(rename = "ResultID")]
     pub result_id: Option<i32>,

@@ -37,32 +37,33 @@
 #' )
 #' }
 geocode_addresses <- function(
-    single_line = NULL,
-    address = NULL,
-    address2 = NULL,
-    address3 = NULL,
-    neighborhood = NULL,
-    city = NULL,
-    subregion = NULL,
-    region = NULL,
-    postal = NULL,
-    postal_ext = NULL,
-    country_code = NULL,
-    location = NULL, # sfc_POINT
-    search_extent = NULL,
-    category = NULL, # Needs validation
-    crs = NULL,
-    max_locations = NULL,
-    for_storage = FALSE, # warn
-    match_out_of_range = NULL,
-    location_type = NULL,
-    lang_code = NULL,
-    source_country = NULL, # iso code
-    preferred_label_values = NULL,
-    batch_size = NULL,
-    geocoder = default_geocoder(),
-    token = arc_token(),
-    .progress = TRUE) {
+  single_line = NULL,
+  address = NULL,
+  address2 = NULL,
+  address3 = NULL,
+  neighborhood = NULL,
+  city = NULL,
+  subregion = NULL,
+  region = NULL,
+  postal = NULL,
+  postal_ext = NULL,
+  country_code = NULL,
+  location = NULL, # sfc_POINT
+  search_extent = NULL,
+  category = NULL, # Needs validation
+  crs = NULL,
+  max_locations = NULL,
+  for_storage = FALSE, # warn
+  match_out_of_range = NULL,
+  location_type = NULL,
+  lang_code = NULL,
+  source_country = NULL, # iso code
+  preferred_label_values = NULL,
+  batch_size = NULL,
+  geocoder = default_geocoder(),
+  token = arc_token(),
+  .progress = TRUE
+) {
   # check that token exists
   # this actually isn't necessary for all geocoder services
   # especially if it will be a private one.
@@ -73,9 +74,10 @@ geocode_addresses <- function(
 
   if (!"geocode" %in% capabilities(geocoder)) {
     arg <- rlang::caller_arg(geocoder)
-    cli::cli_abort("{.arg {arg}} does not support  the {.path /geocodeAddresses} endpoint")
+    cli::cli_abort(
+      "{.arg {arg}} does not support  the {.path /geocodeAddresses} endpoint"
+    )
   }
-
 
   check_bool(.progress, allow_na = FALSE, allow_null = FALSE)
   check_for_storage(for_storage, token)
@@ -137,7 +139,20 @@ geocode_addresses <- function(
   # these are all of the fields that are used to fill in an address
   # they can be identified from geocoder$addressFields
   # the single line field can be found from geocoder$singleLineAddressField
-  address_fields <- c("single_line", "address", "address2", "address3", "neighborhood", "city", "subregion", "region", "postal", "postal_ext", "country_code", "location")
+  address_fields <- c(
+    "single_line",
+    "address",
+    "address2",
+    "address3",
+    "neighborhood",
+    "city",
+    "subregion",
+    "region",
+    "postal",
+    "postal_ext",
+    "country_code",
+    "location"
+  )
 
   fn_args <- rlang::env_get_list(nms = address_fields)
   arg_lengths <- lengths(fn_args)
@@ -197,7 +212,9 @@ geocode_addresses <- function(
   max_batch_size <- geocoder[["locatorProperties"]][["MaxBatchSize"]]
 
   # this is the suggested batch size
-  suggested_batch_size <- geocoder[["locatorProperties"]][["SuggestedBatchSize"]]
+  suggested_batch_size <- geocoder[["locatorProperties"]][[
+    "SuggestedBatchSize"
+  ]]
 
   # set batch_size if null
   if (is.null(batch_size)) {
@@ -268,9 +285,12 @@ geocode_addresses <- function(
   all_reqs <- lapply(address_batch_json, function(.addresses) {
     httr2::req_body_form(
       addresses = .addresses,
-      b_req, !!!addtl_params
+      b_req,
+      !!!addtl_params
     )
   })
+
+  browser()
 
   all_resps <- httr2::req_perform_parallel(
     all_reqs,
@@ -288,7 +308,6 @@ geocode_addresses <- function(
   # pre-allocate the result list
   all_results <- vector(mode = "list", n_chunks)
 
-  # browser()
   for (i in seq_len(n_chunks)) {
     .resp <- all_resps[[i]]
     string <- httr2::resp_body_string(.resp)
@@ -319,7 +338,9 @@ geocode_addresses <- function(
     # process resps and catch the errors
     error_messages <- lapply(
       all_resps[errors],
-      function(.x) catch_error(httr2::resp_body_string(.x), rlang::caller_call(2))
+      function(.x) {
+        catch_error(httr2::resp_body_string(.x), rlang::caller_call(2))
+      }
     )
 
     # add a warning when n_errors > 0
@@ -329,7 +350,9 @@ geocode_addresses <- function(
     ))
 
     # for each error message signal the condition
-    for (cnd in error_messages) rlang::cnd_signal(cnd)
+    for (cnd in error_messages) {
+      rlang::cnd_signal(cnd)
+    }
   }
 
   sort_col <- if (use_custom_json_processing) {
@@ -342,12 +365,18 @@ geocode_addresses <- function(
 }
 
 parse_locations_res <- function(
-    string,
+  string,
+  has_custom_fields,
+  n,
+  geocoder,
+  call = rlang::caller_env()
+) {
+  check_bool(
     has_custom_fields,
-    n,
-    geocoder,
-    call = rlang::caller_env()) {
-  check_bool(has_custom_fields, allow_na = FALSE, allow_null = FALSE, call = call)
+    allow_na = FALSE,
+    allow_null = FALSE,
+    call = call
+  )
 
   if (has_custom_fields) {
     res_list <- parse_custom_loc_json(string, geocoder, n, call)
@@ -375,7 +404,12 @@ parse_locations_res <- function(
 #' to ensure that they are returned
 #' @keywords internal
 #' @noRd
-parse_custom_loc_json <- function(json, geocoder, n, call = rlang::caller_env()) {
+parse_custom_loc_json <- function(
+  json,
+  geocoder,
+  n,
+  call = rlang::caller_env()
+) {
   tbl_to_fill <- ptype_tbl(
     rbind(
       c("ResultID", "esriFieldTypeInteger"),
@@ -428,7 +462,9 @@ sort_asap <- function(.df, .col, call = rlang::caller_env()) {
 
   # check to see if `.col` exists
   if (is.null(.df[[.col]])) {
-    cli::cli_warn("Column {.val {.col}} is not present. Results may be out of order.")
+    cli::cli_warn(
+      "Column {.val {.col}} is not present. Results may be out of order."
+    )
     return(.df)
   }
 

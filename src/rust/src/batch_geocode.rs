@@ -209,17 +209,16 @@ pub fn create_records(
     serde_json::to_string(&recs).unwrap()
 }
 
-
 #[derive(Debug, Clone, Deserialize, Serialize)]
 struct ErrorCode {
     code: i32,
     extended_code: Option<i32>,
     message: Option<String>,
-    details: Option<Vec<String>>
+    details: Option<Vec<String>>,
 }
 #[derive(Debug, Clone, Deserialize, Serialize)]
 struct ErrorMsg {
-    error: ErrorCode
+    error: ErrorCode,
 }
 
 #[extendr]
@@ -261,19 +260,24 @@ pub fn parse_location_json(x: &str) -> Robj {
             )
             .into_robj()
         }
-        Err(_) => {
+        Err(ee) => {
             match serde_json::from_str::<ErrorMsg>(x) {
                 Ok(e) => {
                     let err = e.error;
-                    let fmt = format!("Error occured parsing response:\n{}: {} {}", err.code, err.message.unwrap_or("".into()), err.details.unwrap_or(vec![]).join(" "));
+                    let fmt = format!(
+                        "Error occured parsing response:\n{}: {} {}",
+                        err.code,
+                        err.message.unwrap_or("".into()),
+                        err.details.unwrap_or(vec![]).join(" ")
+                    );
                     eprintln!("{fmt}");
                 }
                 Err(e) => {
-                    eprintln!("Error occured parsing : {:?}", e.to_string());
+                    eprintln!("Error occured parsing reponse and anticipated error message.\nInitial error {:?}\nError message: {:?}", ee, e);
                 }
             }
             ().into_robj()
-        },
+        }
     }
 }
 

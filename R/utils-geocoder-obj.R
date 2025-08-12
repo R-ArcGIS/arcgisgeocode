@@ -47,9 +47,15 @@ print.GeocodeServer <- function(x, ...) {
 }
 
 # handy check function to see if the type is a GeocodeServer
-check_geocoder <- function(x, arg = rlang::caller_arg(x), call = rlang::caller_env()) {
+check_geocoder <- function(
+  x,
+  arg = rlang::caller_arg(x),
+  call = rlang::caller_env()
+) {
   if (!rlang::inherits_any(x, "GeocodeServer")) {
-    cli::cli_abort("Expected {.cls GeocodeServer}, {.arg {arg}} is {obj_type_friendly(x)}")
+    cli::cli_abort(
+      "Expected {.cls GeocodeServer}, {.arg {arg}} is {obj_type_friendly(x)}"
+    )
   }
 
   invisible(NULL)

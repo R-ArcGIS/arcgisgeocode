@@ -1,3 +1,7 @@
+# arcgisgeocode (development version)
+
+- Resolves an issue parsing geocoding results with fields that are not present in the world geocoder. Fixes [#41](https://github.com/R-ArcGIS/arcgisgeocode/issues/41) <https://github.com/R-ArcGIS/arcgisgeocode/pull/42>
+
 # arcgisgeocode 0.3.0
 
 - Adds new fields `bldg_comp`, `struct_type`, `struct_det` to output to address newly added fields in the world geocoding service

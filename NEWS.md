@@ -1,3 +1,5 @@
+# arcgisgeocode (development version)
+
 # arcgisgeocode 0.3.0
 
 - Adds new fields `bldg_comp`, `struct_type`, `struct_det` to output to address newly added fields in the world geocoding service

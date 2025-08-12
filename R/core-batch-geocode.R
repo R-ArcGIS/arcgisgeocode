@@ -290,7 +290,7 @@ geocode_addresses <- function(
     )
   })
 
-  browser()
+  # browser()
 
   all_resps <- httr2::req_perform_parallel(
     all_reqs,

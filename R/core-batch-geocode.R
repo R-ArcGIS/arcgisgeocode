@@ -410,7 +410,7 @@ parse_custom_loc_json <- function(
   n,
   call = rlang::caller_env()
 ) {
-  tbl_to_fill <- ptype_tbl(
+  tbl_to_fill <- fields_as_ptype_df(
     rbind(
       c("ResultID", "esriFieldTypeInteger"),
       geocoder$candidateFields[, c("name", "type")]

@@ -35,7 +35,7 @@ list_geocoders <- function(token = arc_token()) {
     )
   }
   # extract helper services
-  self <- arc_self_meta(error_call = call)
+  self <- arc_portal_self(token = token, error_call = call)
   # extrac geocode metadata
   geocoder_metadata <- self[["helperServices"]][["geocode"]]
 
@@ -62,20 +62,36 @@ list_geocoders <- function(token = arc_token()) {
 #' the public [ArcGIS World Geocoder](https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder) is used. Otherwise, the first available geocoding service associated
 #' with your authorization token is used.
 #'
+#' The [ArcGIS World Geocoder](https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder)
+#' is made publicly available for some uses. The `world_geocoder()` is used
+#' as the default `GeocodeServer` object in [`default_geocoder()`] when no
+#' authorization token is found. The [`find_address_candidates()`],
+#' [`reverse_geocode()`], and [`suggest_places()`] can be used without an
+#' authorization token. The [`geocode_addresses()`] funciton requires an
+#' authorization token to be used for batch geocoding.
+#'
 #' To manually create a `GeocodeServer` object, see [`geocode_server()`].
 #' @inheritParams arc_token
 #' @export
 #' @rdname list_geocoders
 default_geocoder <- function(token = arc_token()) {
   if (is.null(token)) {
-    return(world_geocoder)
+    return(world_geocoder())
   }
 
   res <- list_geocoders(token = token)
 
   if (nrow(res) > 1) {
-    return(world_geocoder)
+    return(world_geocoder())
   }
 
   geocode_server(res[1, "url"])
+}
+
+#' @export
+#' @rdname list_geocoders
+world_geocoder <- function() {
+  geocode_server(
+    "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
+  )
 }

@@ -3,23 +3,21 @@ template:
   bootstrap: 5
 
 reference:
+  - title: Geocoding Services
+    contents:
+      - geocode_addresses
+      - reverse_geocode
+      - find_address_candidates
+      - suggest_places
+      - storage
 
-- title: Geocoding Services 
-  contents:
-  - geocode_addresses
-  - reverse_geocode
-  - find_address_candidates
-  - suggest_places
-  - storage
+  - title: GeocodeServer objects
+    contents:
+      - geocode_server
+      - default_geocoder
+      - list_geocoders
 
-- title: GeocodeServer objects
-  contents:
-  - geocode_server
-  - default_geocoder
-  - list_geocoders
-  - world_geocoder
-
-- title: Utilities
-  contents:
-  - iso_3166_codes
-  - esri_wkids
+  - title: Utilities
+    contents:
+      - iso_3166_codes
+      - esri_wkids

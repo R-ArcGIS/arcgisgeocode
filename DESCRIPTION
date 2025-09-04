@@ -17,14 +17,14 @@ License: Apache License (>= 2)
 URL: https://github.com/r-arcgis/arcgisgeocode,
     https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode
 Imports: 
-    arcgisutils (>= 0.3.0),
+    arcgisutils (>= 0.3.3.9000),
     cli,
     httr2 (>= 1.1.1),
     jsonify,
     RcppSimdJson (>= 0.1.13),
     rlang (>= 1.1.0),
     sf
-Suggests: 
+Suggests:
     data.table,
     dplyr,
     testthat (>= 3.0.0)

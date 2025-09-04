@@ -20,8 +20,6 @@ geocode_server <- function(url, token = arc_token()) {
   structure(res, class = c("GeocodeServer", "list"))
 }
 
-world_geocoder_url <- "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
-
 # Print method for the geocoder, must be exported
 #' @export
 print.GeocodeServer <- function(x, ...) {
@@ -74,9 +72,11 @@ capabilities <- function(geocoder) {
 #' @keywords internal
 #' @noRd
 has_custom_fields <- function(x) {
+  world <- world_geocoder()
+
   custom_fields <- setdiff(
     x$candidateFields$name,
-    arcgisgeocode::world_geocoder$candidateFields$name
+    world$candidateFields$name
   )
 
   length(custom_fields) > 0

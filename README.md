@@ -1,4 +1,5 @@
 
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # arcgisgeocode
@@ -12,38 +13,58 @@ status](https://www.r-pkg.org/badges/version/arcgisgeocode.png)](https://CRAN.R-
 [![R-CMD-check](https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-arcgisgeocode provides access to ArcGIS geocoding services from R. It
-supports address candidate identification, batch geocoding, reverse
-geocoding, and autocomplete suggestions.
+arcgisgeocode is a high-performance R package providing comprehensive
+access to ArcGIS geocoding services. Built with Rust and designed for
+both interactive applications and enterprise workflows, it offers the
+complete suite of ArcGIS geocoding capabilities.
+
+## Key Capabilities
+
+**🌍 Complete Geocoding Suite**:
+
+- **Address suggestion**: Suggest addresses candidates with
+  `find_address_candidates()`
+- **Reverse geocoding**: Coordinates to addresses with
+  `reverse_geocode()`
+- **Batch geocoding**: Bulk processing with `geocode_addresses()`
+- **Interactive suggestions**: Real-time autocomplete with
+  `suggest_places()`
+
+**Integrations**:
+
+- ArcGIS Online
+- ArcGIS Enterprise
+- Custom locators (e.g. StreetMap Premium) note—does not support locator
+  files
+
+**🚀 High—Performance**:
+
+- Vectorized operations across all geocoding functions
+- Rust-powered JSON processing
+- Parallel HTTP requests using `httr2` for concurrent geocoding
+  operations
+- Configurable batching for large datasets
 
 ## Installation
 
-Install the package from CRAN
+`{arcgisgeocode}` is part of the `{arcgis}` metapackage, which provides
+the complete R-ArcGIS Bridge toolkit. For most users, installing the
+metapackage is recommended:
 
 ``` r
 # install from CRAN 
+install.packages("arcgis")
+```
+
+You can also install {arcgislayers} individually from CRAN:
+
+``` r
 install.packages("arcgisgeocode")
 ```
 
-You can also install the development version from r-universe as a binary
-for Mac, Windows, or Ubuntu from r-universe like so:
+To install the development version:
 
 ``` r
-# install from R-universe
-install.packages("arcgisgeocode", repos = "https://r-arcgis.r-universe.dev")
-```
-
-Or you can install the package from source which requires Rust to be
-available. Follow the [rustup instructions](https://rustup.rs/) to
-install Rust and verify your installation is compatible using
-[`rextendr::rust_sitrep()`](https://extendr.github.io/rextendr/dev/#sitrep).
-Then install the development version from GitHub:
-
-``` r
-# install pak if not available
-if (!requireNamespace("pak")) install.packages("pak")
-
-# install development version of {arcgisgeocode}
 pak::pak("r-arcgis/arcgisgeocode")
 ```
 
@@ -94,8 +115,8 @@ dplyr::glimpse(rev_res)
 #> $ addr_type    <chr> "StreetAddress"
 #> $ type_field   <chr> ""
 #> $ place_name   <chr> ""
-#> $ add_num      <chr> "608"
-#> $ address      <chr> "608 Home Pl"
+#> $ add_num      <chr> "604"
+#> $ address      <chr> "604 Home Pl"
 #> $ block        <chr> ""
 #> $ sector       <chr> ""
 #> $ neighborhood <chr> "South Redlands"
@@ -151,7 +172,7 @@ dplyr::glimpse(candidates[, 1:10])
 #> $ short_label <chr> "Esri", "380 New York St"
 #> $ addr_type   <chr> "POI", "PointAddress"
 #> $ type_field  <chr> "Business Facility", NA
-#> $ geometry    <POINT [°]> POINT (-117.1957 34.05609), POINT (-117.1948 34.05726)…
+#> $ geometry    <POINT [°]> POINT (-117.1957 34.05609), POINT (-117.1954 34.0561)
 ```
 
 ### Suggest locations
@@ -193,10 +214,10 @@ suggestions
 #>   text                                                   magic_key is_collection
 #> * <chr>                                                  <chr>     <lgl>        
 #> 1 Bellwood Coffee, 1366 Glenwood Ave SE, Atlanta, GA, 3… dHA9MCN0… FALSE        
-#> 2 Bellwood, Atlanta, GA, USA                             dHA9MCN0… FALSE        
-#> 3 Bellwood Church, Atlanta, GA, USA                      dHA9MCN0… FALSE        
-#> 4 Bellwood Yard, Atlanta, GA, USA                        dHA9MCN0… FALSE        
-#> 5 Bellwood, IL, USA                                      dHA9NCN0… FALSE
+#> 2 Bellwood Homes, 736 Jefferson St NW, Atlanta, GA, 303… dHA9MCN0… FALSE        
+#> 3 Bellwood, Atlanta, GA, USA                             dHA9MCN0… FALSE        
+#> 4 Bellwood Coffee, 1776 Peachtree St NW, Atlanta, GA, 3… dHA9MCN0… FALSE        
+#> 5 Bellwood Church, Atlanta, GA, USA                      dHA9MCN0… FALSE
 ```
 
 The result is intended to be provided to `find_address_candidates()` to
@@ -213,19 +234,19 @@ res <- find_address_candidates(
 )
 
 dplyr::glimpse(res[, 1:10])
-#> Rows: 7
+#> Rows: 5
 #> Columns: 11
-#> $ input_id    <int> 1, 2, 3, 4, 5, 5, 5
-#> $ result_id   <int> NA, NA, NA, NA, NA, NA, NA
-#> $ loc_name    <chr> NA, NA, NA, NA, NA, NA, NA
-#> $ status      <chr> "M", "M", "M", "M", "T", "T", "T"
-#> $ score       <dbl> 100, 100, 100, 100, 100, 100, 100
-#> $ match_addr  <chr> "Bellwood Coffee", "Bellwood, Atlanta, Georgia", "Bellwood…
+#> $ input_id    <int> 1, 2, 3, 4, 5
+#> $ result_id   <int> NA, NA, NA, NA, NA
+#> $ loc_name    <chr> NA, NA, NA, NA, NA
+#> $ status      <chr> "M", "M", "M", "M", "M"
+#> $ score       <dbl> 100, 100, 100, 100, 100
+#> $ match_addr  <chr> "Bellwood Coffee", "Bellwood Homes", "Bellwood, Atlanta, G…
 #> $ long_label  <chr> "Bellwood Coffee, 1366 Glenwood Ave SE, Atlanta, GA, 30316…
-#> $ short_label <chr> "Bellwood Coffee", "Bellwood", "Bellwood Church", "Bellwoo…
-#> $ addr_type   <chr> "POI", "Locality", "POI", "POI", "Locality", "Locality", "…
-#> $ type_field  <chr> "Snacks", "City", "Church", "Building", "City", "City", "C…
-#> $ geometry    <POINT [°]> POINT (-84.34273 33.74034), POINT (-84.41243 33.77455), PO…
+#> $ short_label <chr> "Bellwood Coffee", "Bellwood Homes", "Bellwood", "Bellwood…
+#> $ addr_type   <chr> "POI", "POI", "Locality", "POI", "POI"
+#> $ type_field  <chr> "Snacks", "Other Shops and Service", "City", "Snacks", "Ch…
+#> $ geometry    <POINT [°]> POINT (-84.34272 33.74034), POINT (-84.41127 33.77591), PO…
 ```
 
 ## *Important*: Storing results
@@ -249,9 +270,8 @@ requests.
 
 Batch geocoding requires a signed in user. Load the
 [`{arcgisutils}`](https://github.com/r-arcgis/arcgisutils) to authorize
-and set your token. This example uses the [Geocoding Test
-Dataset](#%20https://datacatalog.urban.org/node/6158/revisions/14192/view)
-from the [Urban Institute](https://www.urban.org/).
+and set your token. This example uses the Geocoding Test Dataset from
+the [Urban Institute](https://www.urban.org/).
 
 > [!TIP]
 >
@@ -260,15 +280,12 @@ from the [Urban Institute](https://www.urban.org/).
 > Enterprise service.
 
 ``` r
-library(arcgisutils)
-library(arcgisgeocode)
-
 set_arc_token(auth_user())
 
 # Example dataset from the Urban Institute
 fp <- "https://urban-data-catalog.s3.amazonaws.com/drupal-root-live/2020/02/25/geocoding_test_data.csv"
 
-to_geocode <- readr::read_csv(fp, readr::locale(encoding = "latin1"))
+to_geocode <- readr::read_csv(fp, show_col_types = FALSE)
 
 geocoded <- to_geocode |>
   dplyr::reframe(
@@ -281,44 +298,66 @@ geocoded <- to_geocode |>
   )
 
 dplyr::glimpse(res[, 1:10])
+#> Rows: 5
+#> Columns: 11
+#> $ input_id    <int> 1, 2, 3, 4, 5
+#> $ result_id   <int> NA, NA, NA, NA, NA
+#> $ loc_name    <chr> NA, NA, NA, NA, NA
+#> $ status      <chr> "M", "M", "M", "M", "M"
+#> $ score       <dbl> 100, 100, 100, 100, 100
+#> $ match_addr  <chr> "Bellwood Coffee", "Bellwood Homes", "Bellwood, Atlanta, G…
+#> $ long_label  <chr> "Bellwood Coffee, 1366 Glenwood Ave SE, Atlanta, GA, 30316…
+#> $ short_label <chr> "Bellwood Coffee", "Bellwood Homes", "Bellwood", "Bellwood…
+#> $ addr_type   <chr> "POI", "POI", "Locality", "POI", "POI"
+#> $ type_field  <chr> "Snacks", "Other Shops and Service", "City", "Snacks", "Ch…
+#> $ geometry    <POINT [°]> POINT (-84.34272 33.74034), POINT (-84.41127 33.77591), PO…
 ```
 
 ## Using other locators
 
-`{arcgisgeocode}` can be used with other geocoding services, including
-custom locators hosted on ArcGIS Online or Enterprise. For example, we
-can use the [AddressNC](https://www.nconemap.gov/pages/addresses)
-geocoding service [available on ArcGIS
-Online](https://www.arcgis.com/home/item.html?id=247dfe30ec42476a96926ad9e35f725f).
-
-Create a new `GeocodeServer` object using `geocode_server()`. This
-geocoder can be passed into the `geocoder` argument to any of the
-geocoding functions.
+You can use `list_geocoders()` to find all of the geocoders available to
+you by your organization.
 
 ``` r
-address_nc <- geocode_server(
-  "https://services.nconemap.gov/secure/rest/services/AddressNC/AddressNC_geocoder/GeocodeServer",
-  token = NULL
-)
-
-res <- find_address_candidates(
-  address = "rowan coffee",
-  city = "asheville",
-  geocoder = address_nc
-)
-
-dplyr::glimpse(res[, 1:10])
-#> Rows: 2
-#> Columns: 11
-#> $ input_id    <int> 1, 1
-#> $ result_id   <int> NA, NA
-#> $ loc_name    <chr> NA, NA
-#> $ status      <chr> "T", "T"
-#> $ score       <dbl> 78, 78
-#> $ match_addr  <chr> "ASHEVILLE", "ASHEVILLE"
-#> $ long_label  <chr> "ASHEVILLE", "ASHEVILLE"
-#> $ short_label <chr> "ASHEVILLE", "ASHEVILLE"
-#> $ addr_type   <chr> "Locality", "Locality"
-#> $ type_field  <chr> "City", "City"
-#> $ geometry    <POINT [US_survey_foot]> POINT (943428.1 681596.4), POINT (948500.3 631973.4)…
+list_geocoders()
+#> # A data frame: 1 × 10
+#>   url     northLat southLat eastLon westLon name  suggest zoomScale placefinding
+#> * <chr>   <chr>    <chr>    <chr>   <chr>   <chr> <lgl>       <int> <lgl>       
+#> 1 https:… Ymax     Ymin     Xmax    Xmin    ArcG… TRUE        10000 TRUE        
+#> # ℹ 1 more variable: batch <lgl>
 ```
+
+`{arcgisgeocode}` can be used with other geocoding services, including
+custom locators hosted on ArcGIS Online or Enterprise. You can search
+for geocoding services that may be useful for you with
+`arcgisutils::search_items()`.
+
+``` r
+search_items(item_type = "Geocoding Service", max_pages = 1)
+#> # A data frame: 50 × 45
+#>    id      owner created             modified            guid  name  title type 
+#>  * <chr>   <chr> <dttm>              <dttm>              <lgl> <chr> <chr> <chr>
+#>  1 62e6d8… jstr… 2017-09-21 20:46:45 2017-09-21 20:54:15 NA    <NA>  Brev… Geoc…
+#>  2 495c4d… AdmB… 2020-01-13 08:21:34 2020-07-01 07:07:25 NA    <NA>  Sted… Geoc…
+#>  3 b3f732… Clar… 2019-10-24 21:01:47 2019-10-24 21:02:35 NA    <NA>  Clar… Geoc…
+#>  4 11f1b5… Erik… 2015-10-20 17:36:20 2017-11-28 17:24:30 NA    <NA>  COMP… Geoc…
+#>  5 e2e52a… mari… 2017-02-09 12:20:33 2017-02-09 12:20:38 NA    <NA>  Topo… Geoc…
+#>  6 c10754… balt… 2019-12-06 15:47:03 2019-12-06 15:47:06 NA    <NA>  EGIS… Geoc…
+#>  7 2fde30… cbat… 2015-10-29 17:49:15 2015-10-29 17:49:15 NA    <NA>  Addr… Geoc…
+#>  8 0983b4… dili… 2016-05-04 15:59:35 2016-05-04 15:59:35 NA    <NA>  what… Geoc…
+#>  9 893e0b… gis_… 2017-11-15 09:19:05 2017-11-15 11:44:58 NA    <NA>  PKC   Geoc…
+#> 10 b8bcbe… 3918  2014-03-21 13:00:08 2014-03-21 13:00:08 NA    <NA>  Indy… Geoc…
+#> # ℹ 40 more rows
+#> # ℹ 37 more variables: typeKeywords <list>, description <chr>, tags <list>,
+#> #   snippet <chr>, thumbnail <chr>, documentation <lgl>, extent <list>,
+#> #   categories <list>, spatialReference <chr>, accessInformation <chr>,
+#> #   classification <lgl>, licenseInfo <chr>, culture <chr>, properties <list>,
+#> #   advancedSettings <lgl>, url <chr>, sourceUrl <chr>, proxyFilter <lgl>,
+#> #   access <chr>, size <int>, subInfo <int>, appCategories <list>, …
+```
+
+## Learn more
+
+To learn more about geocoding with the R-ArcGIS Bridge visit the
+[developers
+site](https://developers.arcgis.com/r-bridge/geocoding/overview/).

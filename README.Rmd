@@ -18,9 +18,10 @@ library(jsonify)
 # arcgisgeocode
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![extendr](https://img.shields.io/badge/extendr-^0.8.0-276DC2)](https://extendr.github.io/extendr/extendr_api/)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN status](https://www.r-pkg.org/badges/version/arcgisgeocode)](https://CRAN.R-project.org/package=arcgisgeocode)
-[![R-CMD-check](https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml)
+[![Downloads](https://cranlogs.r-pkg.org/badges/arcgisgeocode)](https://cran.r-project.org/package=arcgisgeocode)
 <!-- badges: end -->
 
 arcgisgeocode is a high-performance R package providing comprehensive access to ArcGIS geocoding services. Built with Rust and designed for both interactive applications and enterprise workflows, it offers the complete suite of ArcGIS geocoding capabilities.

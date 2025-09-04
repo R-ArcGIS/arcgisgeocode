@@ -6,11 +6,12 @@
 
 <!-- badges: start -->
 
+[![extendr](https://img.shields.io/badge/extendr-%5E0.8.0-276DC2)](https://extendr.github.io/extendr/extendr_api/)
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/arcgisgeocode.png)](https://CRAN.R-project.org/package=arcgisgeocode)
-[![R-CMD-check](https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml)
+[![Downloads](https://cranlogs.r-pkg.org/badges/arcgisgeocode.png)](https://cran.r-project.org/package=arcgisgeocode)
 <!-- badges: end -->
 
 arcgisgeocode is a high-performance R package providing comprehensive

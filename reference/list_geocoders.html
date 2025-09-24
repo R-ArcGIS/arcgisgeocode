@@ -9,7 +9,7 @@ a data.frame containing the available geocoding services for the
 associated token.
 For users who have not signed into a private portal or ArcGIS Online,
 the public ArcGIS World Geocoder is used. Otherwise, the first available geocoding service associated
-with your authorization token is used."><meta property="og:image" content="/logo.svg"></head><body>
+with your authorization token is used."><meta property="og:image" content="https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/logo.svg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -53,9 +53,9 @@ with your authorization token is used.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">list_geocoders</span><span class="op">(</span>token <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/arcgisutils/man/token.html" class="external-link">arc_token</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">list_geocoders</span><span class="op">(</span>token <span class="op">=</span> <span class="fu">arc_token</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">default_geocoder</span><span class="op">(</span>token <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/arcgisutils/man/token.html" class="external-link">arc_token</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">default_geocoder</span><span class="op">(</span>token <span class="op">=</span> <span class="fu">arc_token</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -86,10 +86,7 @@ token.</p>
 <span class="r-in"><span><span class="co"># Default geocoder object</span></span></span>
 <span class="r-in"><span><span class="co"># ArcGIS World Geocoder b/c no token</span></span></span>
 <span class="r-in"><span><span class="fu">default_geocoder</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;GeocodeServer&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Description: World Geocoder</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Version: 11.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CRS: 4326</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in world_geocoder():</span> could not find function "world_geocoder"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Requires an Authorization Token</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>

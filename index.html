@@ -18,7 +18,7 @@
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="A Robust Interface to ArcGIS Geocoding Services">
 <meta name="description" content="A very fast and robust interface to ArcGIS Geocoding Services. Provides capabilities for reverse geocoding, finding address candidates, character-by-character search autosuggestion, and batch geocoding. The public ArcGIS World Geocoder is accessible for free use via arcgisgeocode for all services except batch geocoding. arcgisgeocode also integrates with arcgisutils to provide access to custom locators or private ArcGIS World Geocoder hosted on ArcGIS Enterprise. Learn more in the Geocode service API reference &lt;https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm&gt;.">
 <meta property="og:description" content="A very fast and robust interface to ArcGIS Geocoding Services. Provides capabilities for reverse geocoding, finding address candidates, character-by-character search autosuggestion, and batch geocoding. The public ArcGIS World Geocoder is accessible for free use via arcgisgeocode for all services except batch geocoding. arcgisgeocode also integrates with arcgisutils to provide access to custom locators or private ArcGIS World Geocoder hosted on ArcGIS Enterprise. Learn more in the Geocode service API reference &lt;https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm&gt;.">
-<meta property="og:image" content="/logo.svg">
+<meta property="og:image" content="https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/logo.svg">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -59,25 +59,52 @@
 </div>
 <!-- badges: start -->
 
-<p>arcgisgeocode provides access to ArcGIS geocoding services from R. It supports address candidate identification, batch geocoding, reverse geocoding, and autocomplete suggestions.</p>
+<p>arcgisgeocode is a high-performance R package providing comprehensive access to ArcGIS geocoding services. Built with Rust and designed for both interactive applications and enterprise workflows, it offers the complete suite of ArcGIS geocoding capabilities.</p>
+<div class="section level2">
+<h2 id="key-capabilities">Key Capabilities<a class="anchor" aria-label="anchor" href="#key-capabilities"></a>
+</h2>
+<p><strong>🌍 Complete Geocoding Suite</strong>:</p>
+<ul>
+<li>
+<strong>Address suggestion</strong>: Suggest addresses candidates with <code><a href="reference/find_address_candidates.html">find_address_candidates()</a></code>
+</li>
+<li>
+<strong>Reverse geocoding</strong>: Coordinates to addresses with <code><a href="reference/reverse_geocode.html">reverse_geocode()</a></code>
+</li>
+<li>
+<strong>Batch geocoding</strong>: Bulk processing with <code><a href="reference/geocode_addresses.html">geocode_addresses()</a></code>
+</li>
+<li>
+<strong>Interactive suggestions</strong>: Real-time autocomplete with <code><a href="reference/suggest_places.html">suggest_places()</a></code>
+</li>
+</ul>
+<p><strong>Integrations</strong>:</p>
+<ul>
+<li>ArcGIS Online</li>
+<li>ArcGIS Enterprise</li>
+<li>Custom locators (e.g. StreetMap Premium) note—does not support locator files</li>
+</ul>
+<p><strong>🚀 High—Performance</strong>:</p>
+<ul>
+<li>Vectorized operations across all geocoding functions</li>
+<li>Rust-powered JSON processing</li>
+<li>Parallel HTTP requests using <code>httr2</code> for concurrent geocoding operations</li>
+<li>Configurable batching for large datasets</li>
+</ul>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>Install the package from CRAN</p>
+<p><a href="https://github.com/r-arcgis/arcgisgeocode" class="external-link">arcgisgeocode</a> is part of the <a href="https://github.com/R-ArcGIS/arcgis/" class="external-link">arcgis</a> metapackage, which provides the complete R-ArcGIS Bridge toolkit. For most users, installing the metapackage is recommended:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install from CRAN </span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"arcgisgeocode"</span><span class="op">)</span></span></code></pre></div>
-<p>You can also install the development version from r-universe as a binary for Mac, Windows, or Ubuntu from r-universe like so:</p>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"arcgis"</span><span class="op">)</span></span></code></pre></div>
+<p>You can also install {arcgislayers} individually from CRAN:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install from R-universe</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"arcgisgeocode"</span>, repos <span class="op">=</span> <span class="st">"https://r-arcgis.r-universe.dev"</span><span class="op">)</span></span></code></pre></div>
-<p>Or you can install the package from source which requires Rust to be available. Follow the <a href="https://rustup.rs/" class="external-link">rustup instructions</a> to install Rust and verify your installation is compatible using <a href="https://extendr.github.io/rextendr/dev/#sitrep" class="external-link"><code>rextendr::rust_sitrep()</code></a>. Then install the development version from GitHub:</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"arcgisgeocode"</span><span class="op">)</span></span></code></pre></div>
+<p>To install the development version:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install pak if not available</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># install development version of {arcgisgeocode}</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"r-arcgis/arcgisgeocode"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"r-arcgis/arcgisgeocode"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -109,8 +136,8 @@
 <span><span class="co">#&gt; $ addr_type    &lt;chr&gt; "StreetAddress"</span></span>
 <span><span class="co">#&gt; $ type_field   &lt;chr&gt; ""</span></span>
 <span><span class="co">#&gt; $ place_name   &lt;chr&gt; ""</span></span>
-<span><span class="co">#&gt; $ add_num      &lt;chr&gt; "608"</span></span>
-<span><span class="co">#&gt; $ address      &lt;chr&gt; "608 Home Pl"</span></span>
+<span><span class="co">#&gt; $ add_num      &lt;chr&gt; "604"</span></span>
+<span><span class="co">#&gt; $ address      &lt;chr&gt; "604 Home Pl"</span></span>
 <span><span class="co">#&gt; $ block        &lt;chr&gt; ""</span></span>
 <span><span class="co">#&gt; $ sector       &lt;chr&gt; ""</span></span>
 <span><span class="co">#&gt; $ neighborhood &lt;chr&gt; "South Redlands"</span></span>
@@ -159,7 +186,7 @@
 <span><span class="co">#&gt; $ short_label &lt;chr&gt; "Esri", "380 New York St"</span></span>
 <span><span class="co">#&gt; $ addr_type   &lt;chr&gt; "POI", "PointAddress"</span></span>
 <span><span class="co">#&gt; $ type_field  &lt;chr&gt; "Business Facility", NA</span></span>
-<span><span class="co">#&gt; $ geometry    &lt;POINT [°]&gt; POINT (-117.1957 34.05609), POINT (-117.1948 34.05726)…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ geometry    &lt;POINT [°]&gt; POINT (-117.1957 34.05609), POINT (-117.1954 34.0561)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="suggest-locations">Suggest locations<a class="anchor" aria-label="anchor" href="#suggest-locations"></a>
@@ -194,10 +221,10 @@
 <span><span class="co">#&gt;   text                                                   magic_key is_collection</span></span>
 <span><span class="co">#&gt; * &lt;chr&gt;                                                  &lt;chr&gt;     &lt;lgl&gt;        </span></span>
 <span><span class="co">#&gt; 1 Bellwood Coffee, 1366 Glenwood Ave SE, Atlanta, GA, 3… dHA9MCN0… FALSE        </span></span>
-<span><span class="co">#&gt; 2 Bellwood, Atlanta, GA, USA                             dHA9MCN0… FALSE        </span></span>
-<span><span class="co">#&gt; 3 Bellwood Church, Atlanta, GA, USA                      dHA9MCN0… FALSE        </span></span>
-<span><span class="co">#&gt; 4 Bellwood Yard, Atlanta, GA, USA                        dHA9MCN0… FALSE        </span></span>
-<span><span class="co">#&gt; 5 Bellwood, IL, USA                                      dHA9NCN0… FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt; 2 Bellwood Homes, 736 Jefferson St NW, Atlanta, GA, 303… dHA9MCN0… FALSE        </span></span>
+<span><span class="co">#&gt; 3 Bellwood, Atlanta, GA, USA                             dHA9MCN0… FALSE        </span></span>
+<span><span class="co">#&gt; 4 Bellwood Coffee, 1776 Peachtree St NW, Atlanta, GA, 3… dHA9MCN0… FALSE        </span></span>
+<span><span class="co">#&gt; 5 Bellwood Church, Atlanta, GA, USA                      dHA9MCN0… FALSE</span></span></code></pre></div>
 <p>The result is intended to be provided to <code><a href="reference/find_address_candidates.html">find_address_candidates()</a></code> to complete the geocoding process. The column <code>text</code> contains the address to geocode. The column <code>magic_key</code> is a special identifier that makes it much faster to fetch results. Pass this into the argument <code>magic_key</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get address candidate information</span></span>
@@ -208,19 +235,19 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">res</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 7</span></span>
+<span><span class="co">#&gt; Rows: 5</span></span>
 <span><span class="co">#&gt; Columns: 11</span></span>
-<span><span class="co">#&gt; $ input_id    &lt;int&gt; 1, 2, 3, 4, 5, 5, 5</span></span>
-<span><span class="co">#&gt; $ result_id   &lt;int&gt; NA, NA, NA, NA, NA, NA, NA</span></span>
-<span><span class="co">#&gt; $ loc_name    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA</span></span>
-<span><span class="co">#&gt; $ status      &lt;chr&gt; "M", "M", "M", "M", "T", "T", "T"</span></span>
-<span><span class="co">#&gt; $ score       &lt;dbl&gt; 100, 100, 100, 100, 100, 100, 100</span></span>
-<span><span class="co">#&gt; $ match_addr  &lt;chr&gt; "Bellwood Coffee", "Bellwood, Atlanta, Georgia", "Bellwood…</span></span>
+<span><span class="co">#&gt; $ input_id    &lt;int&gt; 1, 2, 3, 4, 5</span></span>
+<span><span class="co">#&gt; $ result_id   &lt;int&gt; NA, NA, NA, NA, NA</span></span>
+<span><span class="co">#&gt; $ loc_name    &lt;chr&gt; NA, NA, NA, NA, NA</span></span>
+<span><span class="co">#&gt; $ status      &lt;chr&gt; "M", "M", "M", "M", "M"</span></span>
+<span><span class="co">#&gt; $ score       &lt;dbl&gt; 100, 100, 100, 100, 100</span></span>
+<span><span class="co">#&gt; $ match_addr  &lt;chr&gt; "Bellwood Coffee", "Bellwood Homes", "Bellwood, Atlanta, G…</span></span>
 <span><span class="co">#&gt; $ long_label  &lt;chr&gt; "Bellwood Coffee, 1366 Glenwood Ave SE, Atlanta, GA, 30316…</span></span>
-<span><span class="co">#&gt; $ short_label &lt;chr&gt; "Bellwood Coffee", "Bellwood", "Bellwood Church", "Bellwoo…</span></span>
-<span><span class="co">#&gt; $ addr_type   &lt;chr&gt; "POI", "Locality", "POI", "POI", "Locality", "Locality", "…</span></span>
-<span><span class="co">#&gt; $ type_field  &lt;chr&gt; "Snacks", "City", "Church", "Building", "City", "City", "C…</span></span>
-<span><span class="co">#&gt; $ geometry    &lt;POINT [°]&gt; POINT (-84.34273 33.74034), POINT (-84.41243 33.77455), PO…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ short_label &lt;chr&gt; "Bellwood Coffee", "Bellwood Homes", "Bellwood", "Bellwood…</span></span>
+<span><span class="co">#&gt; $ addr_type   &lt;chr&gt; "POI", "POI", "Locality", "POI", "POI"</span></span>
+<span><span class="co">#&gt; $ type_field  &lt;chr&gt; "Snacks", "Other Shops and Service", "City", "Snacks", "Ch…</span></span>
+<span><span class="co">#&gt; $ geometry    &lt;POINT [°]&gt; POINT (-84.34272 33.74034), POINT (-84.41127 33.77591), PO…</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -234,21 +261,18 @@
 <h2 id="batch-geocoding">Batch geocoding<a class="anchor" aria-label="anchor" href="#batch-geocoding"></a>
 </h2>
 <p>Many addresses can be geocoded very quickly using the <code><a href="reference/geocode_addresses.html">geocode_addresses()</a></code> function which calls the <code>/geocodeAddresses</code> endpoint. Note that this function requires an authorization token. <code><a href="reference/geocode_addresses.html">geocode_addresses()</a></code> sends the input addresses in chunks as parallel requests.</p>
-<p>Batch geocoding requires a signed in user. Load the <a href="https://github.com/r-arcgis/arcgisutils" class="external-link"><code>{arcgisutils}</code></a> to authorize and set your token. This example uses the <a href="#id_%20https://datacatalog.urban.org/node/6158/revisions/14192/view" class="external-link">Geocoding Test Dataset</a> from the <a href="https://www.urban.org/" class="external-link">Urban Institute</a>.</p>
+<p>Batch geocoding requires a signed in user. Load the <a href="https://github.com/r-arcgis/arcgisutils" class="external-link"><code>{arcgisutils}</code></a> to authorize and set your token. This example uses the Geocoding Test Dataset from the <a href="https://www.urban.org/" class="external-link">Urban Institute</a>.</p>
 <blockquote>
 <p>[!TIP]</p>
 <p>A token <em>is required</em> to use this function with the World Geocoding Service. It may not be necessary if you are using a private ArcGIS Enterprise service.</p>
 </blockquote>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/R-ArcGIS/arcgisutils" class="external-link">arcgisutils</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-arcgis/arcgisgeocode" class="external-link">arcgisgeocode</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/arcgisutils/man/token.html" class="external-link">set_arc_token</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/arcgisutils/man/auth.html" class="external-link">auth_user</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu">set_arc_token</span><span class="op">(</span><span class="fu">auth_user</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Example dataset from the Urban Institute</span></span>
 <span><span class="va">fp</span> <span class="op">&lt;-</span> <span class="st">"https://urban-data-catalog.s3.amazonaws.com/drupal-root-live/2020/02/25/geocoding_test_data.csv"</span></span>
 <span></span>
-<span><span class="va">to_geocode</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span><span class="va">fp</span>, <span class="fu">readr</span><span class="fu">::</span><span class="fu">locale</span><span class="op">(</span>encoding <span class="op">=</span> <span class="st">"latin1"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">to_geocode</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span><span class="va">fp</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">geocoded</span> <span class="op">&lt;-</span> <span class="va">to_geocode</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/reframe.html" class="external-link">reframe</a></span><span class="op">(</span></span>
@@ -260,39 +284,60 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">res</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">res</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 5</span></span>
+<span><span class="co">#&gt; Columns: 11</span></span>
+<span><span class="co">#&gt; $ input_id    &lt;int&gt; 1, 2, 3, 4, 5</span></span>
+<span><span class="co">#&gt; $ result_id   &lt;int&gt; NA, NA, NA, NA, NA</span></span>
+<span><span class="co">#&gt; $ loc_name    &lt;chr&gt; NA, NA, NA, NA, NA</span></span>
+<span><span class="co">#&gt; $ status      &lt;chr&gt; "M", "M", "M", "M", "M"</span></span>
+<span><span class="co">#&gt; $ score       &lt;dbl&gt; 100, 100, 100, 100, 100</span></span>
+<span><span class="co">#&gt; $ match_addr  &lt;chr&gt; "Bellwood Coffee", "Bellwood Homes", "Bellwood, Atlanta, G…</span></span>
+<span><span class="co">#&gt; $ long_label  &lt;chr&gt; "Bellwood Coffee, 1366 Glenwood Ave SE, Atlanta, GA, 30316…</span></span>
+<span><span class="co">#&gt; $ short_label &lt;chr&gt; "Bellwood Coffee", "Bellwood Homes", "Bellwood", "Bellwood…</span></span>
+<span><span class="co">#&gt; $ addr_type   &lt;chr&gt; "POI", "POI", "Locality", "POI", "POI"</span></span>
+<span><span class="co">#&gt; $ type_field  &lt;chr&gt; "Snacks", "Other Shops and Service", "City", "Snacks", "Ch…</span></span>
+<span><span class="co">#&gt; $ geometry    &lt;POINT [°]&gt; POINT (-84.34272 33.74034), POINT (-84.41127 33.77591), PO…</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="using-other-locators">Using other locators<a class="anchor" aria-label="anchor" href="#using-other-locators"></a>
 </h2>
-<p><a href="https://github.com/r-arcgis/arcgisgeocode" class="external-link">arcgisgeocode</a> can be used with other geocoding services, including custom locators hosted on ArcGIS Online or Enterprise. For example, we can use the <a href="https://www.nconemap.gov/pages/addresses" class="external-link">AddressNC</a> geocoding service <a href="https://www.arcgis.com/home/item.html?id=247dfe30ec42476a96926ad9e35f725f" class="external-link">available on ArcGIS Online</a>.</p>
-<p>Create a new <code>GeocodeServer</code> object using <code><a href="reference/geocode_server.html">geocode_server()</a></code>. This geocoder can be passed into the <code>geocoder</code> argument to any of the geocoding functions.</p>
+<p>You can use <code><a href="reference/list_geocoders.html">list_geocoders()</a></code> to find all of the geocoders available to you by your organization.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">address_nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/geocode_server.html">geocode_server</a></span><span class="op">(</span></span>
-<span>  <span class="st">"https://services.nconemap.gov/secure/rest/services/AddressNC/AddressNC_geocoder/GeocodeServer"</span>,</span>
-<span>  token <span class="op">=</span> <span class="cn">NULL</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/find_address_candidates.html">find_address_candidates</a></span><span class="op">(</span></span>
-<span>  address <span class="op">=</span> <span class="st">"rowan coffee"</span>,</span>
-<span>  city <span class="op">=</span> <span class="st">"asheville"</span>,</span>
-<span>  geocoder <span class="op">=</span> <span class="va">address_nc</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">res</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 2</span></span>
-<span><span class="co">#&gt; Columns: 11</span></span>
-<span><span class="co">#&gt; $ input_id    &lt;int&gt; 1, 1</span></span>
-<span><span class="co">#&gt; $ result_id   &lt;int&gt; NA, NA</span></span>
-<span><span class="co">#&gt; $ loc_name    &lt;chr&gt; NA, NA</span></span>
-<span><span class="co">#&gt; $ status      &lt;chr&gt; "T", "T"</span></span>
-<span><span class="co">#&gt; $ score       &lt;dbl&gt; 78, 78</span></span>
-<span><span class="co">#&gt; $ match_addr  &lt;chr&gt; "ASHEVILLE", "ASHEVILLE"</span></span>
-<span><span class="co">#&gt; $ long_label  &lt;chr&gt; "ASHEVILLE", "ASHEVILLE"</span></span>
-<span><span class="co">#&gt; $ short_label &lt;chr&gt; "ASHEVILLE", "ASHEVILLE"</span></span>
-<span><span class="co">#&gt; $ addr_type   &lt;chr&gt; "Locality", "Locality"</span></span>
-<span><span class="co">#&gt; $ type_field  &lt;chr&gt; "City", "City"</span></span>
-<span><span class="co">#&gt; $ geometry    &lt;POINT [US_survey_foot]&gt; POINT (943428.1 681596.4), POINT (948500.3 631973.4)…</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/list_geocoders.html">list_geocoders</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A data frame: 1 × 10</span></span>
+<span><span class="co">#&gt;   url     northLat southLat eastLon westLon name  suggest zoomScale placefinding</span></span>
+<span><span class="co">#&gt; * &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;lgl&gt;       &lt;int&gt; &lt;lgl&gt;       </span></span>
+<span><span class="co">#&gt; 1 https:… Ymax     Ymin     Xmax    Xmin    ArcG… TRUE        10000 TRUE        </span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: batch &lt;lgl&gt;</span></span></code></pre></div>
+<p><a href="https://github.com/r-arcgis/arcgisgeocode" class="external-link">arcgisgeocode</a> can be used with other geocoding services, including custom locators hosted on ArcGIS Online or Enterprise. You can search for geocoding services that may be useful for you with <code><a href="https://rdrr.io/pkg/arcgisutils/man/search_items.html" class="external-link">arcgisutils::search_items()</a></code>.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">search_items</span><span class="op">(</span>item_type <span class="op">=</span> <span class="st">"Geocoding Service"</span>, max_pages <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A data frame: 50 × 45</span></span>
+<span><span class="co">#&gt;    id      owner created             modified            guid  name  title type </span></span>
+<span><span class="co">#&gt;  * &lt;chr&gt;   &lt;chr&gt; &lt;dttm&gt;              &lt;dttm&gt;              &lt;lgl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;</span></span>
+<span><span class="co">#&gt;  1 62e6d8… jstr… 2017-09-21 20:46:45 2017-09-21 20:54:15 NA    &lt;NA&gt;  Brev… Geoc…</span></span>
+<span><span class="co">#&gt;  2 495c4d… AdmB… 2020-01-13 08:21:34 2020-07-01 07:07:25 NA    &lt;NA&gt;  Sted… Geoc…</span></span>
+<span><span class="co">#&gt;  3 b3f732… Clar… 2019-10-24 21:01:47 2019-10-24 21:02:35 NA    &lt;NA&gt;  Clar… Geoc…</span></span>
+<span><span class="co">#&gt;  4 11f1b5… Erik… 2015-10-20 17:36:20 2017-11-28 17:24:30 NA    &lt;NA&gt;  COMP… Geoc…</span></span>
+<span><span class="co">#&gt;  5 e2e52a… mari… 2017-02-09 12:20:33 2017-02-09 12:20:38 NA    &lt;NA&gt;  Topo… Geoc…</span></span>
+<span><span class="co">#&gt;  6 c10754… balt… 2019-12-06 15:47:03 2019-12-06 15:47:06 NA    &lt;NA&gt;  EGIS… Geoc…</span></span>
+<span><span class="co">#&gt;  7 2fde30… cbat… 2015-10-29 17:49:15 2015-10-29 17:49:15 NA    &lt;NA&gt;  Addr… Geoc…</span></span>
+<span><span class="co">#&gt;  8 0983b4… dili… 2016-05-04 15:59:35 2016-05-04 15:59:35 NA    &lt;NA&gt;  what… Geoc…</span></span>
+<span><span class="co">#&gt;  9 893e0b… gis_… 2017-11-15 09:19:05 2017-11-15 11:44:58 NA    &lt;NA&gt;  PKC   Geoc…</span></span>
+<span><span class="co">#&gt; 10 b8bcbe… 3918  2014-03-21 13:00:08 2014-03-21 13:00:08 NA    &lt;NA&gt;  Indy… Geoc…</span></span>
+<span><span class="co">#&gt; # ℹ 40 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 37 more variables: typeKeywords &lt;list&gt;, description &lt;chr&gt;, tags &lt;list&gt;,</span></span>
+<span><span class="co">#&gt; #   snippet &lt;chr&gt;, thumbnail &lt;chr&gt;, documentation &lt;lgl&gt;, extent &lt;list&gt;,</span></span>
+<span><span class="co">#&gt; #   categories &lt;list&gt;, spatialReference &lt;chr&gt;, accessInformation &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   classification &lt;lgl&gt;, licenseInfo &lt;chr&gt;, culture &lt;chr&gt;, properties &lt;list&gt;,</span></span>
+<span><span class="co">#&gt; #   advancedSettings &lt;lgl&gt;, url &lt;chr&gt;, sourceUrl &lt;chr&gt;, proxyFilter &lt;lgl&gt;,</span></span>
+<span><span class="co">#&gt; #   access &lt;chr&gt;, size &lt;int&gt;, subInfo &lt;int&gt;, appCategories &lt;list&gt;, …</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="learn-more">Learn more<a class="anchor" aria-label="anchor" href="#learn-more"></a>
+</h2>
+<p>To learn more about geocoding with the R-ArcGIS Bridge visit the <a href="https://developers.arcgis.com/r-bridge/geocoding/overview/" class="external-link">developers site</a>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -329,9 +374,10 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://CRAN.R-project.org/package=arcgisgeocode" class="external-link"><img src="https://www.r-pkg.org/badges/version/arcgisgeocode.png" alt="CRAN status"></a></li>
-<li><a href="https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/R-ArcGIS/arcgisgeocode/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://extendr.github.io/extendr/extendr_api/" class="external-link"><img src="https://img.shields.io/badge/extendr-%5E0.8.0-276DC2" alt="extendr"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg?cache-control=no-cache" alt="Lifecycle: stable"></a></li>
+<li><a href="https://CRAN.R-project.org/package=arcgisgeocode" class="external-link"><img src="https://www.r-pkg.org/badges/version/arcgisgeocode?cache-control=no-cache.png" alt="CRAN status"></a></li>
+<li><a href="https://cran.r-project.org/package=arcgisgeocode" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/arcgisgeocode?cache-control=no-cache.png" alt="Downloads"></a></li>
 </ul>
 </div>
 

@@ -1,20 +1,20 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
-<url><loc>/404.html</loc></url>
-<url><loc>/LICENSE.html</loc></url>
-<url><loc>/authors.html</loc></url>
-<url><loc>/index.html</loc></url>
-<url><loc>/news/index.html</loc></url>
-<url><loc>/reference/arcgisgeocode-package.html</loc></url>
-<url><loc>/reference/esri_wkids.html</loc></url>
-<url><loc>/reference/find_address_candidates.html</loc></url>
-<url><loc>/reference/geocode_addresses.html</loc></url>
-<url><loc>/reference/geocode_server.html</loc></url>
-<url><loc>/reference/index.html</loc></url>
-<url><loc>/reference/iso_3166_codes.html</loc></url>
-<url><loc>/reference/list_geocoders.html</loc></url>
-<url><loc>/reference/reverse_geocode.html</loc></url>
-<url><loc>/reference/storage.html</loc></url>
-<url><loc>/reference/suggest_places.html</loc></url>
-<url><loc>/reference/world_geocoder.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/404.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/LICENSE.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/authors.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/index.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/news/index.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/arcgisgeocode-package.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/esri_wkids.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/find_address_candidates.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/geocode_addresses.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/geocode_server.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/index.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/iso_3166_codes.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/list_geocoders.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/reverse_geocode.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/storage.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/suggest_places.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/world_geocoder.html</loc></url>
 </urlset>
 

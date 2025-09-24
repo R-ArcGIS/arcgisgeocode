@@ -1,4 +1,4 @@
-url: ~
+url: https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode
 template:
   bootstrap: 5
 
@@ -15,6 +15,7 @@ reference:
     contents:
       - geocode_server
       - default_geocoder
+      - world_geocoder
       - list_geocoders
 
   - title: Utilities

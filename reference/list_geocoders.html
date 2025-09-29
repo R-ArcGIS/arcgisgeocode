@@ -55,7 +55,9 @@ with your authorization token is used.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">list_geocoders</span><span class="op">(</span>token <span class="op">=</span> <span class="fu">arc_token</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">default_geocoder</span><span class="op">(</span>token <span class="op">=</span> <span class="fu">arc_token</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">default_geocoder</span><span class="op">(</span>token <span class="op">=</span> <span class="fu">arc_token</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">world_geocoder</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -77,6 +79,13 @@ or related function</p></dd>
     <p>The <code>default_geocoder()</code> will return the ArcGIS World Geocoder if no
 token is available. <code>list_geocoder()</code> requires an authorization
 token.</p>
+<p>The <a href="https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder" class="external-link">ArcGIS World Geocoder</a>
+is made publicly available for some uses. The <code>world_geocoder()</code> is used
+as the default <code>GeocodeServer</code> object in <code>default_geocoder()</code> when no
+authorization token is found. The <code><a href="find_address_candidates.html">find_address_candidates()</a></code>,
+<code><a href="reverse_geocode.html">reverse_geocode()</a></code>, and <code><a href="suggest_places.html">suggest_places()</a></code> can be used without an
+authorization token. The <code><a href="geocode_addresses.html">geocode_addresses()</a></code> funciton requires an
+authorization token to be used for batch geocoding.</p>
 <p>To manually create a <code>GeocodeServer</code> object, see <code><a href="geocode_server.html">geocode_server()</a></code>.</p>
     </div>
 

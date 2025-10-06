@@ -4,6 +4,11 @@
 ^README\.Rmd$
 ^cran-comments\.md$
 ^src/\.cargo$
+README.md
+README.html
+README.Rmd
+README.qmd
+justfile
 ^\.github$
 ^data-raw$
 ^dev$

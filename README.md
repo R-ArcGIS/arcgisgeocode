@@ -6,7 +6,7 @@
 
 <!-- badges: start -->
 
-[![extendr](https://img.shields.io/badge/extendr-%5E0.8.0-276DC2)](https://extendr.github.io/extendr/extendr_api/)
+[![extendr](https://img.shields.io/badge/extendr-%5E0.8.0-276DC2)](https://extendr.rs/extendr/extendr_api/)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg?cache-control=no-cache)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN

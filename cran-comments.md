@@ -1,4 +1,4 @@
-This is a maintenance release to address breaking changes with httr2.
+This is a maitenance release to address minor bugs with changes in upstream services.
 
 ## R CMD check results
 

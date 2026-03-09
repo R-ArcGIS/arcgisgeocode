@@ -1,0 +1,328 @@
+# arcgisgeocode
+
+## Overview
+
+arcgisgeocode is a high-performance R package providing comprehensive access to
+ArcGIS geocoding services. It enables you to convert addresses to coordinates
+(forward geocoding), coordinates to addresses (reverse geocoding), search for
+place suggestions, and batch geocode large lists of addresses.
+
+Key capabilities:
+
+- [`find_address_candidates()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/find_address_candidates.html):
+  Forward geocode one or many addresses, returning up to 50 ranked match
+  candidates per address. Vectorized and runs requests in parallel.
+- [`reverse_geocode()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reverse_geocode.html):
+  Convert one or many coordinates (points) to addresses. Accepts `sfc_POINT`
+  objects, a 2-column numeric matrix, or a length-2 numeric vector.
+  Vectorized and runs requests in parallel.
+- [`geocode_addresses()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/geocode_addresses.html):
+  Bulk geocode large vectors of addresses in parallel batches. Returns a
+  single best-match location per address. Requires an authorization token.
+- [`suggest_places()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/suggest_places.html):
+  Return autocomplete suggestions for a partial search query, optionally
+  constrained by a location or bounding box. Intended for interactive search
+  UIs. Not vectorized.
+
+By default, all functions use the public
+[ArcGIS World Geocoder](https://www.esri.com/en-us/arcgis/products/arcgis-world-geocoder).
+You can also use private locators hosted on ArcGIS Online or ArcGIS Enterprise
+via [`geocode_server()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/geocode_server.html).
+
+## Licensing considerations
+
+Many geocoding operations are free, but **storing results requires setting
+`for_storage = TRUE`** and may incur costs. Batch geocoding
+(`geocode_addresses()`) always requires an authorization token and consumes
+credits when used with the ArcGIS World Geocoder.
+
+| Function | Free? | Token required? |
+|---|---|---|
+| `find_address_candidates()` | ✅ | No |
+| `reverse_geocode()` | ✅ | No |
+| `suggest_places()` | ✅ | No |
+| `geocode_addresses()` | ❌ | Yes |
+
+See the [storage parameter documentation](https://developers.arcgis.com/documentation/mapping-apis-and-services/geocoding/services/geocoding-service/#storage-parameter)
+for details on free vs. paid operations.
+
+## Installation
+
+``` r
+# Install the full R-ArcGIS Bridge metapackage (recommended):
+install.packages("arcgis")
+
+# Or install arcgisgeocode individually:
+install.packages("arcgisgeocode")
+```
+
+### Development version
+
+``` r
+# install.packages("pak")
+pak::pak("r-arcgis/arcgisgeocode")
+```
+
+## Usage
+
+``` r
+library(arcgisgeocode)
+```
+
+### Forward geocoding
+
+Geocode a single address string using the `single_line` argument:
+
+``` r
+loc <- find_address_candidates(
+  "380 New York Street, Redlands, CA 92373",
+  max_locations = 1
+)
+loc$geometry
+#> Geometry set for 1 feature
+#> Geometry type: POINT
+#> CRS: EPSG 4326
+#> POINT (-117.1957 34.05609)
+```
+
+Provide address components individually:
+
+``` r
+candidates <- find_address_candidates(
+  address = "380 New York St",
+  city = "Redlands",
+  region = "CA",
+  postal = "92373",
+  country_code = "USA",
+  max_locations = 1
+)
+```
+
+Geocode a column of addresses from a data frame using `dplyr::reframe()`:
+
+``` r
+library(dplyr)
+
+geocoded <- my_df |>
+  reframe(
+    find_address_candidates(address_column, max_locations = 1)
+  ) |>
+  sf::st_as_sf()
+```
+
+### Reverse geocoding
+
+Reverse geocode a single lon/lat pair:
+
+``` r
+res <- reverse_geocode(c(-117.172, 34.052))
+dplyr::glimpse(res)
+#> Rows: 1
+#> Columns: 23
+#> $ match_addr <chr> "600-620 Home Pl, Redlands, California, 92374"
+#> $ city       <chr> "Redlands"
+#> $ region     <chr> "California"
+#> $ geometry   <POINT [°]> POINT (-117.172 34.05204)
+```
+
+Reverse geocode an `sfc_POINT` geometry column from an sf object:
+
+``` r
+library(sf)
+geocoded <- reverse_geocode(sf::st_geometry(my_sf))
+
+# Combine results back onto original data
+dplyr::bind_cols(my_sf, sf::st_drop_geometry(geocoded))
+```
+
+Also accepts a 2-column numeric matrix (e.g. from `sf::st_coordinates()`):
+
+``` r
+coords <- sf::st_coordinates(my_sf)
+reverse_geocode(coords)
+```
+
+### Place suggestions
+
+Get autocomplete suggestions for a partial search text, optionally scoped to
+a location and bounding box:
+
+``` r
+location <- sf::st_sfc(sf::st_point(c(-84.34, 33.74)), crs = 4326)
+search_extent <- sf::st_bbox(sf::st_buffer(location, 10))
+
+suggestions <- suggest_places(
+  "bellwood",
+  location,
+  search_extent = search_extent
+)
+suggestions
+#> # A data frame: 5 × 3
+#>   text                                          magic_key         is_collection
+#>   <chr>                                         <chr>             <lgl>
+#> 1 Bellwood Coffee, 1366 Glenwood Ave SE, ...   dHA9MCN0…         FALSE
+```
+
+Pass the `text` and `magic_key` columns to `find_address_candidates()` to
+retrieve full geocoding results:
+
+``` r
+find_address_candidates(
+  suggestions$text,
+  magic_key = suggestions$magic_key
+)
+```
+
+### Batch geocoding
+
+Bulk geocode large datasets with `geocode_addresses()`. Requires authentication
+via `{arcgisutils}`.
+
+``` r
+library(arcgisutils)
+set_arc_token(auth_user())
+
+geocoded <- geocode_addresses(
+  address = my_df$street,
+  city    = my_df$city,
+  region  = my_df$state,
+  postal  = my_df$zip
+)
+```
+
+Results include a `result_id` column that can be joined back to the original
+data frame:
+
+``` r
+library(dplyr)
+left_join(my_df |> mutate(id = row_number()), geocoded, by = c("id" = "result_id"))
+```
+
+### Storing results
+
+By default `for_storage = FALSE`. If you intend to persist geocoding results,
+set `for_storage = TRUE` in any function call:
+
+``` r
+find_address_candidates("1600 Pennsylvania Ave NW", for_storage = TRUE)
+```
+
+## Geocoder services
+
+### Default geocoder
+
+By default all functions use the ArcGIS World Geocoder. Use
+`default_geocoder()` to inspect the active geocoder, or `world_geocoder()` to
+explicitly create a reference to the World Geocoder.
+
+``` r
+default_geocoder()
+#> <GeocodeServer>
+#> Description: ...
+#> Version: 10.91
+#> CRS: 4326
+```
+
+### Custom locators
+
+To use a private or organization geocoding service, create a `GeocodeServer`
+object from its URL using `geocode_server()` and pass it to the `geocoder`
+argument of any geocoding function:
+
+``` r
+my_locator <- geocode_server(
+  "https://my-enterprise.example.com/arcgis/rest/services/MyLocator/GeocodeServer"
+)
+
+find_address_candidates("123 Main St", geocoder = my_locator)
+```
+
+List all geocoders available to your account:
+
+``` r
+list_geocoders()
+#> # A data frame: 1 × 10
+#>   url     name    suggest batch ...
+```
+
+Search for geocoding services on ArcGIS Online:
+
+``` r
+arcgisutils::search_items(item_type = "Geocoding Service")
+```
+
+## Getting help
+
+- Documentation: <https://developers.arcgis.com/r-bridge/geocoding/overview/>
+- File a bug report: <https://github.com/R-ArcGIS/arcgisgeocode/issues>
+- Community forum: <https://community.esri.com/>
+
+# Package index
+
+## Core geocoding functions
+
+- [`find_address_candidates()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/find_address_candidates.html):
+  Forward geocode one or many addresses; returns an `sf` object with up to 50
+  ranked candidates per address. Accepts `single_line` (full address string) or
+  individual fields (`address`, `city`, `region`, `postal`, etc.). Vectorized;
+  sends requests in parallel.
+
+- [`reverse_geocode()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reverse_geocode.html):
+  Convert one or many point locations to addresses; returns an `sf` object.
+  Accepts an `sfc_POINT` object, a 2-column numeric matrix, or a length-2
+  numeric vector (lon, lat). Vectorized; sends requests in parallel.
+
+- [`geocode_addresses()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/geocode_addresses.html):
+  Bulk geocode many addresses in parallel batches; returns a single best-match
+  location per address as an `sf` object. Accepts the same address arguments as
+  `find_address_candidates()`. Requires an authorization token.
+
+- [`suggest_places()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/suggest_places.html):
+  Return up to 15 place/address autocomplete suggestions for a partial search
+  string. Not vectorized. Returns a `data.frame` with columns `text`,
+  `magic_key`, and `is_collection`.
+
+## Geocoder management
+
+- [`geocode_server()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/geocode_server.html):
+  Create a `GeocodeServer` object from a service URL. Pass the result to the
+  `geocoder` argument of any geocoding function.
+
+- [`default_geocoder()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/default_geocoder.html):
+  Returns the ArcGIS World Geocoder when no token is set, or the first
+  available organizational geocoder when authenticated.
+
+- [`world_geocoder()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/world_geocoder.html):
+  Explicitly returns a `GeocodeServer` object for the public ArcGIS World
+  Geocoder.
+
+- [`list_geocoders()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/list_geocoders.html):
+  List all geocoding services available to your authenticated account. Requires
+  an authorization token.
+
+## Utilities
+
+- [`iso_3166_codes()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/iso_3166_codes.html):
+  Return a character vector of valid ISO 3166 country codes accepted by
+  `country_code`, `lang_code`, and `source_country` arguments.
+
+- [`esri_wkids`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/esri_wkids.html):
+  A numeric vector of Esri well-known IDs (WKIDs) for spatial references.
+
+# Articles
+
+- [Overview](https://developers.arcgis.com/r-bridge/geocoding/overview/):
+  Introduction to geocoding concepts (forward, reverse, batch) and licensing
+  considerations for the ArcGIS World Geocoder.
+
+- [Forward geocoding](https://developers.arcgis.com/r-bridge/geocoding/forward-geocoding/):
+  How to geocode single addresses, multiple addresses, and address columns in a
+  data frame using `find_address_candidates()`.
+
+- [Reverse geocoding](https://developers.arcgis.com/r-bridge/geocoding/reverse-geocoding/):
+  How to reverse geocode single points, `sfc_POINT` geometry columns, and
+  coordinate matrices using `reverse_geocode()`.
+
+- [Bulk geocoding](https://developers.arcgis.com/r-bridge/geocoding/bulk-geocoding/):
+  How to authenticate and geocode large datasets efficiently with
+  `geocode_addresses()`, then join results back to the original data frame.

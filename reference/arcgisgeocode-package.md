@@ -1,0 +1,24 @@
+# arcgisgeocode: A Robust Interface to ArcGIS 'Geocoding Services'
+
+A very fast and robust interface to ArcGIS 'Geocoding Services'.
+Provides capabilities for reverse geocoding, finding address candidates,
+character-by-character search autosuggestion, and batch geocoding. The
+public 'ArcGIS World Geocoder' is accessible for free use via
+'arcgisgeocode' for all services except batch geocoding. 'arcgisgeocode'
+also integrates with 'arcgisutils' to provide access to custom locators
+or private 'ArcGIS World Geocoder' hosted on 'ArcGIS Enterprise'. Learn
+more in the 'Geocode service' API reference
+<https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm>.
+
+## See also
+
+Useful links:
+
+- <https://github.com/r-arcgis/arcgisgeocode>
+
+- <https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode>
+
+## Author
+
+**Maintainer**: Josiah Parry <josiah.parry@gmail.com>
+([ORCID](https://orcid.org/0000-0001-9910-865X))

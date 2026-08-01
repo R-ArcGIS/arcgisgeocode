@@ -21,6 +21,7 @@ jobs:
         config:
           - {os: macos-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
+          - {os: windows-11-arm, r: 'release'}
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
           - {os: ubuntu-latest,   r: 'oldrel-1'}
@@ -34,6 +35,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - if: ${{ runner.os == 'windows' && runner.arch == 'ARM64' }}
+        run: rustup target add aarch64-pc-windows-gnullvm
 
       - uses: r-lib/actions/setup-pandoc@v2
 

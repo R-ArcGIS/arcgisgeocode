@@ -59,6 +59,13 @@
 #'   determined by the `geocoder` and are not validated—see
 #'   `geocoder[["candidateFields"]]`. Fields that are not requested are returned
 #'   as missing values. Optional.
+#' @param search_within default `NULL`. Returns the collection of places that
+#'   exist within a geocoded object—for example every business at an address, or
+#'   every address in a postal code. Must be one or more of `"PointAddress"`,
+#'   `"Subaddress"`, or `"POI"`. Collections are only returned for geocoded
+#'   `PointAddress` and `PostalExt` records, and the first candidate in the
+#'   result is always the geocoded object itself. A `token` is required whenever
+#'   `search_within` is provided. Optional.
 #' @param match_out_of_range set to `TRUE` by service by default. Matches locations Optional.
 #' @param source_country default `NULL`. An ISO 3166 country code.
 #'   See [`iso_3166_codes()`] for valid ISO codes. Optional.
@@ -89,6 +96,7 @@ find_address_candidates <- function(
     crs = NULL, # validate
     max_locations = NULL, # max 50
     out_fields = NULL, # not validated, determined by the geocoder
+    search_within = NULL,
     for_storage = FALSE, # warn
     match_out_of_range = NULL,
     location_type = NULL,
@@ -128,6 +136,7 @@ find_address_candidates <- function(
   check_character(preferred_label_values, allow_null = TRUE)
   check_character(magic_key, allow_null = TRUE)
   check_character(out_fields, allow_null = TRUE)
+  check_character(search_within, allow_null = TRUE)
 
   # iso 3166 checks
   check_iso_3166(country_code, allow_null = TRUE, scalar = FALSE)
@@ -168,7 +177,7 @@ find_address_candidates <- function(
   # these arguments are scalars and shold not be handled in a vectorized manner
   to_exclude <- c(
     "crs", ".progress", "token", "geocoder", "for_storage", "search_extent",
-    "out_fields"
+    "out_fields", "search_within"
   )
   to_include <- !names(all_args) %in% to_exclude
 
@@ -242,6 +251,10 @@ find_address_candidates <- function(
   # the service takes a comma separated string. `*` requests everything
   out_fields <- collapse_out_fields(out_fields)
 
+  if (!is.null(search_within)) {
+    search_within <- paste0(search_within, collapse = ",")
+  }
+
   # create the base request
   b_req <- arc_base_req(
     geocoder[["url"]],
@@ -272,7 +285,8 @@ find_address_candidates <- function(
       !!!params_i,
       outFields = out_fields,
       outSR = crs,
-      searchExtent = search_extent
+      searchExtent = search_extent,
+      searchWithin = search_within
     )
   }
 

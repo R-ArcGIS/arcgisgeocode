@@ -22,6 +22,7 @@ find_address_candidates(
   crs = NULL,
   max_locations = NULL,
   out_fields = NULL,
+  search_within = NULL,
   for_storage = FALSE,
   match_out_of_range = NULL,
   location_type = NULL,
@@ -92,6 +93,14 @@ service. The default, \code{NULL}, requests all fields. The available fields are
 determined by the \code{geocoder} and are not validated—see
 \code{geocoder[["candidateFields"]]}. Fields that are not requested are returned
 as missing values. Optional.}
+
+\item{search_within}{default \code{NULL}. Returns the collection of places that
+exist within a geocoded object—for example every business at an address, or
+every address in a postal code. Must be one or more of \code{"PointAddress"},
+\code{"Subaddress"}, or \code{"POI"}. Collections are only returned for geocoded
+\code{PointAddress} and \code{PostalExt} records, and the first candidate in the
+result is always the geocoded object itself. A \code{token} is required whenever
+\code{search_within} is provided. Optional.}
 
 \item{for_storage}{default \code{FALSE}. Whether or not the results will be saved
 for long term storage.}

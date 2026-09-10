@@ -17,8 +17,8 @@ fn is_iso3166(code: Strings) -> Logicals {
 
 fn is_iso3166_scalar(code: &str) -> bool {
     let code = code.to_uppercase();
-    //https://developers.arcgis.com/rest/geocode/api-reference/geocode-coverage.htm#GUID-D61FB53E-32DF-4E0E-A1CC-473BA38A23C0
-    let non_iso_valid = ["EUR", "NCY", "PLI", "RKS", "SPI"];
+    //https://developers.arcgis.com/rest/geocode/geocode-coverage/#supported-country-codes
+    let non_iso_valid = ["EUR", "KSA", "ROC", "RSA", "UAE"];
 
     // check these first
     if non_iso_valid.contains(&code.as_str()) {

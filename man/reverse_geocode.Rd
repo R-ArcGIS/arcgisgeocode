@@ -10,6 +10,7 @@ reverse_geocode(
   ...,
   lang_code = NULL,
   feature_type = NULL,
+  out_fields = NULL,
   location_type = c("rooftop", "street"),
   preferred_label_values = c("postalCity", "localCity"),
   for_storage = FALSE,
@@ -32,6 +33,12 @@ See \code{\link[=iso_3166_codes]{iso_3166_codes()}} for valid ISO codes. Optiona
 \item{feature_type}{limits the possible match types returned. Must be one of
 \code{"StreetInt"}, \code{"DistanceMarker"}, \code{"StreetAddress"}, \code{"StreetName"},
 \code{"POI"}, \code{"Subaddress"}, \code{"PointAddress"}, \code{"Postal"}, or \code{"Locality"}. Optional.}
+
+\item{out_fields}{a character vector of the fields to be returned by the
+service. The default, \code{NULL}, requests all fields. The available fields are
+determined by the \code{geocoder} and are not validated—see
+\code{geocoder[["candidateFields"]]}. Fields that are not requested are returned
+as empty strings. Optional.}
 
 \item{location_type}{default \code{"rooftop"}. Must be one of \code{"rooftop"} or \code{"street"}.
 Optional.}

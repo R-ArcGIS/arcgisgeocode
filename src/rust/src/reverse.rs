@@ -187,6 +187,7 @@ pub struct ReverseGeocodeResponse {
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize, IntoDataFrameRow)]
 #[serde(rename_all = "camelCase")]
+#[serde(default)]
 pub struct Address {
     #[serde(rename = "Match_addr")]
     pub match_addr: String,

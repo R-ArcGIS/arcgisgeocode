@@ -46,6 +46,11 @@
 #' `"POI"`, `"Subaddress"`, `"PointAddress"`, `"Postal"`, or `"Locality"`. Optional.
 #' @param location_type default `"rooftop"`. Must be one of `"rooftop"` or `"street"`.
 #'  Optional.
+#' @param out_fields a character vector of the fields to be returned by the
+#'   service. The default, `NULL`, requests all fields. The available fields are
+#'   determined by the `geocoder` and are not validated—see
+#'   `geocoder[["candidateFields"]]`. Fields that are not requested are returned
+#'   as empty strings. Optional.
 #' @param preferred_label_values default NULL. Must be one of `"postalCity"`
 #'  or `"localCity"`. Optional.
 #' @param for_storage default `FALSE`. Whether or not the results will be saved
@@ -61,6 +66,7 @@ reverse_geocode <- function(
     ...,
     lang_code = NULL,
     feature_type = NULL,
+    out_fields = NULL,
     location_type = c("rooftop", "street"),
     preferred_label_values = c("postalCity", "localCity"),
     for_storage = FALSE,
@@ -122,6 +128,8 @@ reverse_geocode <- function(
   # ensure lang_code a single string
   check_string(lang_code, allow_null = TRUE)
 
+  check_character(out_fields, allow_null = TRUE)
+
   # if not missing and not valid, error
   if (!is.null(lang_code) && !is_iso3166(lang_code)) {
     cli::cli_abort(
@@ -139,6 +147,7 @@ reverse_geocode <- function(
   query_params <- compact(list(
     langCode = lang_code,
     outSR = jsonify::to_json(out_crs, unbox = TRUE),
+    outFields = collapse_out_fields(out_fields),
     featureType = feature_type,
     forStorage = for_storage,
     locationType = location_type,

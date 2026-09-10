@@ -180,3 +180,18 @@ abort_4326 <- function(arg, call) {
 #     call = call
 #   )
 # }
+
+#' Collapse `out_fields` into the comma separated string the service expects
+#'
+#' Values are not validated. The available fields are a property of the
+#' geocoder, see `geocoder[["candidateFields"]]`.
+#'
+#' @keywords internal
+#' @noRd
+collapse_out_fields <- function(out_fields) {
+  if (is.null(out_fields)) {
+    return("*")
+  }
+
+  paste0(out_fields, collapse = ",")
+}

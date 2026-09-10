@@ -53,6 +53,7 @@ geocode_addresses <- function(
   category = NULL, # Needs validation
   crs = NULL,
   max_locations = NULL,
+  out_fields = NULL, # not validated, determined by the geocoder
   for_storage = FALSE, # warn
   match_out_of_range = NULL,
   location_type = NULL,
@@ -103,6 +104,7 @@ geocode_addresses <- function(
   check_string(category, allow_null = TRUE, allow_empty = FALSE)
   check_string(location_type, allow_null = TRUE, allow_empty = FALSE)
   check_string(preferred_label_values, allow_null = TRUE, allow_empty = FALSE)
+  check_character(out_fields, allow_null = TRUE)
   check_iso_3166(source_country, allow_null = TRUE, scalar = TRUE)
   check_iso_3166(lang_code, allow_null = TRUE, scalar = TRUE)
 
@@ -279,7 +281,7 @@ geocode_addresses <- function(
     langCode = lang_code,
     outSR = crs,
     searchExtent = search_extent,
-    outFields = "*"
+    outFields = collapse_out_fields(out_fields)
   )
 
   all_reqs <- lapply(address_batch_json, function(.addresses) {

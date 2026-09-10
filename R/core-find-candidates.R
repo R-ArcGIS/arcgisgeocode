@@ -54,6 +54,11 @@
 #'  higher accuracy when also passing postal. Optional.
 #' @param max_locations the maximum number of results to return. The default is
 #'   15 with a maximum of 50. Optional.
+#' @param out_fields a character vector of the fields to be returned by the
+#'   service. The default, `NULL`, requests all fields. The available fields are
+#'   determined by the `geocoder` and are not validated—see
+#'   `geocoder[["candidateFields"]]`. Fields that are not requested are returned
+#'   as missing values. Optional.
 #' @param match_out_of_range set to `TRUE` by service by default. Matches locations Optional.
 #' @param source_country default `NULL`. An ISO 3166 country code.
 #'   See [`iso_3166_codes()`] for valid ISO codes. Optional.
@@ -83,6 +88,7 @@ find_address_candidates <- function(
     category = NULL, # Needs validation
     crs = NULL, # validate
     max_locations = NULL, # max 50
+    out_fields = NULL, # not validated, determined by the geocoder
     for_storage = FALSE, # warn
     match_out_of_range = NULL,
     location_type = NULL,
@@ -121,6 +127,7 @@ find_address_candidates <- function(
   check_character(location_type, allow_null = TRUE)
   check_character(preferred_label_values, allow_null = TRUE)
   check_character(magic_key, allow_null = TRUE)
+  check_character(out_fields, allow_null = TRUE)
 
   # iso 3166 checks
   check_iso_3166(country_code, allow_null = TRUE, scalar = FALSE)
@@ -159,7 +166,10 @@ find_address_candidates <- function(
   null_args <- vapply(all_args, is.null, logical(1))
 
   # these arguments are scalars and shold not be handled in a vectorized manner
-  to_exclude <- c("crs", ".progress", "token", "geocoder", "for_storage", "search_extent")
+  to_exclude <- c(
+    "crs", ".progress", "token", "geocoder", "for_storage", "search_extent",
+    "out_fields"
+  )
   to_include <- !names(all_args) %in% to_exclude
 
   # fetches all non-null arguments. These will be turned into a dataframe
@@ -229,6 +239,9 @@ find_address_candidates <- function(
     search_extent <- jsonify::to_json(extent_json_raw, unbox = TRUE)
   }
 
+  # the service takes a comma separated string. `*` requests everything
+  out_fields <- collapse_out_fields(out_fields)
+
   # create the base request
   b_req <- arc_base_req(
     geocoder[["url"]],
@@ -257,17 +270,11 @@ find_address_candidates <- function(
     all_reqs[[i]] <- httr2::req_body_form(
       b_req,
       !!!params_i,
-      outFields = "*",
+      outFields = out_fields,
       outSR = crs,
       searchExtent = search_extent
     )
   }
-
-  all_resps <- httr2::req_perform_parallel(
-    all_reqs,
-    on_error = "continue",
-    progress = .progress
-  )
 
   all_resps <- httr2::req_perform_parallel(
     all_reqs,

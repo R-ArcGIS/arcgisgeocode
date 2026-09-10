@@ -21,6 +21,7 @@ geocode_addresses(
   category = NULL,
   crs = NULL,
   max_locations = NULL,
+  out_fields = NULL,
   for_storage = FALSE,
   match_out_of_range = NULL,
   location_type = NULL,
@@ -85,6 +86,12 @@ Ignored if \code{locations} is not an \code{sfc_POINT} object.}
 
 \item{max_locations}{the maximum number of results to return. The default is
 15 with a maximum of 50. Optional.}
+
+\item{out_fields}{a character vector of the fields to be returned by the
+service. The default, \code{NULL}, requests all fields. The available fields are
+determined by the \code{geocoder} and are not validated—see
+\code{geocoder[["candidateFields"]]}. Fields that are not requested are returned
+as missing values. Optional.}
 
 \item{for_storage}{default \code{FALSE}. Whether or not the results will be saved
 for long term storage.}

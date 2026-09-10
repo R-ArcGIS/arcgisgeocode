@@ -23,6 +23,7 @@ find_address_candidates(
   crs = NULL,
   max_locations = NULL,
   out_fields = NULL,
+  search_within = NULL,
   for_storage = FALSE,
   match_out_of_range = NULL,
   location_type = NULL,
@@ -133,6 +134,16 @@ find_address_candidates(
   determined by the `geocoder` and are not validated—see
   `geocoder[["candidateFields"]]`. Fields that are not requested are
   returned as missing values. Optional.
+
+- search_within:
+
+  default `NULL`. Returns the collection of places that exist within a
+  geocoded object—for example every business at an address, or every
+  address in a postal code. Must be one or more of `"PointAddress"`,
+  `"Subaddress"`, or `"POI"`. Collections are only returned for geocoded
+  `PointAddress` and `PostalExt` records, and the first candidate in the
+  result is always the geocoded object itself. A `token` is required
+  whenever `search_within` is provided. Optional.
 
 - for_storage:
 

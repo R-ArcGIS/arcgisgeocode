@@ -56,6 +56,7 @@
 <span>  crs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  max_locations <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  out_fields <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  search_within <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  for_storage <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  match_out_of_range <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  location_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -163,6 +164,16 @@ service. The default, <code>NULL</code>, requests all fields. The available fiel
 determined by the <code>geocoder</code> and are not validated—see
 <code>geocoder[["candidateFields"]]</code>. Fields that are not requested are returned
 as missing values. Optional.</p></dd>
+
+
+<dt id="arg-search-within">search_within<a class="anchor" aria-label="anchor" href="#arg-search-within"></a></dt>
+<dd><p>default <code>NULL</code>. Returns the collection of places that
+exist within a geocoded object—for example every business at an address, or
+every address in a postal code. Must be one or more of <code>"PointAddress"</code>,
+<code>"Subaddress"</code>, or <code>"POI"</code>. Collections are only returned for geocoded
+<code>PointAddress</code> and <code>PostalExt</code> records, and the first candidate in the
+result is always the geocoded object itself. A <code>token</code> is required whenever
+<code>search_within</code> is provided. Optional.</p></dd>
 
 
 <dt id="arg-for-storage">for_storage<a class="anchor" aria-label="anchor" href="#arg-for-storage"></a></dt>

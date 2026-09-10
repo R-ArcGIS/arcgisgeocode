@@ -22,6 +22,7 @@ find_address_candidates(
   category = NULL,
   crs = NULL,
   max_locations = NULL,
+  out_fields = NULL,
   for_storage = FALSE,
   match_out_of_range = NULL,
   location_type = NULL,
@@ -124,6 +125,14 @@ find_address_candidates(
 
   the maximum number of results to return. The default is 15 with a
   maximum of 50. Optional.
+
+- out_fields:
+
+  a character vector of the fields to be returned by the service. The
+  default, `NULL`, requests all fields. The available fields are
+  determined by the `geocoder` and are not validated—see
+  `geocoder[["candidateFields"]]`. Fields that are not requested are
+  returned as missing values. Optional.
 
 - for_storage:
 

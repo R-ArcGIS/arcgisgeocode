@@ -32,6 +32,6 @@ server_url <- "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServ
 geocode_server(server_url)
 #> <GeocodeServer>
 #> Description: World Geocoder
-#> Version: 11.5
+#> Version: 12.1
 #> CRS: 4326
 ```

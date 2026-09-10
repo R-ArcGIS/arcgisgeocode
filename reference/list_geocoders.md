@@ -57,12 +57,13 @@ To manually create a `GeocodeServer` object, see
 ## Examples
 
 ``` r
+
 # Default geocoder object
 # ArcGIS World Geocoder b/c no token
 default_geocoder()
 #> <GeocodeServer>
 #> Description: World Geocoder
-#> Version: 11.5
+#> Version: 12.1
 #> CRS: 4326
 
 # Requires an Authorization Token

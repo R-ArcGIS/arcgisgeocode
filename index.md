@@ -41,6 +41,7 @@ provides the complete R-ArcGIS Bridge toolkit. For most users,
 installing the metapackage is recommended:
 
 ``` r
+
 # install from CRAN 
 install.packages("arcgis")
 ```
@@ -48,12 +49,14 @@ install.packages("arcgis")
 You can also install {arcgislayers} individually from CRAN:
 
 ``` r
+
 install.packages("arcgisgeocode")
 ```
 
 To install the development version:
 
 ``` r
+
 pak::pak("r-arcgis/arcgisgeocode")
 ```
 
@@ -95,6 +98,7 @@ Reverse geocoding takes a location and finds the associated address.
 > A token *is not required* to use this function.
 
 ``` r
+
 library(arcgisgeocode)
 
 # Find addresses from locations
@@ -146,6 +150,7 @@ of 50).
 > A token *is not required* to use this function.
 
 ``` r
+
 # Find addresses from address search
 candidates <- find_address_candidates(
   address = "esri",
@@ -187,6 +192,7 @@ suggestions based on the search term `"bellwood"`.
 > A token *is not required* to use this function.
 
 ``` r
+
 # identify a search point as a simple feature column
 location <- sf::st_sfc(
   sf::st_point(c(-84.34, 33.74)),
@@ -224,6 +230,7 @@ makes it much faster to fetch results. Pass this into the argument
 `magic_key`.
 
 ``` r
+
 # get address candidate information
 # using the text and the magic key
 res <- find_address_candidates(
@@ -279,6 +286,7 @@ the [Urban Institute](https://www.urban.org/).
 > Enterprise service.
 
 ``` r
+
 set_arc_token(auth_user())
 
 # Example dataset from the Urban Institute
@@ -319,6 +327,7 @@ You can use
 to find all of the geocoders available to you by your organization.
 
 ``` r
+
 list_geocoders()
 #> # A data frame: 1 × 10
 #>   url     northLat southLat eastLon westLon name  suggest zoomScale placefinding
@@ -334,6 +343,7 @@ may be useful for you with
 [`arcgisutils::search_items()`](https://rdrr.io/pkg/arcgisutils/man/search_items.html).
 
 ``` r
+
 search_items(item_type = "Geocoding Service", max_pages = 1)
 #> # A data frame: 50 × 45
 #>    id      owner created             modified            guid  name  title type 

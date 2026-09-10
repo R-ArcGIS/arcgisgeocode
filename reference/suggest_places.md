@@ -110,11 +110,11 @@ find_address_candidates(
 #> Bounding box:  xmin: -84.34272 ymin: 33.74035 xmax: -84.34272 ymax: 33.74035
 #> Geodetic CRS:  WGS 84
 #>   input_id result_id loc_name status score                 match_addr
-#> 1        1        NA     <NA>      M   100            Bellwood Coffee
-#> 2        2        NA     <NA>      M   100             Bellwood Homes
-#> 3        3        NA     <NA>      M   100 Bellwood, Atlanta, Georgia
-#> 4        4        NA     <NA>      M   100            Bellwood Coffee
-#> 5        5        NA     <NA>      M   100            Bellwood Church
+#> 1        1        NA    World      M   100            Bellwood Coffee
+#> 2        2        NA    World      M   100             Bellwood Homes
+#> 3        3        NA    World      M   100 Bellwood, Atlanta, Georgia
+#> 4        4        NA    World      M   100            Bellwood Coffee
+#> 5        5        NA    World      M   100            Bellwood Church
 #>                                                       long_label
 #> 1 Bellwood Coffee, 1366 Glenwood Ave SE, Atlanta, GA, 30316, USA
 #> 2   Bellwood Homes, 736 Jefferson St NW, Atlanta, GA, 30318, USA

@@ -11,6 +11,7 @@ reverse_geocode(
   ...,
   lang_code = NULL,
   feature_type = NULL,
+  out_fields = NULL,
   location_type = c("rooftop", "street"),
   preferred_label_values = c("postalCity", "localCity"),
   for_storage = FALSE,
@@ -48,6 +49,14 @@ reverse_geocode(
   `"StreetInt"`, `"DistanceMarker"`, `"StreetAddress"`, `"StreetName"`,
   `"POI"`, `"Subaddress"`, `"PointAddress"`, `"Postal"`, or
   `"Locality"`. Optional.
+
+- out_fields:
+
+  a character vector of the fields to be returned by the service. The
+  default, `NULL`, requests all fields. The available fields are
+  determined by the `geocoder` and are not validated—see
+  `geocoder[["candidateFields"]]`. Fields that are not requested are
+  returned as empty strings. Optional.
 
 - location_type:
 

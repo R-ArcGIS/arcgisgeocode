@@ -4,9 +4,20 @@
 
 CRAN release: 2025-10-07
 
+- Adds
+  [`geocode_file()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/geocode_file_job.md)
+  and
+  [`geocode_file_job()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/geocode_file_job.md)
+  which geocode a file of addresses using the `BatchGeocode` job
+  endpoint. Results are written with
+  [`write_geocode_result()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/write_geocode_result.md)
+  and read with
+  [`read_geocode_result()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/read_geocode_result.md).
+
 - The `world_geocoder` object has been deprecated in favor of
   [`world_geocoder()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/list_geocoders.md)
   function
+
 - Resolves an issue parsing geocoding results with fields that are not
   present in the world geocoder. Fixes
   [\#41](https://github.com/R-ArcGIS/arcgisgeocode/issues/41)

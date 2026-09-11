@@ -4,16 +4,20 @@
 <url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/authors.html</loc></url>
 <url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/index.html</loc></url>
 <url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/news/index.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/BatchGeocodeJob.html</loc></url>
 <url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/arcgisgeocode-package.html</loc></url>
 <url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/esri_wkids.html</loc></url>
 <url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/find_address_candidates.html</loc></url>
 <url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/geocode_addresses.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/geocode_file_job.html</loc></url>
 <url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/geocode_server.html</loc></url>
 <url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/index.html</loc></url>
 <url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/iso_3166_codes.html</loc></url>
 <url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/list_geocoders.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/read_geocode_result.html</loc></url>
 <url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/reverse_geocode.html</loc></url>
 <url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/storage.html</loc></url>
 <url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/suggest_places.html</loc></url>
+<url><loc>https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/write_geocode_result.html</loc></url>
 </urlset>
 

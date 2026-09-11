@@ -22,3 +22,8 @@ Useful links:
 
 **Maintainer**: Josiah Parry <josiah.parry@gmail.com>
 ([ORCID](https://orcid.org/0000-0001-9910-865X))
+
+Authors:
+
+- Josiah Parry <josiah.parry@gmail.com>
+  ([ORCID](https://orcid.org/0000-0001-9910-865X))

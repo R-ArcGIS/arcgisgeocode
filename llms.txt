@@ -388,6 +388,18 @@ site](https://developers.arcgis.com/r-bridge/geocoding/overview/).
 - [`storage`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/storage.md)
   : Storing Geocoding Results
 
+## Batch Geocoding Jobs
+
+- [`geocode_file_job()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/geocode_file_job.md)
+  [`geocode_file()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/geocode_file_job.md)
+  : Batch Geocode a File
+- [`BatchGeocodeJob`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/BatchGeocodeJob.md)
+  : Batch Geocode Job
+- [`write_geocode_result()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/write_geocode_result.md)
+  : Write Batch Geocoding Results
+- [`read_geocode_result()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/read_geocode_result.md)
+  : Read Batch Geocoding Results
+
 ## GeocodeServer objects
 
 - [`geocode_server()`](https://developers.arcgis.com/r-bridge/api-reference/arcgisgeocode/reference/geocode_server.md)

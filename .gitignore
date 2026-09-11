@@ -9,3 +9,5 @@ docs
 src/rust/vendor
 src/Makevars
 src/Makevars.win
+
+tests/testthat/_snaps/*.new.md

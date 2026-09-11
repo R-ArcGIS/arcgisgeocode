@@ -1,5 +1,7 @@
 # arcgisgeocode 0.4.0
 
+- Adds `geocode_file()` and `geocode_file_job()` which geocode a file of addresses using the `BatchGeocode` job endpoint. Results are written with `write_geocode_result()` and read with `read_geocode_result()`.
+
 - The `world_geocoder` object has been deprecated in favor of `world_geocoder()` function
 - Resolves an issue parsing geocoding results with fields that are not present in the world geocoder. Fixes [#41](https://github.com/R-ArcGIS/arcgisgeocode/issues/41) <https://github.com/R-ArcGIS/arcgisgeocode/pull/42>
 

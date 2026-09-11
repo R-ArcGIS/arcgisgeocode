@@ -33,8 +33,8 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
 SystemRequirements: Cargo (Rust's package manager), rustc >= 1.67, xz
 Depends: 
     R (>= 4.2)
 LazyData: true
+Config/roxygen2/version: 8.1.0.9000

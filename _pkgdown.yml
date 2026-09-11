@@ -11,6 +11,14 @@ reference:
       - suggest_places
       - storage
 
+  - title: Batch Geocoding Jobs
+    contents:
+      - geocode_file_job
+      - geocode_file
+      - BatchGeocodeJob
+      - write_geocode_result
+      - read_geocode_result
+
   - title: GeocodeServer objects
     contents:
       - geocode_server

@@ -1,3 +1,7 @@
+# development version
+
+- Fixes a bug where `feature_type` was silently ignored. 
+
 # arcgisgeocode 0.4.0
 
 - Adds `geocode_file()` and `geocode_file_job()` which geocode a file of addresses using the `BatchGeocode` job endpoint. Results are written with `write_geocode_result()` and read with `read_geocode_result()`.

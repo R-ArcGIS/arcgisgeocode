@@ -61,25 +61,28 @@
 #' @export
 #' @return An sf object.
 reverse_geocode <- function(
-    locations,
-    crs = sf::st_crs(locations),
-    ...,
-    lang_code = NULL,
-    feature_type = NULL,
-    out_fields = NULL,
-    location_type = c("rooftop", "street"),
-    preferred_label_values = c("postalCity", "localCity"),
-    for_storage = FALSE,
-    geocoder = default_geocoder(),
-    token = arc_token(),
-    .progress = TRUE) {
+  locations,
+  crs = sf::st_crs(locations),
+  ...,
+  lang_code = NULL,
+  feature_type = NULL,
+  out_fields = NULL,
+  location_type = c("rooftop", "street"),
+  preferred_label_values = c("postalCity", "localCity"),
+  for_storage = FALSE,
+  geocoder = default_geocoder(),
+  token = arc_token(),
+  .progress = TRUE
+) {
   # TODO ask users to verify their `for_storage` use
   # This is super important and can lead to contractual violations
   check_geocoder(geocoder, call = rlang::caller_env())
 
   if (!"reversegeocode" %in% capabilities(geocoder)) {
     arg <- rlang::caller_arg(geocoder)
-    cli::cli_abort("{.arg {arg}} does not support  the {.path /reverseGeocode} endpoint")
+    cli::cli_abort(
+      "{.arg {arg}} does not support  the {.path /reverseGeocode} endpoint"
+    )
   }
 
   check_for_storage(for_storage, token, call = rlang::caller_env())
@@ -88,18 +91,27 @@ reverse_geocode <- function(
 
   # check feature type if not missing
   if (!is.null(feature_type)) {
-    rlang::arg_match(
+    feature_type <- rlang::arg_match(
       feature_type,
       c(
-        "StreetInt", "DistanceMarker", "StreetAddress",
-        "StreetName", "POI", "Subaddress",
-        "PointAddress", "Postal", "Locality"
+        "StreetInt",
+        "DistanceMarker",
+        "StreetAddress",
+        "StreetName",
+        "POI",
+        "Subaddress",
+        "PointAddress",
+        "Postal",
+        "Locality"
       )
     )
   }
 
   # verify location type argument
-  location_type <- rlang::arg_match(location_type, values = c("rooftop", "street"))
+  location_type <- rlang::arg_match(
+    location_type,
+    values = c("rooftop", "street")
+  )
 
   # verify label value arg
   preferred_label_values <- rlang::arg_match(
@@ -213,7 +225,6 @@ reverse_geocode <- function(
   # or use tokio....
   # I'll try both
 }
-
 
 # notes -------------------------------------------------------------------
 

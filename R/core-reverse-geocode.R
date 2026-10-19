@@ -137,20 +137,9 @@ reverse_geocode <- function(
   # validates location input
   locations <- obj_as_points(locations)
 
-  # ensure lang_code a single string
-  check_string(lang_code, allow_null = TRUE)
+  check_string(lang_code, allow_null = TRUE, allow_empty = FALSE)
 
   check_character(out_fields, allow_null = TRUE)
-
-  # if not missing and not valid, error
-  if (!is.null(lang_code) && !is_iso3166(lang_code)) {
-    cli::cli_abort(
-      c(
-        "{.arg lang_code} is not a recognized Country Code",
-        "i" = "See {.fn iso_3166_codes} for ISO 3166 codes"
-      )
-    )
-  }
 
   # get the JSON output
   out_crs <- validate_crs(crs)[[1]]

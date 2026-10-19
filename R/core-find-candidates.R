@@ -140,7 +140,7 @@ find_address_candidates <- function(
 
   # iso 3166 checks
   check_iso_3166(country_code, allow_null = TRUE, scalar = FALSE)
-  check_iso_3166(lang_code, allow_null = TRUE, scalar = FALSE)
+  check_character(lang_code, allow_null = TRUE)
   check_iso_3166(source_country, allow_null = TRUE, scalar = FALSE)
 
   check_logical(

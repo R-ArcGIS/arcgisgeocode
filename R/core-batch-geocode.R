@@ -106,7 +106,7 @@ geocode_addresses <- function(
   check_string(preferred_label_values, allow_null = TRUE, allow_empty = FALSE)
   check_character(out_fields, allow_null = TRUE)
   check_iso_3166(source_country, allow_null = TRUE, scalar = TRUE)
-  check_iso_3166(lang_code, allow_null = TRUE, scalar = TRUE)
+  check_string(lang_code, allow_null = TRUE, allow_empty = FALSE)
 
   # if loations are provided, they can be a single location represented in different ways this will modify them
   location <- obj_as_points(location, allow_null = TRUE)
